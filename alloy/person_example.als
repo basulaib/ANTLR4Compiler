@@ -15,7 +15,9 @@ fact {
 
 pred addFriend(p,r,q: Person) {
 	!(q in p.friends)
+	q.name != p.name
 	r.friends = p.friends + q
+	r.friends != p.friends
 }
 
 pred removeFriend(p,r,q: Person) {
