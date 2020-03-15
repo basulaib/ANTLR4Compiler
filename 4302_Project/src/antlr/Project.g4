@@ -93,7 +93,7 @@ TYPE : 'int' | 'string' | 'bool';
 VAR: NUM | BOOL | '"'STRING'"' | '"'ID'"';
 fragment STRING : [a-zA-Z0-9_ ]*;
 fragment NUM : '0' | '-'?[1-9]?[0-9]+;
-ID : [a-zA-Z0-9_"]*;
+ID : [a-zA-Z0-9_]*;
 BOOL : 'true' | 'false';
 COMMENT : '//' ~[\r\n]* -> skip;
 WS : [ \r\t\n]+ -> skip;
