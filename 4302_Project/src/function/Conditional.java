@@ -32,6 +32,19 @@ public class Conditional extends FuncStatement {
 		}
 	}
 
+	public void addConditionalStatement(FuncStatement statement) {
+		// make sure you do it for else only
+		BoolConst boolTrue = new BoolConst(true);
+		if (this.exprBlocks.containsKey(boolTrue)) {
+			exprBlocks.get(boolTrue).add(statement);
+		} else {
+			List<FuncStatement> statements = new ArrayList<FuncStatement>();
+			statements.add(statement);
+			exprBlocks.put(boolTrue, statements);
+			this.order.add(boolTrue);
+		}
+	}
+
 	public List<Expression> getOrder() {
 		return this.order;
 	}
