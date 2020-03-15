@@ -25,7 +25,6 @@ class Student {
             otherGPA > 0;
         }
 
-        gpa > otherGPA => iq > otherIQ;
 
         ensure {
 

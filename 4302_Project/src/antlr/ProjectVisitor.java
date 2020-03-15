@@ -109,11 +109,11 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionBody(ProjectParser.FunctionBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ProjectParser#assignment}.
+	 * Visit a parse tree produced by {@link ProjectParser#funcStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssignment(ProjectParser.AssignmentContext ctx);
+	T visitFuncStatement(ProjectParser.FuncStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PreCond}
 	 * labeled alternative in {@link ProjectParser#precon}.

@@ -174,15 +174,15 @@ public interface ProjectListener extends ParseTreeListener {
 	 */
 	void exitFunctionBody(ProjectParser.FunctionBodyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProjectParser#assignment}.
+	 * Enter a parse tree produced by {@link ProjectParser#funcStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignment(ProjectParser.AssignmentContext ctx);
+	void enterFuncStatement(ProjectParser.FuncStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ProjectParser#assignment}.
+	 * Exit a parse tree produced by {@link ProjectParser#funcStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignment(ProjectParser.AssignmentContext ctx);
+	void exitFuncStatement(ProjectParser.FuncStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PreCond}
 	 * labeled alternative in {@link ProjectParser#precon}.
