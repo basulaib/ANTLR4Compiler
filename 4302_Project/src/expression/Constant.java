@@ -1,6 +1,6 @@
 package expression;
 
-public abstract class Constant {
+public abstract class Constant extends Expression {
 	public Type type;
 	protected String strValue;
 	protected int numValue;
