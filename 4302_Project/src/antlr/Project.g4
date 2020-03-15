@@ -54,14 +54,15 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | VAR																	# BoolNumExpr
     ;
 
-func: 'func' (TYPE)? ID '(' (param ',')* (param)* ')' '{' funcBody '}'			# Function
+func: 'func' (TYPE)? ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
 	;
 
-funcBody: precon? ((assignment LINE_END) | (conditional))* postcon?			# FunctionBody
+funcBody: precon? (funcStatement)* postcon?			# FunctionBody
 		;
 
-assignment: ID '=' (expr | '"'ID'"')								      //# Assignment
-		  ;
+funcStatement: ID '=' (expr | VAR) LINE_END						      //# Statement
+			 | conditional
+			 ;
 
 precon: 'require' '{' (expr LINE_END)* '}'									# PreCond
 	  ;
@@ -75,13 +76,13 @@ assertion: 'assert' '{' (expr LINE_END)* '}'
 conditional: ifBlock (elseifBlock)* elseBlock?							  //# Conditional
 		   ;
 
-ifBlock: 'if' '(' expr ')' '{' (assignment LINE_END)* '}'					# IfConditional
+ifBlock: 'if' '(' expr ')' '{' (funcStatement)* '}'					# IfConditional
        ;
 
-elseifBlock: 'else if' '(' expr ')' '{' (assignment LINE_END)* '}'			# ElseIfConditional
+elseifBlock: 'else if' '(' expr ')' '{' (funcStatement)* '}'			# ElseIfConditional
 		   ;
 
-elseBlock: 'else' '{' (assignment LINE_END)* '}'							# ElseConditional
+elseBlock: 'else' '{' (funcStatement)* '}'							# ElseConditional
 		 ;
 
 param: TYPE ID																# Parameter
@@ -89,9 +90,10 @@ param: TYPE ID																# Parameter
 
 // Tokens
 TYPE : 'int' | 'string' | 'bool';
-VAR: '"'ID'"' | NUM | BOOL;
-ID : [a-zA-Z_]+;
-NUM : '0' | '-'?[1-9]?[0-9]+;
+VAR: NUM | BOOL | '"'STRING'"' | '"'ID'"';
+fragment STRING : [a-zA-Z0-9_ ]*;
+fragment NUM : '0' | '-'?[1-9]?[0-9]+;
+ID : [a-zA-Z0-9_"]*;
 BOOL : 'true' | 'false';
 COMMENT : '//' ~[\r\n]* -> skip;
 WS : [ \r\t\n]+ -> skip;

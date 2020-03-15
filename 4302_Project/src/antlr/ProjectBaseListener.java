@@ -186,13 +186,13 @@ public class ProjectBaseListener implements ProjectListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignment(ProjectParser.AssignmentContext ctx) { }
+	@Override public void enterFuncStatement(ProjectParser.FuncStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignment(ProjectParser.AssignmentContext ctx) { }
+	@Override public void exitFuncStatement(ProjectParser.FuncStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

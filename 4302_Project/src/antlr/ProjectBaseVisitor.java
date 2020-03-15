@@ -117,7 +117,7 @@ public class ProjectBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssignment(ProjectParser.AssignmentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFuncStatement(ProjectParser.FuncStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
