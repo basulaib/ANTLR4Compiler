@@ -10,22 +10,26 @@ import function.*;
 import visitor.*;
 
 public class Program {
-	public List<Assumption> assumptions;// the expression can be declaration expression or constrains
-	public List<Declaration> declarations;
-	public List<Assertion> assertions;
-	public List<Function> functions;
 
-	public List<String> semanticErrors;
+	private List<String> semanticErrors;
+	private List<Class> classes;
 
-	public HashMap<String, Boolean> declaredBools;
+//	public HashMap<String, Boolean> declaredBools;
 
 	public Program(List<String> semanticErrors) {
-		this.assumptions = new ArrayList<Assumption>();
-		this.declarations = new ArrayList<Declaration>();
-		this.functions = new ArrayList<Function>();
-		this.assertions = new ArrayList<Assertion>();
 		this.semanticErrors = semanticErrors;
-
+		this.classes = new ArrayList<Class>();
 	}
 
+	public List<Class> getClasses() {
+		return this.classes;
+	}
+
+	public List<String> getSemanticErrors() {
+		return this.semanticErrors;
+	}
+
+	public void addClass(Class c) {
+		this.classes.add(c);
+	}
 }
