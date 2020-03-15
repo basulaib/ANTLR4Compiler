@@ -54,7 +54,7 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | VAR																	# BoolNumExpr
     ;
 
-func: 'func' TYPE ID '(' (param ',')* param ')' '{' funcBody '}'			# Function
+func: 'func' (TYPE)? ID '(' (param ',')* (param)* ')' '{' funcBody '}'			# Function
 	;
 
 funcBody: precon? ((assignment LINE_END) | (conditional))* postcon?			# FunctionBody
@@ -95,7 +95,7 @@ NUM : '0' | '-'?[1-9]?[0-9]+;
 BOOL : 'true' | 'false';
 COMMENT : '//' ~[\r\n]* -> skip;
 WS : [ \r\t\n]+ -> skip;
-BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==';
+BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==' | '!=' | '=>' | '<=>';
 UNARY_OP : '!';
 LINE_END : ';';
 

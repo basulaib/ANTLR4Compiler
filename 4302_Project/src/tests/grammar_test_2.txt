@@ -1,0 +1,42 @@
+// Grammar Test 2 Bank/Account
+
+class Account {
+    declare {
+        int balance = 0;
+        int id;
+        string name;
+    }
+    
+    func int getBalance() {
+        y = balance;
+        ensure {
+            y == balance;
+        }
+    }
+
+    assume {
+        balance > 0;
+        name != "";
+    }
+
+    assert {
+        balance > 0;
+        id > 0;
+    }
+}
+
+class Bank {
+    declare {
+        int num_of_clients;
+        string account_names;
+        string account_ids;
+    }
+
+    assume {
+        num_of_clients >= 0;
+    }
+
+    assert {
+        num_of_clients >= 0;
+    }
+}
