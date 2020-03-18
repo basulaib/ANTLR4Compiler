@@ -10,4 +10,8 @@ public abstract class Variable extends Expression {
 //		// TODO Auto-generated constructor stub
 //	}
 
+	public String getID() {
+		return this.ID;
+	}
+
 }

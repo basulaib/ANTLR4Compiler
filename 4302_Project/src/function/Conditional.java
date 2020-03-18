@@ -8,6 +8,7 @@ import expression.*;
 import visitor.Visitor;
 
 public class Conditional extends FuncStatement {
+	// TODO: MUST OVERRIDE equal() and hashCode() for this to work!!!
 	HashMap<Expression, List<FuncStatement>> exprBlocks;
 	List<Expression> order;
 //	List<FuncStatement>conditionalStatements;
@@ -47,6 +48,10 @@ public class Conditional extends FuncStatement {
 
 	public List<Expression> getOrder() {
 		return this.order;
+	}
+
+	public List<FuncStatement> getStatements(Expression expr) {
+		return this.exprBlocks.get(expr);
 	}
 
 	@Override

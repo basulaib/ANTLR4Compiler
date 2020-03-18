@@ -20,21 +20,6 @@ import program.*;
 
 public interface Visitor {
 	// binary operation
-	// Boolean operation
-	public void visitConjunction(BiConjunction conjunc);
-
-	public void visitDisjunction(BiDisjunction disjunct);
-
-	public void visitImplication(BiImplication imply);
-
-	public void visitEquivalence(BiEquivalence equal);
-
-	public void visitBoolVariable(BoolVariable bool);
-
-	public void visitDeclaration(Declaration decl);
-
-	public void visitNegation(Negation neg);
-
 	// Numeric operation
 	public void visitMult(BiMultiplication mult);
 
@@ -55,6 +40,19 @@ public interface Visitor {
 	public void visitEqual(BiEqual equ);
 
 	public void visitNotEqual(BiNotEqual neq);
+
+	// Boolean operation
+	public void visitConjunction(BiConjunction conjunc);
+
+	public void visitDisjunction(BiDisjunction disjunct);
+
+	public void visitImplication(BiImplication imply);
+
+	public void visitEquivalence(BiEquivalence equal);
+
+	public void visitDeclaration(Declaration decl);
+
+	public void visitNegation(Negation neg);
 
 	// const
 
