@@ -1,5 +1,6 @@
-package expression;
+package expression.binary;
 
+import expression.Expression;
 import visitor.*;
 
 public class BiMultiplication extends BinaryOperation {

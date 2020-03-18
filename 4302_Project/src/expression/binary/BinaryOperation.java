@@ -1,4 +1,6 @@
-package expression;
+package expression.binary;
+
+import expression.Expression;
 
 public abstract class BinaryOperation extends Expression {
 	private Expression left;

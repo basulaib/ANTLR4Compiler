@@ -1,6 +1,20 @@
 package visitor;
 
 import expression.*;
+import expression.binary.BiAddition;
+import expression.binary.BiConjunction;
+import expression.binary.BiDisjunction;
+import expression.binary.BiDivision;
+import expression.binary.BiEqual;
+import expression.binary.BiEquivalence;
+import expression.binary.BiImplication;
+import expression.binary.BiLarger;
+import expression.binary.BiLargerOrEqual;
+import expression.binary.BiMultiplication;
+import expression.binary.BiNotEqual;
+import expression.binary.BiSmaller;
+import expression.binary.BiSmallerOrEqual;
+import expression.binary.BiSubtraction;
 import function.*;
 import program.*;
 
@@ -41,6 +55,22 @@ public interface Visitor {
 	public void visitEqual(BiEqual equ);
 
 	public void visitNotEqual(BiNotEqual neq);
+
+	// const
+
+	public void visitBoolConst(BoolConst con);
+
+	public void visitNumConst(NumConst con);
+
+	public void visitStrConst(StringConst str);
+
+	// variables
+
+	public void visitStrVar(StringVariable str);
+
+	public void visitBoolVar(BoolVariable boo);
+
+	public void visitNumVar(NumVariable num);
 
 	// function cluster
 	public void visitFunction(Function func);

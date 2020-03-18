@@ -2,25 +2,25 @@ package expression;
 
 import visitor.Visitor;
 
-public class BoolVariable extends Variable {
+public class NumVariable extends Variable {
 
-	public BoolVariable(String ID) {
+	public NumVariable(String ID) {
 		this.ID = ID;
 	}
 
-	public BoolVariable(String ID, Constant value) {
+	public NumVariable(String ID, Constant value) {
 		this.ID = ID;
 		this.valueDefined = true;
 		this.value = value;
 	}
 
-	public boolean getValue() {
-		return ((BoolConst) value).boolValue;
+	public int getValue() {
+		return ((NumConst) value).numValue;
 	}
 
 	@Override
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
-		visitor.visitBoolVar(this);
+		visitor.visitNumVar(this);
 	}
 }

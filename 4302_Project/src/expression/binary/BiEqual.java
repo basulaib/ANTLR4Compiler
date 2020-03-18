@@ -1,10 +1,11 @@
-package expression;
+package expression.binary;
 
+import expression.Expression;
 import visitor.Visitor;
 
-public class BiConjunction extends BinaryOperation {
+public class BiEqual extends BinaryOperation {
 
-	public BiConjunction(Expression left, Expression right) {
+	public BiEqual(Expression left, Expression right) {
 		super(left, right);
 		// TODO Auto-generated constructor stub
 	}
@@ -12,7 +13,6 @@ public class BiConjunction extends BinaryOperation {
 	@Override
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
-		visitor.visitConjunction(this);
+		visitor.visitEqual(this);
 	}
-
 }

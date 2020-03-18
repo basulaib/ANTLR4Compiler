@@ -1,10 +1,11 @@
-package expression;
+package expression.binary;
 
+import expression.Expression;
 import visitor.Visitor;
 
-public class BiImplication extends BinaryOperation {
+public class BiLarger extends BinaryOperation {
 
-	public BiImplication(Expression left, Expression right) {
+	public BiLarger(Expression left, Expression right) {
 		super(left, right);
 		// TODO Auto-generated constructor stub
 	}
@@ -12,7 +13,7 @@ public class BiImplication extends BinaryOperation {
 	@Override
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
-		visitor.visitImplication(this);
+		visitor.visitLarger(this);
 	}
 
 }
