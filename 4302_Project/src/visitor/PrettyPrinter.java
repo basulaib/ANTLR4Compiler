@@ -70,14 +70,6 @@ public class PrettyPrinter implements Visitor {
 	}
 
 	@Override
-	public void visitBoolVar(BoolVariable bool) {
-		// this is the base case
-		this.printResult = bool.ID;
-
-//		this.addParenthesis();
-	}
-
-	@Override
 	public void visitNegation(Negation neg) {
 		reset();
 		neg.expr.accept(printer);
@@ -162,38 +154,36 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolConst(BoolConst con) {
-		// TODO Auto-generated method stub
-
+		this.printResult = con.getBoolValue() ? "1 = 1" : "1 = 0";
 	}
 
 	@Override
 	public void visitNumConst(NumConst con) {
-		// TODO Auto-generated method stub
-
+		this.printResult = ((Integer) con.getNumValue()).toString();
 	}
 
 	@Override
 	public void visitStrConst(StringConst str) {
-		// TODO Auto-generated method stub
-
+		this.printResult = "'" + str.getStrValue() + "'";
 	}
 
 	@Override
 	public void visitStrVar(StringVariable str) {
-		// TODO Auto-generated method stub
-
+		this.printResult = str.ID;
 	}
 
 	@Override
 	public void visitNumVar(NumVariable num) {
-		// TODO Auto-generated method stub
+		this.printResult = num.ID;
+	}
 
+	@Override
+	public void visitBoolVar(BoolVariable bool) {
+		this.printResult = bool.ID;
 	}
 
 	@Override
 	public void visitDeclaration(Declaration decl) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
