@@ -8,7 +8,7 @@ public abstract class Expression {
 		HashCodeCalculator codeCalculator = new HashCodeCalculator();
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + codeCalculator.getHashCode(this);
+		result = prime + codeCalculator.getHashCode(this);
 		return result;
 	}
 
