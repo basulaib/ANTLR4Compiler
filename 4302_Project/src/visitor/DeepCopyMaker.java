@@ -14,6 +14,11 @@ public class DeepCopyMaker implements Visitor {
 		return this.copy;
 	}
 
+	public Expression getExprCopy(Expression expr) {
+		expr.accept(this);
+		return this.copy;
+	}
+
 	public DeepCopyMaker() {
 	}
 
