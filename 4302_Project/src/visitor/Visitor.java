@@ -50,8 +50,6 @@ public interface Visitor {
 
 	public void visitEquivalence(BiEquivalence equal);
 
-	public void visitDeclaration(Declaration decl);
-
 	public void visitNegation(Negation neg);
 
 	// const
@@ -71,6 +69,8 @@ public interface Visitor {
 	public void visitNumVar(NumVariable num);
 
 	// function cluster
+	public void visitDeclaration(Declaration decl);
+
 	public void visitFunction(Function func);
 
 	public void visitConditional(Conditional cond);
