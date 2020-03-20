@@ -7,19 +7,28 @@ import java.util.List;
 import function.Function;
 
 public class Class {
+	private String id;
 	private List<Assumption> assumptions;// the expression can be declaration expression or constrains
 	private List<Declaration> declarations;
 	private List<Assertion> assertions;
 	private List<Function> functions;
 
-	public HashMap<String, Boolean> declaredBools;
+	// public HashMap<String, Boolean> declaredBools;
 
 	public Class(List<String> semanticErrors) {
+		this.id = "";
 		this.assumptions = new ArrayList<Assumption>();
 		this.declarations = new ArrayList<Declaration>();
 		this.functions = new ArrayList<Function>();
 		this.assertions = new ArrayList<Assertion>();
-
+	}
+	
+	public Class(String id, List<String> semanticErrors) {
+		this.id = id;
+		this.assumptions = new ArrayList<Assumption>();
+		this.declarations = new ArrayList<Declaration>();
+		this.functions = new ArrayList<Function>();
+		this.assertions = new ArrayList<Assertion>();
 	}
 
 	public void addAssumption(Assumption assume) {
@@ -36,6 +45,14 @@ public class Class {
 
 	public void addFunction(Function funct) {
 		this.functions.add(funct);
+	}
+	
+	public void setName(String name) {
+		this.id = name;
+	}
+	
+	public String getName() {
+		return this.id;
 	}
 
 	public List<Assumption> getAssumptions() {

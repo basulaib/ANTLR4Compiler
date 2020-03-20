@@ -169,17 +169,17 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitStrVar(StringVariable str) {
-		this.printResult = str.ID;
+		this.printResult = str.getID();
 	}
 
 	@Override
 	public void visitNumVar(NumVariable num) {
-		this.printResult = num.ID;
+		this.printResult = num.getID();
 	}
 
 	@Override
 	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = bool.ID;
+		this.printResult = bool.getID();
 	}
 
 	@Override

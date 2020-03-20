@@ -14,7 +14,7 @@ public class StringVariable extends Variable {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public String getStringValue() {
 		return ((StringConst) value).strValue;
 	}
 

@@ -171,30 +171,30 @@ public class DeepCopyMaker implements Visitor {
 	@Override
 	public void visitStrVar(StringVariable str) {
 		// TODO Auto-generated method stub
-		if (str.valueDefined) {
-			this.copy = new StringVariable(str.ID, getConstCopy(str.value));
+		if (str.getValueDefined()) {
+			this.copy = new StringVariable(str.getID(), getConstCopy(str.getValue()));
 		} else {
-			this.copy = new StringVariable(str.ID);
+			this.copy = new StringVariable(str.getID());
 		}
 	}
 
 	@Override
 	public void visitBoolVar(BoolVariable boo) {
 		// TODO Auto-generated method stub
-		if (boo.valueDefined) {
-			this.copy = new BoolVariable(boo.ID, getConstCopy(boo.value));
+		if (boo.getValueDefined()) {
+			this.copy = new BoolVariable(boo.getID(), getConstCopy(boo.getValue()));
 		} else {
-			this.copy = new BoolVariable(boo.ID);
+			this.copy = new BoolVariable(boo.getID());
 		}
 	}
 
 	@Override
 	public void visitNumVar(NumVariable num) {
 		// TODO Auto-generated method stub
-		if (num.valueDefined) {
-			this.copy = new NumVariable(num.ID, getConstCopy(num.value));
+		if (num.getValueDefined()) {
+			this.copy = new NumVariable(num.getID(), getConstCopy(num.getValue()));
 		} else {
-			this.copy = new NumVariable(num.ID);
+			this.copy = new NumVariable(num.getID());
 		}
 	}
 

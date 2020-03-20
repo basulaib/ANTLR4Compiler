@@ -14,7 +14,8 @@ public class NumVariable extends Variable {
 		this.value = value;
 	}
 
-	public int getValue() {
+	
+	public int getIntValue() {
 		return ((NumConst) value).numValue;
 	}
 

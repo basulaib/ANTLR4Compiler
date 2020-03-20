@@ -14,7 +14,7 @@ public class BoolVariable extends Variable {
 		this.value = value;
 	}
 
-	public boolean getValue() {
+	public boolean getBoolValue() {
 		return ((BoolConst) value).boolValue;
 	}
 
