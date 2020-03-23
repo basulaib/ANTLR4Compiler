@@ -294,7 +294,7 @@ public class PrettyPrinter implements Visitor {
 			}
 			this.parameters = pars;
 			reset();
-			result.append("all " + this.prefix + ": " + this.currentClass + " | ");
+			result.append("all " + this.prefix + ": " + this.currentClass + "| ");
 
 			result.append(this.printer.getPrintResult(pred));
 
