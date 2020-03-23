@@ -8,6 +8,7 @@ import function.Function;
 
 public class Class {
 	private String id;
+	private List<String> semanticErrors;
 	private List<Assumption> assumptions;// the expression can be declaration expression or constrains
 	private List<Declaration> declarations;
 	private List<Assertion> assertions;
@@ -17,6 +18,7 @@ public class Class {
 
 	public Class(List<String> semanticErrors) {
 		this.id = "";
+		this.semanticErrors = semanticErrors;
 		this.assumptions = new ArrayList<Assumption>();
 		this.declarations = new ArrayList<Declaration>();
 		this.functions = new ArrayList<Function>();
@@ -25,6 +27,7 @@ public class Class {
 	
 	public Class(String id, List<String> semanticErrors) {
 		this.id = id;
+		this.semanticErrors = semanticErrors;
 		this.assumptions = new ArrayList<Assumption>();
 		this.declarations = new ArrayList<Declaration>();
 		this.functions = new ArrayList<Function>();
@@ -69,5 +72,9 @@ public class Class {
 
 	public List<Function> getFunctions() {
 		return this.functions;
+	}
+	
+	public List<String> getSemanticErrors() {
+		return this.semanticErrors;
 	}
 }

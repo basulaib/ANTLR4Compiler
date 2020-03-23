@@ -10,6 +10,11 @@ public class Declaration {
 		this.id = "unknown";
 		this.value = null;
 	}
+	
+	public Declaration(String id) {
+		this.id = id;
+		this.value = null;
+	}
 
 	public Declaration(String id, Constant value) {
 		this.id = id;

@@ -3,6 +3,7 @@ package function;
 import java.util.ArrayList;
 import java.util.List;
 
+import expression.Constant;
 import expression.Expression;
 import visitor.Visitor;
 
@@ -24,9 +25,5 @@ public class Parameter {
 
     public String getID() {
         return this.ID;
-    }
-
-    public String getValue{
-        return this.value;
     }
 }
