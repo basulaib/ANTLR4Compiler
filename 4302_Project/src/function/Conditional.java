@@ -21,6 +21,15 @@ public class Conditional extends FuncStatement {
 	public Conditional(HashMap<Expression, List<FuncStatement>> exprBlocks) {
 		this.exprBlocks = exprBlocks;
 	}
+	
+	public void addConditionalStatement(Expression condition) {
+		if (this.exprBlocks.containsKey(condition)) {
+		} else {
+			List<FuncStatement> statements = new ArrayList<FuncStatement>();
+			exprBlocks.put(condition, statements);
+			this.order.add(condition);
+		}
+	}
 
 	public void addConditionalStatement(Expression condition, FuncStatement statement) {
 		if (this.exprBlocks.containsKey(condition)) {
