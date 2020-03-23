@@ -1,0 +1,28 @@
+//test for conjunction/equivalence
+class test{
+	declare {
+    	bool result;
+    }
+
+
+	func bool notEqual(int x, int y){
+		require {
+			x > 0;
+			y > 0;
+		}
+		if(x != y){
+		    result = true
+		}
+		else{
+		    result = false
+		}
+
+		ensure {
+			result == (x != y);
+		}
+	}
+
+	assert {
+		result == true || false;
+	}
+}

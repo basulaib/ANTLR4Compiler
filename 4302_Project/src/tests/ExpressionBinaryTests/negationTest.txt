@@ -1,0 +1,23 @@
+//test for conjunction/equivalence
+class test{
+	declare {
+    	bool result;
+    }
+
+
+	func bool negate(bool x){
+		require {
+			x == true || false;
+		}
+
+		result = !x
+
+		ensure {
+			result != x
+		}
+	}
+
+	assert {
+		result == true || false;
+	}
+}
