@@ -1,8 +1,10 @@
 package program;
 
 import expression.*;
+import visitor.Visitor;
 
 public class Declaration {
+	private Constant.Type type;
 	private String id;
 	private Constant value;
 
@@ -11,9 +13,29 @@ public class Declaration {
 		this.value = null;
 	}
 
+	public Declaration(String id) {
+		this.id = id;
+		this.value = null;
+	}
+
 	public Declaration(String id, Constant value) {
 		this.id = id;
 		this.value = value;
+		this.type = value.type;
+	}
+
+	public Declaration(String id, Constant.Type type) {
+		this.id = id;
+		this.value = null;
+		this.type = type;
+	}
+
+	public Constant.Type getType() {
+		return type;
+	}
+
+	public void setType(Constant.Type type) {
+		this.type = type;
 	}
 
 	public void setID(String id) {
@@ -30,5 +52,9 @@ public class Declaration {
 
 	public Constant getConst() {
 		return this.value;
+	}
+
+	public void accept(Visitor visitor) {
+		visitor.visitDeclaration(this);
 	}
 }

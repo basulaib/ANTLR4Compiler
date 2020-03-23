@@ -33,7 +33,7 @@ public abstract class Constant extends Expression {
 		return this.numValue;
 	}
 
-	enum Type {
+	public enum Type {
 		string, bool, num
 	}
 }

@@ -12,9 +12,19 @@ public class WPCalculator {
 	public WPCalculator() {
 	}
 
+	public Expression getPred(Function func) {
+		if (func.getPostCondition().isEmpty())
+			return null;
+		Expression wp = getWP(func);
+		Expression precond = this.conjunctAll(func.getPreCondition(), 0, func.getPreCondition().size() - 1);
+
+		return precond == null ? wp : new BiImplication(precond, wp);
+	}
+
 	// passing in the function, it will return the weakest precondition for that
 	// function
-	public Expression getWP(Function func, Expression postCond) {
+	public Expression getWP(Function func) {
+		Expression postCond = this.conjunctAll(func.getPostCondition(), 0, func.getPostCondition().size() - 1);
 		return sequentialCase(func.getStatements(), postCond);
 	}
 
@@ -49,6 +59,9 @@ public class WPCalculator {
 	private Expression conjunctAll(List<Expression> exprs, int start, int end) {
 		// return the conjunction of all the expression passed in
 		// lets divide and conquer !!
+
+		if (exprs.isEmpty())
+			return null;
 
 		if (end - start == 0) {
 			return exprs.get(start);

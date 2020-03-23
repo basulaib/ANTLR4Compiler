@@ -33,7 +33,7 @@ prog: (classBlock)+ EOF														# Program
 classBlock: 'class' ID '{' body '}'
 	 	  ;
 
-body: (declBody | assume | func | assertion)*								# ClassBody
+body: declBody? (assume | func | assertion)*								# ClassBody
 	;
 
 declBody: 'declare' '{' (decl LINE_END)* '}'
@@ -54,7 +54,7 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | VAR																	# BoolNumExpr
     ;
 
-func: 'func' (TYPE)? ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
+func: 'func' (TYPE | 'void') ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
 	;
 
 funcBody: precon? (funcStatement)* postcon?			# FunctionBody
@@ -93,7 +93,7 @@ TYPE : 'int' | 'string' | 'bool';
 VAR: NUM | BOOL | '"'STRING'"' | '"'ID'"';
 fragment STRING : [a-zA-Z0-9_ ]*;
 fragment NUM : '0' | '-'?[1-9]?[0-9]+;
-ID : [a-zA-Z0-9_]*;
+ID : [a-zA-Z0-9_]+;
 BOOL : 'true' | 'false';
 COMMENT : '//' ~[\r\n]* -> skip;
 WS : [ \r\t\n]+ -> skip;
