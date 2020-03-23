@@ -60,8 +60,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		// classBlock: 'class' ID '{' body '}'
 		c.setName(ctx.getChild(1).getText());
 		visit(ctx.getChild(3));
-		return (Class) super.visitClassBlock(ctx);
-		
+		return c;
 	}
 
 	@Override
