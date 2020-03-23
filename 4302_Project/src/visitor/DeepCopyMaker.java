@@ -4,6 +4,8 @@ import expression.*;
 import expression.binary.*;
 import function.*;
 import program.Declaration;
+import program.Program;
+import program.Class;
 
 public class DeepCopyMaker implements Visitor {
 //currently it can only make a deep-copy of binary expression
@@ -224,6 +226,18 @@ public class DeepCopyMaker implements Visitor {
 
 	@Override
 	public void visitPostCondition(PostCondition postCond) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitProgram(Program program) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitClass(Class cla) {
 		// TODO Auto-generated method stub
 
 	}

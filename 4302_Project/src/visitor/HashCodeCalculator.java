@@ -21,6 +21,8 @@ import function.Function;
 import function.PostCondition;
 import function.PreCondition;
 import program.Declaration;
+import program.Program;
+import program.Class;
 
 public class HashCodeCalculator implements Visitor {
 //this might not be a very eifficient way of geting hash code
@@ -198,6 +200,18 @@ public class HashCodeCalculator implements Visitor {
 
 	@Override
 	public void visitPostCondition(PostCondition postCond) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitProgram(Program program) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitClass(Class cla) {
 		// TODO Auto-generated method stub
 
 	}

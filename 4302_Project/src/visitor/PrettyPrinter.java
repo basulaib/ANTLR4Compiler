@@ -21,16 +21,32 @@ import function.Conditional;
 import function.Function;
 import function.PostCondition;
 import function.PreCondition;
-import program.Declaration;
+import program.*;
+import program.Class;
 
 public class PrettyPrinter implements Visitor {
 
 	private String printResult;
+	private String prefix; // the prefix for all variables, eg. x => n.x
+	private String currentClass;
 
 	private PrettyPrinter printer;// we can reuse the same printer
 
 	public PrettyPrinter() {
 		printResult = "";
+		prefix = "";
+	}
+
+	// we need to add prefix for variables for identifying predicates
+	public PrettyPrinter(String prefix) {
+		printResult = "";
+		this.prefix = prefix;
+	}
+
+	private PrettyPrinter(String prefix, String currentClass) {
+		this.printResult = "";
+		this.prefix = prefix;
+		this.currentClass = currentClass;
 	}
 
 	// must be accepted before calling this
@@ -45,7 +61,7 @@ public class PrettyPrinter implements Visitor {
 
 	public void reset() {
 		if (this.printer == null)
-			printer = new PrettyPrinter();
+			printer = new PrettyPrinter(this.prefix, this.currentClass);
 		this.printResult = "";
 	}
 
@@ -169,27 +185,57 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitStrVar(StringVariable str) {
-		this.printResult = str.getID();
+		this.printResult = prefix.isEmpty() ? str.getID() : prefix + "." + str.getID();
 	}
 
 	@Override
 	public void visitNumVar(NumVariable num) {
-		this.printResult = num.getID();
+		this.printResult = prefix.isEmpty() ? num.getID() : prefix + "." + num.getID();
 	}
 
 	@Override
 	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = bool.getID();
+		this.printResult = prefix.isEmpty() ? bool.getID() : prefix + "." + bool.getID();
 	}
 
 	@Override
 	public void visitDeclaration(Declaration decl) {
+		// we don't need to add prefix in declaration
+		if (decl.getConst() != null) {
+			reset();
+			this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+		} else {
+			this.printResult = decl.getID() + ":";
+			switch (decl.getConst().type) {
+			case bool:
+				this.printResult = this.printResult + "Bool";
+				break;
+			case string:
+				this.printResult = this.printResult + "String";
+				break;
+			case num:
+				this.printResult = this.printResult + "Int";
+				break;
+			}
+		}
 	}
 
 	@Override
 	public void visitFunction(Function func) {
-		// TODO Auto-generated method stub
+		// each function is a predicate
+		this.printResult = "pred" + " functionName " + " {\n\t";
+		WPCalculator wpCal = new WPCalculator();
+		Expression pred = wpCal.getPred(func);
 
+		if (pred != null) {
+			// all n: Class | n.x ........
+			this.prefix = "n";
+			this.printResult = this.printResult + "all " + this.prefix + ": " + this.currentClass + " | ";
+			reset();
+
+			this.printResult = this.printResult + this.printer.getPrintResult(pred);
+			this.printResult = this.printResult + '\n' + '}';
+		}
 	}
 
 	@Override
@@ -212,6 +258,18 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitPostCondition(PostCondition postCond) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitProgram(Program program) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visitClass(Class cla) {
 		// TODO Auto-generated method stub
 
 	}

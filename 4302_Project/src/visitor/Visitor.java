@@ -17,6 +17,7 @@ import expression.binary.BiSmallerOrEqual;
 import expression.binary.BiSubtraction;
 import function.*;
 import program.*;
+import program.Class;
 
 public interface Visitor {
 	// binary operation
@@ -81,4 +82,9 @@ public interface Visitor {
 
 	public void visitPostCondition(PostCondition postCond);
 
+	// program
+
+	public void visitClass(Class cla);
+
+	public void visitProgram(Program program);
 }
