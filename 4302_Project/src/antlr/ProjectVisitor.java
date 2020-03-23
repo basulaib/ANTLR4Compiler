@@ -1,4 +1,4 @@
-// Generated from .\antlr\Project.g4 by ANTLR 4.8
+// Generated from Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -60,6 +60,90 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssumption(ProjectParser.AssumptionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Multiplication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplication(ProjectParser.MultiplicationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Addition}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddition(ProjectParser.AdditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NotEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotEqual(ProjectParser.NotEqualContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SmallerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSmallerOrEqual(ProjectParser.SmallerOrEqualContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Larger}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLarger(ProjectParser.LargerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Implication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImplication(ProjectParser.ImplicationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LargerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLargerOrEqual(ProjectParser.LargerOrEqualContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Disjunction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDisjunction(ProjectParser.DisjunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Subtraction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubtraction(ProjectParser.SubtractionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Equivalence}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEquivalence(ProjectParser.EquivalenceContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Equal}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqual(ProjectParser.EqualContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolNumExpr}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
@@ -67,12 +151,12 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolNumExpr(ProjectParser.BoolNumExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code BinaryExpr}
+	 * Visit a parse tree produced by the {@code Conjunction}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryExpr(ProjectParser.BinaryExprContext ctx);
+	T visitConjunction(ProjectParser.ConjunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code VarExpr}
 	 * labeled alternative in {@link ProjectParser#expr}.
@@ -88,12 +172,19 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenthesizedExpr(ProjectParser.ParenthesizedExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code UnaryExpr}
+	 * Visit a parse tree produced by the {@code Division}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	T visitDivision(ProjectParser.DivisionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Smaller}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSmaller(ProjectParser.SmallerContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Function}
 	 * labeled alternative in {@link ProjectParser#func}.

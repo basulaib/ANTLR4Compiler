@@ -1,7 +1,9 @@
 package program;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -9,12 +11,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.ProjectBaseVisitor;
 import antlr.ProjectParser.AssertionContext;
 import antlr.ProjectParser.AssumptionContext;
-import antlr.ProjectParser.BinaryExprContext;
 import antlr.ProjectParser.BoolNumExprContext;
 import antlr.ProjectParser.ClassBlockContext;
 import antlr.ProjectParser.ClassBodyContext;
 import antlr.ProjectParser.ConditionalContext;
 import antlr.ProjectParser.DeclBodyContext;
+import antlr.ProjectParser.DeclContext;
 import antlr.ProjectParser.ElseConditionalContext;
 import antlr.ProjectParser.ElseIfConditionalContext;
 import antlr.ProjectParser.ExprContext;
@@ -37,6 +39,7 @@ import expression.Constant;
 import expression.Expression;
 import expression.NumConst;
 import expression.StringConst;
+import expression.Variable;
 import function.Assignment;
 import function.Conditional;
 import function.FuncStatement;
@@ -46,15 +49,19 @@ import function.PostCondition;
 import function.PreCondition;
 
 public class AntlrToClass extends ProjectBaseVisitor<Object> {
-	
+
+	Map<String, Declaration> decls;
 	List<String> semanticErrors;
 	Class c;
-	
-	public AntlrToClass(List<String> semanticErrors) {
+	AntlrToExpression toExpression;
+
+	public AntlrToClass(List<String> semanticErrors, Map<String, Declaration> decls) {
 		this.semanticErrors = semanticErrors;
 		this.c = new Class(this.semanticErrors);
+		toExpression = new AntlrToExpression(this.semanticErrors, decls);
+		this.decls = decls;
 	}
-	
+
 	@Override
 	public Class visitClassBlock(ClassBlockContext ctx) {
 		// classBlock: 'class' ID '{' body '}'
@@ -79,23 +86,20 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 				for (Declaration d : ldr) {
 					this.c.addDeclaration(d);
 				}
-			}
-			else if (c instanceof AssumptionContext) {
+			} else if (c instanceof AssumptionContext) {
 				// assump = (Assumption) visit(c);
 				this.c.addAssumption((Assumption) visit(c));
-			}
-			else if (c instanceof FunctionContext) {
+			} else if (c instanceof FunctionContext) {
 				// func = (Function) visit(c);
 				// functions.add(func);
 				this.c.addFunction((Function) visit(c));
-			}
-			else if (c instanceof AssertionContext) {
+			} else if (c instanceof AssertionContext) {
 				// assrt = (Assertion) visit(c);
 				this.c.addAssertion((Assertion) visit(c));
 			}
 		}
 		return super.visitClassBody(ctx);
-		
+
 	}
 
 	@Override
@@ -103,7 +107,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		// TODO Auto-generated method stub
 		List<Declaration> result = new ArrayList<>();
 		for (ParseTree c : ctx.children) {
-			result.add((Declaration) visit(c));
+			if (c instanceof DeclContext)
+				result.add((Declaration) visit(c));
 //			if (c instanceof VarDeclContext) {
 //				visit(c);
 //			}
@@ -116,21 +121,20 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 
 	@Override
 	public Declaration visitVarDecl(VarDeclContext ctx) {
-		// TODO Auto-generated method stub
 		Declaration result = new Declaration();
 		String type = ctx.getChild(0).getText();
 		if (type.equals("int")) {
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, Constant.Type.num);
-		}
-		else if (type.equals("string")) {
+		} else if (type.equals("string")) {
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, Constant.Type.string);
-		}
-		else if (type.equals("bool")) {
+		} else if (type.equals("bool")) {
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, Constant.Type.bool);
 		}
+
+		this.decls.put(result.getID(), result);
 		return result;
 	}
 
@@ -143,17 +147,16 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 			Integer value = Integer.parseInt(ctx.getChild(3).getText());
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, new NumConst(value));
-		}
-		else if (type.equals("string")) {
+		} else if (type.equals("string")) {
 			String value = ctx.getChild(3).getText();
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, new StringConst(value));
-		}
-		else if (type.equals("bool")) {
+		} else if (type.equals("bool")) {
 			Boolean value = Boolean.parseBoolean(ctx.getChild(3).getText());
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, new BoolConst(value));
 		}
+		this.decls.put(result.getID(), result);
 		return result;
 	}
 
@@ -164,7 +167,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		for (ParseTree t : ctx.children) {
 // (t instanceof BinaryExprContext) || (t instanceof ParenthesizedExprContext) || (t instanceof UnaryExprContext) || (t instanceof VarExprContext) || (t instanceof BoolNumExprContext)
 			if (t instanceof ExprContext) {
-				Expression e = (Expression) visit(t);
+				Expression e = toExpression.visit(t);
 				result.addExpr(e);
 			}
 		}
@@ -175,29 +178,34 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 	public Function visitFunction(FunctionContext ctx) {
 		// TODO Auto-generated method stub
 		Function result = new Function("");
-		if (ctx.getChild(1).getText().equals("void")) {
-			result = new Function(ctx.getChild(2).getText());
-			for (ParseTree funcTree : ctx.children) {
-				if (funcTree instanceof ParamContext) {
-					result.addParameter((Parameter) visit(funcTree));
-				}
-				if (funcTree instanceof FuncBodyContext) {
-					for (ParseTree funcBodyTree : ((FuncBodyContext) funcTree).children) {
-						if (funcBodyTree instanceof PreCondContext) {
-							result.setPreCondition((PreCondition) visit(funcBodyTree));
-						}
-						if (funcBodyTree instanceof PostCondContext) {
-							result.setPostCondition((PostCondition) visit(funcBodyTree));
-						}
-						if (funcBodyTree instanceof FuncStatementContext) {
-							for (ParseTree funcStatementTree : ((FuncStatementContext) funcBodyTree).children) {
-								result.addStatement((FuncStatement) visit(funcStatementTree));
-							}
-						}
+
+		// if its not void, we can still calculate the wp
+//		if (ctx.getChild(1).getText().equals("void")) {
+		result = new Function(ctx.getChild(2).getText());
+
+		HashMap<String, Parameter> pars = new HashMap<String, Parameter>();
+		this.toExpression.setParameters(pars);
+		for (ParseTree funcTree : ctx.children) {
+			if (funcTree instanceof ParamContext) {
+				Parameter par = (Parameter) visit(funcTree);
+				pars.put(par.getID(), par);
+				result.addParameter(par);
+			}
+			if (funcTree instanceof FuncBodyContext) {
+				for (ParseTree funcBodyTree : ((FuncBodyContext) funcTree).children) {
+					if (funcBodyTree instanceof PreCondContext) {
+						result.setPreCondition((PreCondition) visit(funcBodyTree));
+					}
+					if (funcBodyTree instanceof PostCondContext) {
+						result.setPostCondition((PostCondition) visit(funcBodyTree));
+					}
+					if (funcBodyTree instanceof FuncStatementContext) {
+						result.addStatement((FuncStatement) visit(funcBodyTree));
 					}
 				}
 			}
 		}
+//		}
 		return result;
 	}
 
@@ -212,9 +220,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		// TODO Auto-generated method stub
 		FuncStatement result = null;
 		if (!(ctx.getChild(0) instanceof ConditionalContext)) { // Assignment
-			result = new Assignment(ctx.getChild(0).getText(), (Expression) visit(ctx.getChild(2)));
-		}
-		else {
+			result = new Assignment(ctx.getChild(0).getText(), this.toExpression.visit(ctx.getChild(2)));
+		} else {
 			result = (Conditional) visit(ctx.getChild(0));
 		}
 		return result;
@@ -226,7 +233,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		PreCondition result = new PreCondition();
 		for (ParseTree t : ctx.children) {
 			if (t instanceof ExprContext) {
-				result.addPreCondition((Expression) visit(t));
+				result.addPreCondition(this.toExpression.visit(t));
 			}
 		}
 		return result;
@@ -238,7 +245,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		PostCondition result = new PostCondition();
 		for (ParseTree t : ctx.children) {
 			if (t instanceof ExprContext) {
-				result.addPostCondition((Expression) visit(t));
+				result.addPostCondition(this.toExpression.visit(t));
 			}
 		}
 		return result;
@@ -250,7 +257,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		Assertion result = new Assertion();
 		for (ParseTree t : ctx.children) {
 			if (t instanceof ExprContext) {
-				result.addExpression((Expression) visit(t));
+				result.addExpression(this.toExpression.visit(t));
 			}
 		}
 		return result;
@@ -265,40 +272,42 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		for (ParseTree t : ctx.children) { // blocks
 			if (t instanceof IfConditionalContext) {
 				if (((IfConditionalContext) t).children.size() > 6) { // statements exist
-					e = (Expression) visit(t.getChild(2));
+					e = this.toExpression.visit(t.getChild(2));
 					for (ParseTree tt : ((IfConditionalContext) t).children) {
 						if (tt instanceof FuncStatementContext) {
 							fs = (FuncStatement) visit(tt);
 							result.addConditionalStatement(e, fs);
 						}
 					}
-				}
-				else {
-					e = (Expression) visit(t.getChild(2));
+				} else {
+					e = this.toExpression.visit(t.getChild(2));
 					result.addConditionalStatement(e);
 				}
-			}
-			else if (t instanceof ElseIfConditionalContext) {
+			} else if (t instanceof ElseIfConditionalContext) {
 				if (((ElseIfConditionalContext) t).children.size() > 6) { // statements exist
-					e = (Expression) visit(t.getChild(2));
+					e = this.toExpression.visit(t.getChild(2));
 					for (ParseTree tt : ((ElseIfConditionalContext) t).children) {
 						if (tt instanceof FuncStatementContext) {
 							fs = (FuncStatement) visit(tt);
 							result.addConditionalStatement(e, fs);
 						}
 					}
-				}
-				else {
-					e = (Expression) visit(t.getChild(2));
+				} else {
+					e = this.toExpression.visit(t.getChild(2));
 					result.addConditionalStatement(e);
 				}
-			}
-			else {
+			} else {
+				boolean emptyBlock = true;
 				for (ParseTree tt : ((ElseConditionalContext) t).children) {
 					if (tt instanceof FuncStatementContext) {
 						fs = (FuncStatement) visit(tt);
 						result.addConditionalStatement(fs);
+						emptyBlock = false;
 					}
+				}
+				if (emptyBlock) {
+					FuncStatement nullStatement = null;
+					result.addConditionalStatement(nullStatement);
 				}
 			}
 		}

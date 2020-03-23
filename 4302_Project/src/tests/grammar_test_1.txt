@@ -1,5 +1,6 @@
 class Account{
 	declare {
+		int old_amount;
     	int	amount;
 		int a = 5;
     }
@@ -11,15 +12,29 @@ class Account{
 //   amount = 5;
 //   ID = 8;
 	
-	func int increase(int x, int y){
+	func int increase(int x, int y, bool p, bool q, bool r){
 		require {
 			x > 0;
 		}
+		//((amount + x) + y) * ((amount + x) + y) == (amount + x + y) * (amount + x + y);
+		
+		old_amount = amount;
+		
+		//((amount + x) + y) * ((amount + x) + y) == (old_amount + x + y) * (old_amount + x + y);
+		
 		amount = amount + x;
-        
+		
+		//(amount + y) * (amount + y) == (old_amount + x + y) * (old_amount + x + y);
+		
+        amount = amount + y;
+
+		//amount * amount == (old_amount + x + y) * (old_amount + x + y);
+
+		amount = amount * amount;
+		
         if (x > 10) {
-        	 x = p || q && r;
-             x = p && q || r;
+        	 r = p || q && r;
+             q = p && q || r;
         }else if (x > 9) {
         
         }else {
@@ -27,7 +42,7 @@ class Account{
         } 
         
 		ensure {
-			amount == amount + x;
+			amount == (old_amount + x + y) * (old_amount + x + y);
 		}		
 	}
 	

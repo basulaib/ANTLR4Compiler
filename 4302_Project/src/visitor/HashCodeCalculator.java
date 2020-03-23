@@ -44,7 +44,7 @@ public class HashCodeCalculator implements Visitor {
 	}
 
 	private void reset() {
-		if (calculator != null)
+		if (calculator == null)
 			calculator = new HashCodeCalculator();
 	}
 

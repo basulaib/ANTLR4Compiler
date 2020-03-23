@@ -56,7 +56,7 @@ public class WPCalculator {
 		return result;
 	}
 
-	private Expression conjunctAll(List<Expression> exprs, int start, int end) {
+	public static Expression conjunctAll(List<Expression> exprs, int start, int end) {
 		// return the conjunction of all the expression passed in
 		// lets divide and conquer !!
 
@@ -107,6 +107,9 @@ public class WPCalculator {
 	// replace all occurrences of x in R with e.
 	private void replace(String x, Expression e, Expression R) {
 		// base case
+		if (R instanceof Constant)
+			return;
+
 		if (R instanceof Negation) {
 			replace(x, e, ((Negation) R).expr);
 			return;
@@ -126,13 +129,15 @@ public class WPCalculator {
 
 			if (right instanceof Variable) {
 				if (((Variable) right).getID().equals(x))
-					((BinaryOperation) R).setLeft(e);
+					((BinaryOperation) R).setRight(e);
 			} else {
 				// recursive case
 				replace(x, e, right);
 			}
 		} else {
-			System.err.print("The post condition is neither binary operation nor negation");
+			PrettyPrinter printer = new PrettyPrinter();
+			System.err.print("The post condition is neither binary operation nor negation:\n");
+			System.err.print(printer.getPrintResult(R) + "\n");
 		}
 
 	}

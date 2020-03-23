@@ -66,6 +66,11 @@ public class PrettyPrinter implements Visitor {
 		return this.printResult;
 	}
 
+	public String getPrintResult(Program program) {
+		this.visitProgram(program);
+		return this.printResult;
+	}
+
 	public String getPrintResult(Expression expr) {
 		expr.accept(this);
 		return this.printResult;
@@ -207,7 +212,7 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitStrConst(StringConst str) {
-		this.printResult = "'" + str.getStrValue() + "'";
+		this.printResult = str.getStrValue().isEmpty() ? "none" : '"' + str.getStrValue() + '"';
 	}
 
 	@Override
@@ -374,15 +379,21 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitProgram(Program program) {
-		// TODO Auto-generated method stub
+		StringBuilder result = new StringBuilder();
+		result.append("open util/boolean");
+		for (Class c : program.getClasses()) {
+			result.append("\n\n//==============" + c.getName() + "==============\n");
+			this.printer = new PrettyPrinter();
+			result.append(printer.getPrintResult(c));
+		}
 
+		this.printResult = result.toString();
 	}
 
 	@Override
 	public void visitClass(Class cla) {
 		// add all signatures
 		StringBuilder result = new StringBuilder();
-		result.append("open util/boolean\n\n");
 		this.currentClass = cla.getName();
 
 		// some keyword is a must!

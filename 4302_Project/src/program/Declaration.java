@@ -54,6 +54,22 @@ public class Declaration {
 		return this.value;
 	}
 
+	public Variable getVariableReference() {
+		Variable result;
+		switch (this.type) {
+		case string:
+			result = value == null ? new StringVariable(this.id) : new StringVariable(this.id, this.value);
+			break;
+		case num:
+			result = value == null ? new NumVariable(this.id) : new NumVariable(this.id, this.value);
+			break;
+		default:
+			result = value == null ? new BoolVariable(this.id) : new BoolVariable(this.id, this.value);
+			break;
+		}
+		return result;
+	}
+
 	public void accept(Visitor visitor) {
 		visitor.visitDeclaration(this);
 	}

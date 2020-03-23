@@ -1,4 +1,4 @@
-// Generated from .\antlr\Project.g4 by ANTLR 4.8
+// Generated from Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -90,6 +90,150 @@ public interface ProjectListener extends ParseTreeListener {
 	 */
 	void exitAssumption(ProjectParser.AssumptionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Multiplication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplication(ProjectParser.MultiplicationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Multiplication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplication(ProjectParser.MultiplicationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Addition}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddition(ProjectParser.AdditionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Addition}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddition(ProjectParser.AdditionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotEqual(ProjectParser.NotEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotEqual(ProjectParser.NotEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SmallerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSmallerOrEqual(ProjectParser.SmallerOrEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SmallerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSmallerOrEqual(ProjectParser.SmallerOrEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Larger}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterLarger(ProjectParser.LargerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Larger}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitLarger(ProjectParser.LargerContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code UnaryExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UnaryExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Implication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterImplication(ProjectParser.ImplicationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Implication}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitImplication(ProjectParser.ImplicationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code LargerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterLargerOrEqual(ProjectParser.LargerOrEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code LargerOrEqual}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitLargerOrEqual(ProjectParser.LargerOrEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Disjunction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterDisjunction(ProjectParser.DisjunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Disjunction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitDisjunction(ProjectParser.DisjunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Subtraction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubtraction(ProjectParser.SubtractionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Subtraction}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubtraction(ProjectParser.SubtractionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Equivalence}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquivalence(ProjectParser.EquivalenceContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Equivalence}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquivalence(ProjectParser.EquivalenceContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Equal}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEqual(ProjectParser.EqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Equal}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEqual(ProjectParser.EqualContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolNumExpr}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
@@ -102,17 +246,17 @@ public interface ProjectListener extends ParseTreeListener {
 	 */
 	void exitBoolNumExpr(ProjectParser.BoolNumExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code BinaryExpr}
+	 * Enter a parse tree produced by the {@code Conjunction}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBinaryExpr(ProjectParser.BinaryExprContext ctx);
+	void enterConjunction(ProjectParser.ConjunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code BinaryExpr}
+	 * Exit a parse tree produced by the {@code Conjunction}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBinaryExpr(ProjectParser.BinaryExprContext ctx);
+	void exitConjunction(ProjectParser.ConjunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code VarExpr}
 	 * labeled alternative in {@link ProjectParser#expr}.
@@ -138,17 +282,29 @@ public interface ProjectListener extends ParseTreeListener {
 	 */
 	void exitParenthesizedExpr(ProjectParser.ParenthesizedExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code UnaryExpr}
+	 * Enter a parse tree produced by the {@code Division}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	void enterDivision(ProjectParser.DivisionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code UnaryExpr}
+	 * Exit a parse tree produced by the {@code Division}
 	 * labeled alternative in {@link ProjectParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryExpr(ProjectParser.UnaryExprContext ctx);
+	void exitDivision(ProjectParser.DivisionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Smaller}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSmaller(ProjectParser.SmallerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Smaller}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSmaller(ProjectParser.SmallerContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Function}
 	 * labeled alternative in {@link ProjectParser#func}.

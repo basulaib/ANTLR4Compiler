@@ -48,12 +48,26 @@ assume: 'assume' '{' (expr LINE_END)* '}'									# Assumption
 
 
 expr: '(' expr ')' 															# ParenthesizedExpr
-    | expr BINARY_OP expr													# BinaryExpr
+    | expr '*' expr                                                         # Multiplication
+    | expr '/' expr                                                        # Division
+    | expr '+' expr                                                        # Addition
+    | expr '-' expr                                                        # Subtraction
+    | expr '&&' expr                                                        # Conjunction
+    | expr '||' expr                                                        # Disjunction
+    | expr '>' expr                                                        # Larger
+    | expr '<' expr                                                        # Smaller
+    | expr '>=' expr                                                        # LargerOrEqual
+    | expr '<=' expr                                                         # SmallerOrEqual
+    | expr '==' expr                                                         # Equal
+    | expr '!=' expr                                                         # NotEqual
+    | expr '=>' expr                                                         # Implication
+    | expr '<=>' expr                                                         # Equivalence
     | UNARY_OP expr															# UnaryExpr	
     | ID																	# VarExpr
     | VAR																	# BoolNumExpr
     ;
-
+    
+//BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==' | '!=' | '=>' | '<=>';
 func: 'func' (TYPE | 'void') ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
 	;
 
@@ -97,7 +111,7 @@ ID : [a-zA-Z0-9_]+;
 BOOL : 'true' | 'false';
 COMMENT : '//' ~[\r\n]* -> skip;
 WS : [ \r\t\n]+ -> skip;
-BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==' | '!=' | '=>' | '<=>';
+//BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==' | '!=' | '=>' | '<=>';
 UNARY_OP : '!';
 LINE_END : ';';
 
