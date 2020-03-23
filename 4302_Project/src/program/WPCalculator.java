@@ -99,7 +99,7 @@ public class WPCalculator {
 		postCond.accept(copyMaker);
 		Expression wp = copyMaker.getExprCopy();
 
-		this.replace(name, expr, postCond);
+		this.replace(name, expr, wp);
 
 		return wp;
 	}
