@@ -67,7 +67,7 @@ public class WPCalculator {
 			return exprs.get(start);
 		} else {
 			int mid = (start + end) / 2;
-			return new BiDisjunction(conjunctAll(exprs, start, mid), conjunctAll(exprs, mid + 1, end));
+			return new BiConjunction(conjunctAll(exprs, start, mid), conjunctAll(exprs, mid + 1, end));
 		}
 
 	}
