@@ -1,0 +1,29 @@
+
+open util/boolean
+
+//==============test==============
+some sig test{
+	result:Int,
+	a:5,
+	amount:Int
+}
+
+fact testFact {
+	all n: test| (n.amount) > (0)
+}
+
+assert testAssert {
+	all n: test| (n.result) >= (0)
+}
+
+//the class invariant for class (test) is only valid if this check is valid
+check testAssert
+
+pred multCheck[x:Int, y:Int]{
+	some n: test| not ((((x) >= (0)) and ((y) >= (0))) => ((mul[x][y]) = (mul[x][y])))
+}
+
+//the post condition for function (mult) is only valid when this is inconsistent.
+run {
+	some x: Int| some y: Int| multCheck[x, y]
+}for 8 but 8 int, 2 Bool, exactly 32 String

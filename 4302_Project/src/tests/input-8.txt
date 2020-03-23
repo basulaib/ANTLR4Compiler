@@ -1,0 +1,32 @@
+class test{
+	declare {
+    	bool result;
+    	bool bar;
+    }
+    assume{
+        bar == true;
+    }
+
+	func bool imp(bool x, bool y){
+		require {
+            x == true || false;
+            y == true || false;
+		}
+
+        if(y == true && x == true){
+
+            result = x => (y && bar);
+
+        }
+        else{
+            result  = (x || y) => (y || x);
+        }
+		ensure {
+			result == true || false;
+		}
+	}
+
+	assert {
+		result == bar || false;
+	}
+}

@@ -202,7 +202,7 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolConst(BoolConst con) {
-		this.printResult = con.getBoolValue() ? "1 = 1" : "1 = 0";
+		this.printResult = con.getBoolValue() ? "True" : "False";
 	}
 
 	@Override

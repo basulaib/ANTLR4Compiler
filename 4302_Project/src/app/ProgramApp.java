@@ -1,21 +1,13 @@
 package app;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.*;
-import expression.*;
-import expression.binary.*;
-import function.Assignment;
-import function.Function;
-import function.Parameter;
 import program.*;
-import program.Class;
 import visitor.*;
 
 public class ProgramApp {

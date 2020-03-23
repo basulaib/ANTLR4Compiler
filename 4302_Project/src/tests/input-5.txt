@@ -1,0 +1,23 @@
+//test for disjunction
+class test{
+	declare {
+    	bool result;
+    }
+
+	func bool disjunction(bool x, bool y){
+		require {
+			x == true || false;
+			y == true || false;
+		}
+
+		result = x || y;
+
+		ensure {
+			result == x || y;
+		}
+	}
+
+	assert {
+		result == true || false;
+	}
+}

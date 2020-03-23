@@ -148,7 +148,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, new NumConst(value));
 		} else if (type.equals("string")) {
-			String value = ctx.getChild(3).getText();
+			String value = ctx.getChild(3).getText().substring(1, ctx.getChild(3).getText().length() - 1);
 			String id = ctx.getChild(1).getText();
 			result = new Declaration(id, new StringConst(value));
 		} else if (type.equals("bool")) {

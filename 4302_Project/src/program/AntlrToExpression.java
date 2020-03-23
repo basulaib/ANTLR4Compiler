@@ -190,7 +190,7 @@ public class AntlrToExpression extends ProjectBaseVisitor<Expression> {
 
 		if (exp.charAt(0) == ('"')) {
 			if (exp.length() > 2)
-				return new StringConst(exp.substring(1, exp.length() - 2));
+				return new StringConst(exp.substring(1, exp.length() - 1));
 			else
 				return new StringConst("");
 		} else if (exp.equals("true")) {

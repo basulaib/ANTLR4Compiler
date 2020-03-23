@@ -1,0 +1,28 @@
+
+open util/boolean
+
+//==============test==============
+some sig test{
+	result:Bool,
+	bar:Bool
+}
+
+fact testFact {
+	all n: test| (n.bar) = (True)
+}
+
+assert testAssert {
+	all n: test| (n.result) = ((n.bar) or (False))
+}
+
+//the class invariant for class (test) is only valid if this check is valid
+check testAssert
+
+pred impCheck[x:Bool, y:Bool]{
+	some n: test| not ((((x) = ((True) or (False))) and ((y) = ((True) or (False)))) => (((((y) = ((True) and (x))) = (True)) => (((x) => ((y) and (n.bar))) = ((True) or (False)))) and ((not (((y) = ((True) and (x))) = (True))) => ((((x) or (y)) => ((y) or (x))) = ((True) or (False))))))
+}
+
+//the post condition for function (imp) is only valid when this is inconsistent.
+run {
+	some x: Bool| some y: Bool| impCheck[x, y]
+}for 8 but 8 int, 2 Bool, exactly 32 String

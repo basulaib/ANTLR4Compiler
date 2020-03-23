@@ -1,0 +1,24 @@
+//test for conjunction/equivalence
+class test{
+	declare {
+    	int result;
+    }
+
+
+	func int div(int x, int y){
+		require {
+			x >= 0;
+			y > 0;
+		}
+
+		result = x / y;
+
+		ensure {
+			result == x/y;
+		}
+	}
+
+	assert {
+		result >= 0;
+	}
+}

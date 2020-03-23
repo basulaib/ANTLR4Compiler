@@ -1,0 +1,29 @@
+
+open util/boolean
+
+//==============Account==============
+some sig Account{
+	old_amount:Int,
+	amount:Int,
+	a:5
+}
+
+fact AccountFact {
+	all n: Account| (n.amount) > (0)
+}
+
+assert AccountAssert {
+	all n: Account| (n.amount) > (0)
+}
+
+//the class invariant for class (Account) is only valid if this check is valid
+check AccountAssert
+
+pred increaseCheck[x:Int, y:Int, p:Bool, q:Bool, r:Bool]{
+	some n: Account| not (((x) > (0)) => (((((x) > (10)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]))) and (((x) > (9)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))) and (((not ((x) > (9))) and (not ((x) > (10)))) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))))
+}
+
+//the post condition for function (increase) is only valid when this is inconsistent.
+run {
+	some x: Int| some y: Int| some p: Bool| some q: Bool| some r: Bool| increaseCheck[x, y, p, q, r]
+}for 8 but 8 int, 2 Bool, exactly 32 String
