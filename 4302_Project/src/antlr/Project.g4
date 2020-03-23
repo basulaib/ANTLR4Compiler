@@ -54,7 +54,7 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | VAR																	# BoolNumExpr
     ;
 
-func: 'func' (TYPE)? ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
+func: 'func' (TYPE | 'void') ID '(' ((param ',')* param)? ')' '{' funcBody '}'		# Function
 	;
 
 funcBody: precon? (funcStatement)* postcon?			# FunctionBody

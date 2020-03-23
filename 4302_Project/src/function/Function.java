@@ -3,11 +3,13 @@ package function;
 import java.util.ArrayList;
 import java.util.List;
 
+import expression.Constant;
 import expression.Expression;
 import visitor.Visitor;
 
 public class Function {
 	private String id;
+	private Constant.Type type;
 	private List<Parameter> parameterList;
 	private List<FuncStatement> statementList;
 	private PreCondition preCondition;
@@ -15,6 +17,15 @@ public class Function {
 	
 	public Function(String id) {
 		this.id = id;
+		this.parameterList = new ArrayList<Parameter>();
+		this.statementList = new ArrayList<FuncStatement>();
+		this.preCondition = new PreCondition();
+		this.postCondition = new PostCondition();
+	}
+	
+	public Function(String id, Constant.Type type) {
+		this.id = id;
+		this.type = type;
 		this.parameterList = new ArrayList<Parameter>();
 		this.statementList = new ArrayList<FuncStatement>();
 		this.preCondition = new PreCondition();

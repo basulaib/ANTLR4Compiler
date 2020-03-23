@@ -20,7 +20,7 @@ class Student {
         course != "";
     }
 
-    func compareStudentGPA(int otherGPA, int otherIQ) {
+    func void compareStudentGPA(int otherGPA, int otherIQ) {
         require {
             otherGPA > 0;
         }
@@ -50,7 +50,7 @@ class Professor {
         tenure == false;
     }
 
-    func checkTenureTrack() {
+    func void checkTenureTrack() {
         require {
             exp_years > 0;
             tenure == false;
@@ -59,6 +59,8 @@ class Professor {
         if (exp_years > 10) {
             tenure = true;
         }
+
+        name = true;
     }
 
     assert {

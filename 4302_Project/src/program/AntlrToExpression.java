@@ -103,13 +103,13 @@ public class AntlrToExpression extends ProjectBaseVisitor<Expression> {
     	return vars.get(ctx.getChild(0).getText());
     }
     
-    public Expression visitParenthesizedExpression(ParenthesizedExprContext ctx) {
+    public Expression visitParenthesizedExpr(ParenthesizedExprContext ctx) {
     	Expression expr = visit(ctx.getChild(1));
     	expr.parenthesized = true;
     	return expr;
     }
     
-    public Expression visitBoolNumExpression(BoolNumExprContext ctx) {
+    public Expression visitBoolNumExpr(BoolNumExprContext ctx) {
     	String exp = ctx.getChild(0).getText();
 		Token idToken = ctx.getToken(0,1).getSymbol();
 		int line = idToken.getLine();
