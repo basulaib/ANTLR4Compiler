@@ -1,9 +1,11 @@
 module BST
+open util/boolean
 
 sig Node {
 	left: lone Node,
 	right: lone Node,
 	parent: lone Node,
+	happy: Bool,
 	key: Int
 }
 
@@ -15,6 +17,7 @@ sig BST {
 
 fact ChildrenNotEqual {
 	all n: Node | n.left != n.right
+	all n: Node | n.left.key > n.right.key && n.left.key > n.parent.key && n.right.key < n.parent.key
 }
 
 fact BSTProperty {
