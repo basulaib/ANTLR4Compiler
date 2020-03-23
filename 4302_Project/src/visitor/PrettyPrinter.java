@@ -1,6 +1,7 @@
 package visitor;
 
 import java.util.HashSet;
+import java.util.List;
 
 import expression.*;
 import expression.binary.BiAddition;
@@ -262,7 +263,8 @@ public class PrettyPrinter implements Visitor {
 
 		if (pred != null) {
 			// all n: Class | n.x ........
-			result.append("\n\npred " + func.getId() + "Check");
+			String predicateName = func.getId() + "Check";
+			result.append("\n\n" + "pred " + predicateName);
 
 			if (!func.getParameters().isEmpty()) {
 				result.append("[");
@@ -294,12 +296,56 @@ public class PrettyPrinter implements Visitor {
 			}
 			this.parameters = pars;
 			reset();
-			result.append("all " + this.prefix + ": " + this.currentClass + "| ");
+			result.append("some " + this.prefix + ": " + this.currentClass + "| ");
 
-			result.append(this.printer.getPrintResult(pred));
+			// try to find an instance of the negation of that
+			result.append(this.printer.getPrintResult(new Negation(pred)));
+
+			result.append("\n}\n\n" + runPred(func.getParameterList(), predicateName));
 
 			this.printResult = result.toString();
 		}
+	}
+
+	private String runPred(List<Parameter> pars, String predName) {
+		StringBuilder result = new StringBuilder();
+
+		result.append("//the post condition for function (" + predName.substring(0, predName.length() - 5));
+		result.append(") is only valid when this is inconsistent.\n");
+
+		if (pars == null || pars.isEmpty()) {
+			result.append("run " + predName);
+		} else {
+			result.append("run {\n\t");
+			for (Parameter p : pars) {
+				result.append("some " + p.getID() + ": ");
+				switch (p.getType()) {
+				case string:
+					result.append("String| ");
+					break;
+				case bool:
+					result.append("Bool| ");
+					break;
+				case num:
+					result.append("Int| ");
+					break;
+				}
+			}
+			result.append(predName + "[");
+
+			for (Parameter p : pars) {
+				result.append(p.getID() + ", ");
+			}
+
+			// delete the last 2 character ", "
+			result.deleteCharAt(result.length() - 1);
+			result.deleteCharAt(result.length() - 1);
+
+			result.append("]\n}");
+
+			result.append("for 8 but 8 int, 2 Bool, exactly 32 String");
+		}
+		return result.toString();
 	}
 
 	@Override
@@ -334,13 +380,13 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitClass(Class cla) {
-		// TODO Auto-generated method stub
 		// add all signatures
 		StringBuilder result = new StringBuilder();
 		result.append("open util/boolean\n\n");
 		this.currentClass = cla.getName();
 
-		result.append("sig " + this.currentClass + "{");
+		// some keyword is a must!
+		result.append("some sig " + this.currentClass + "{");
 
 		for (Declaration decl : cla.getDeclarations()) {
 			reset();
@@ -379,16 +425,18 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 
-		result.append("\n}");
+		result.append("\n}\n\n");
+
+		result.append("//the class invariant for class (" + this.currentClass);
+		result.append(") is only valid if this check is valid");
+
+		result.append("\ncheck " + this.currentClass + "Assert");
 
 		// add all predicates
 		for (Function func : cla.getFunctions()) {
-
 			this.prefix = "n";
 			this.reset();
 			result.append(this.printer.getPrintResult(func));
-
-			result.append("\n}");
 		}
 
 		this.printResult = result.toString();
