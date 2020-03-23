@@ -52,14 +52,14 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | expr '/' expr                                                        # Division
     | expr '+' expr                                                        # Addition
     | expr '-' expr                                                        # Subtraction
-    | expr '&&' expr                                                        # Conjunction
-    | expr '||' expr                                                        # Disjunction
     | expr '>' expr                                                        # Larger
     | expr '<' expr                                                        # Smaller
     | expr '>=' expr                                                        # LargerOrEqual
     | expr '<=' expr                                                         # SmallerOrEqual
     | expr '==' expr                                                         # Equal
     | expr '!=' expr                                                         # NotEqual
+    | expr '&&' expr                                                        # Conjunction
+    | expr '||' expr                                                        # Disjunction
     | expr '=>' expr                                                         # Implication
     | expr '<=>' expr                                                         # Equivalence
     | UNARY_OP expr															# UnaryExpr	

@@ -3,24 +3,24 @@ open util/boolean
 
 //==============test==============
 some sig test{
-	result:Int
+	result:Bool
 }
 
 fact testFact {
 }
 
 assert testAssert {
-	all n: test| (n.result) >= (0)
+	all n: test| ((n.result) = (True)) or (False)
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
-pred divCheck[x:Int, y:Int]{
-	some n: test| not ((((x) >= (0)) and ((y) > (0))) => ((div[x][y]) = (div[x][y])))
+pred negateCheck[x:Bool]{
+	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
 }
 
-//the post condition for function (div) is only valid when this is inconsistent.
+//the post condition for function (negate) is only valid when this is inconsistent.
 run {
-	some x: Int| some y: Int| divCheck[x, y]
+	some x: Bool| negateCheck[x]
 }for 8 but 8 int, 2 Bool, exactly 32 String

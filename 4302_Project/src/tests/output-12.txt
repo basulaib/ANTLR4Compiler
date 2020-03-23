@@ -3,24 +3,24 @@ open util/boolean
 
 //==============test==============
 some sig test{
-	result:String
+	result:Bool
 }
 
 fact testFact {
 }
 
 assert testAssert {
-	all n: test| (((n.result) = (("x") or (n.result))) = (("y") or (n.result))) = ("equal")
+	all n: test| ((n.result) = (True)) or (False)
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
-pred smallerCheck[x:Int, y:Int]{
-	some n: test| not ((((x) > (0)) and ((y) > (0))) => (((((x) < (y)) => (((("x") = (("x") or ("x"))) = (("y") or ("x"))) = ("equal"))) and (((x) > (y)) => (((("y") = (("x") or ("y"))) = (("y") or ("y"))) = ("equal")))) and (((not ((x) > (y))) and (not ((x) < (y)))) => (((("equal") = (("x") or ("equal"))) = (("y") or ("equal"))) = ("equal")))))
+pred negateCheck[x:Bool]{
+	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
 }
 
-//the post condition for function (smaller) is only valid when this is inconsistent.
+//the post condition for function (negate) is only valid when this is inconsistent.
 run {
-	some x: Int| some y: Int| smallerCheck[x, y]
+	some x: Bool| negateCheck[x]
 }for 8 but 8 int, 2 Bool, exactly 32 String

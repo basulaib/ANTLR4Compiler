@@ -42,8 +42,8 @@ public class ProjectParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'class'", "'{'", "'}'", "'declare'", "'='", "'assume'", "'('", 
-			"')'", "'*'", "'/'", "'+'", "'-'", "'&&'", "'||'", "'>'", "'<'", "'>='", 
-			"'<='", "'=='", "'!='", "'=>'", "'<=>'", "'func'", "'void'", "','", "'require'", 
+			"')'", "'*'", "'/'", "'+'", "'-'", "'>'", "'<'", "'>='", "'<='", "'=='", 
+			"'!='", "'&&'", "'||'", "'=>'", "'<=>'", "'func'", "'void'", "','", "'require'", 
 			"'ensure'", "'assert'", "'if'", "'else if'", "'else'", null, null, null, 
 			null, null, null, "'!'", "';'"
 		};
@@ -1112,7 +1112,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 5:
 						{
-						_localctx = new ConjunctionContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new LargerContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(115);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
@@ -1124,7 +1124,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 6:
 						{
-						_localctx = new DisjunctionContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new SmallerContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(118);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
@@ -1136,7 +1136,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 7:
 						{
-						_localctx = new LargerContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new LargerOrEqualContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(121);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
@@ -1148,7 +1148,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 8:
 						{
-						_localctx = new SmallerContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new SmallerOrEqualContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(124);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
@@ -1160,7 +1160,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 9:
 						{
-						_localctx = new LargerOrEqualContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new EqualContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(127);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
@@ -1172,7 +1172,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 10:
 						{
-						_localctx = new SmallerOrEqualContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new NotEqualContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(130);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
@@ -1184,7 +1184,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 11:
 						{
-						_localctx = new EqualContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new ConjunctionContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(133);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
@@ -1196,7 +1196,7 @@ public class ProjectParser extends Parser {
 						break;
 					case 12:
 						{
-						_localctx = new NotEqualContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new DisjunctionContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(136);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");

@@ -10,17 +10,17 @@ fact testFact {
 }
 
 assert testAssert {
-	all n: test| (n.result) = ((True) or (False))
+	all n: test| ((n.result) = (True)) or (False)
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
-pred disjuncCheck[x:Int, y:Int, z:Int]{
-	some n: test| not (((((x) >= (0)) and ((y) >= (0))) and ((z) >= (0))) => (((((x) = ((y) and (x))) = (z)) => ((True) = (((x) = ((y) and (x))) = (z)))) and ((not (((x) = ((y) and (x))) = (z))) => ((False) = (((x) = ((y) and (x))) = (z))))))
+pred negateCheck[x:Bool]{
+	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
 }
 
-//the post condition for function (disjunc) is only valid when this is inconsistent.
+//the post condition for function (negate) is only valid when this is inconsistent.
 run {
-	some x: Int| some y: Int| some z: Int| disjuncCheck[x, y, z]
+	some x: Bool| negateCheck[x]
 }for 8 but 8 int, 2 Bool, exactly 32 String

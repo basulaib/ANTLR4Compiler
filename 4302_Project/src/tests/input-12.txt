@@ -12,12 +12,12 @@ class test{
 		if(x < y){
 		    result = "x";
 		}
-		else if(x > y){
-		    result = "y";
-		}
-		else{
-		    result = "equal";
-		}
+//		else if(x > y){
+//		    result = "y";
+//		}
+//		else{
+//		    result = "equal";
+//		}
 
 		ensure {
 			result == "x" || result == "y" || result == "equal";

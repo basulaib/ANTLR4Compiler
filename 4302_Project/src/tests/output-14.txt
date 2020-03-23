@@ -10,14 +10,14 @@ fact testFact {
 }
 
 assert testAssert {
-	all n: test| (n.result) = ((True) or (False))
+	all n: test| ((n.result) = (True)) or (False)
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
 pred negateCheck[x:Bool]{
-	some n: test| not (((x) = ((True) or (False))) => ((not (x)) != (x)))
+	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
 }
 
 //the post condition for function (negate) is only valid when this is inconsistent.

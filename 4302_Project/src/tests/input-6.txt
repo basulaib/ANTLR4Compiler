@@ -23,6 +23,6 @@ class test{
 	}
 
 	assert {
-		result == true || false;
+		result == true || result == false;
 	}
 }

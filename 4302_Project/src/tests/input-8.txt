@@ -9,8 +9,8 @@ class test{
 
 	func bool imp(bool x, bool y){
 		require {
-            x == true || false;
-            y == true || false;
+            x == true || x == false;
+            y == true || x == false;
 		}
 
         if(y == true && x == true){
@@ -22,11 +22,11 @@ class test{
             result  = (x || y) => (y || x);
         }
 		ensure {
-			result == true || false;
+			result == true || x == false;
 		}
 	}
 
 	assert {
-		result == bar || false;
+		result == bar || x == false;
 	}
 }
