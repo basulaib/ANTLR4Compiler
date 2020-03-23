@@ -117,4 +117,30 @@ public class Function {
 	public List<FuncStatement> getStatementList() {
 		return statementList;
 	}
+
+	public List<Parameter> getParameterList() {
+		return parameterList;
+	}
+
+	public void setParameterList(List<Parameter> parameterList) {
+		this.parameterList = parameterList;
+	}
+
+	public Constant.Type getType() {
+		return type;
+	}
+
+	public void setStatementList(List<FuncStatement> statementList) {
+		this.statementList = statementList;
+	}
+
+	public void setPreCondition(PreCondition preCondition) {
+		this.preCondition = preCondition;
+	}
+
+	public void setPostCondition(PostCondition postCondition) {
+		this.postCondition = postCondition;
+	}
+	
+	
 }

@@ -36,6 +36,7 @@ import expression.Constant;
 import expression.Expression;
 import expression.NumConst;
 import expression.StringConst;
+import function.FuncStatement;
 import function.Function;
 import function.Parameter;
 import function.PostCondition;
@@ -173,21 +174,23 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 		Function result = new Function("");
 		if (ctx.getChild(1).getText().equals("void")) {
 			result = new Function(ctx.getChild(2).getText());
-			for (ParseTree t : ctx.children) {
-				if (t instanceof ParamContext) {
-					result.addParameter((Parameter) visit(t));
+			for (ParseTree funcTree : ctx.children) {
+				if (funcTree instanceof ParamContext) {
+					result.addParameter((Parameter) visit(funcTree));
 				}
-				if (t instanceof FuncBodyContext) {
-					for (ParseTree tt : ((FuncBodyContext) t).children) {
-//						if (tt instanceof PreCondContext) {
-//							result.addPreCondition((PreCondition) visit(tt));
-//						}
-//						if (tt instanceof PostCondContext) {
-//							result.addPostCondition((PostCondition) visit(tt));
-//						}
-//						if (tt instanceof FuncStatementContext) {
-//							
-//						}
+				if (funcTree instanceof FuncBodyContext) {
+					for (ParseTree funcBodyTree : ((FuncBodyContext) funcTree).children) {
+						if (funcBodyTree instanceof PreCondContext) {
+							result.setPreCondition((PreCondition) visit(funcBodyTree));
+						}
+						if (funcBodyTree instanceof PostCondContext) {
+							result.setPostCondition((PostCondition) visit(funcBodyTree));
+						}
+						if (funcBodyTree instanceof FuncStatementContext) {
+							for (ParseTree funcStatementTree : ((FuncStatementContext) funcBodyTree).children) {
+								result.addStatement((FuncStatement) visit(funcStatementTree));
+							}
+						}
 					}
 				}
 			}
@@ -202,8 +205,11 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 	}
 
 	@Override
-	public Object visitFuncStatement(FuncStatementContext ctx) {
+	public FuncStatement visitFuncStatement(FuncStatementContext ctx) {
 		// TODO Auto-generated method stub
+		if (!(ctx.getChild(0) instanceof ConditionalContext)) { // Assignment
+			
+		}
 		return super.visitFuncStatement(ctx);
 	}
 
