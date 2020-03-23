@@ -16,7 +16,7 @@ public class WPCalculator {
 		if (func.getPostCondition().isEmpty())
 			return null;
 		Expression wp = getWP(func);
-		Expression precond = this.conjunctAll(func.getPreCondition(), 0, func.getPreCondition().size());
+		Expression precond = this.conjunctAll(func.getPreCondition(), 0, func.getPreCondition().size() - 1);
 
 		return precond == null ? wp : new BiImplication(precond, wp);
 	}

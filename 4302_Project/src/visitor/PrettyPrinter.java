@@ -1,5 +1,7 @@
 package visitor;
 
+import java.util.HashSet;
+
 import expression.*;
 import expression.binary.BiAddition;
 import expression.binary.BiConjunction;
@@ -19,6 +21,7 @@ import expression.binary.BinaryOperation;
 import function.Assignment;
 import function.Conditional;
 import function.Function;
+import function.Parameter;
 import function.PostCondition;
 import function.PreCondition;
 import program.*;
@@ -29,6 +32,7 @@ public class PrettyPrinter implements Visitor {
 	private String printResult;
 	private String prefix; // the prefix for all variables, eg. x => n.x
 	private String currentClass;
+	private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
 
 	private PrettyPrinter printer;// we can reuse the same printer
 
@@ -49,6 +53,13 @@ public class PrettyPrinter implements Visitor {
 		this.currentClass = currentClass;
 	}
 
+	private PrettyPrinter(String prefix, String currentClass, HashSet<String> parameters) {
+		this.printResult = "";
+		this.prefix = prefix;
+		this.currentClass = currentClass;
+		this.parameters = parameters;
+	}
+
 	// must be accepted before calling this
 	public String getPrintResult() {
 		return this.printResult;
@@ -59,9 +70,24 @@ public class PrettyPrinter implements Visitor {
 		return this.printResult;
 	}
 
+	public String getPrintResult(Declaration decl) {
+		decl.accept(this);
+		return this.printResult;
+	}
+
+	public String getPrintResult(Function fun) {
+		fun.accept(this);
+		return this.printResult;
+	}
+
+	public String getPrintResult(Class cla) {
+		cla.accept(this);
+		return this.printResult;
+	}
+
 	public void reset() {
-		if (this.printer == null)
-			printer = new PrettyPrinter(this.prefix, this.currentClass);
+//		if (this.printer == null)
+		printer = new PrettyPrinter(this.prefix, this.currentClass, this.parameters);
 		this.printResult = "";
 	}
 
@@ -185,17 +211,23 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitStrVar(StringVariable str) {
-		this.printResult = prefix.isEmpty() ? str.getID() : prefix + "." + str.getID();
+
+		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(str.getID()))) ? str.getID()
+				: prefix + "." + str.getID();
 	}
 
 	@Override
 	public void visitNumVar(NumVariable num) {
-		this.printResult = prefix.isEmpty() ? num.getID() : prefix + "." + num.getID();
+
+		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(num.getID()))) ? num.getID()
+				: prefix + "." + num.getID();
 	}
 
 	@Override
 	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = prefix.isEmpty() ? bool.getID() : prefix + "." + bool.getID();
+		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
+				? bool.getID()
+				: prefix + "." + bool.getID();
 	}
 
 	@Override
@@ -206,7 +238,7 @@ public class PrettyPrinter implements Visitor {
 			this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
 		} else {
 			this.printResult = decl.getID() + ":";
-			switch (decl.getConst().type) {
+			switch (decl.getType()) {
 			case bool:
 				this.printResult = this.printResult + "Bool";
 				break;
@@ -223,18 +255,50 @@ public class PrettyPrinter implements Visitor {
 	@Override
 	public void visitFunction(Function func) {
 		// each function is a predicate
-		this.printResult = "pred" + " functionName " + " {\n\t";
 		WPCalculator wpCal = new WPCalculator();
 		Expression pred = wpCal.getPred(func);
 
+		StringBuilder result = new StringBuilder();
+
 		if (pred != null) {
 			// all n: Class | n.x ........
-			this.prefix = "n";
-			this.printResult = this.printResult + "all " + this.prefix + ": " + this.currentClass + " | ";
-			reset();
+			result.append("\n\npred " + func.getId() + "Check");
 
-			this.printResult = this.printResult + this.printer.getPrintResult(pred);
-			this.printResult = this.printResult + '\n' + '}';
+			if (!func.getParameters().isEmpty()) {
+				result.append("[");
+				for (Parameter p : func.getParameters()) {
+					result.append(p.getID() + ":");
+					switch (p.getType()) {
+					case string:
+						result.append("String, ");
+						break;
+					case num:
+						result.append("Int, ");
+						break;
+					case bool:
+						result.append("Bool, ");
+						break;
+					}
+				}
+
+				result.deleteCharAt(result.length() - 1);
+				result.deleteCharAt(result.length() - 1);
+				result.append("]");
+			}
+			result.append("{\n\t");
+
+			this.prefix = "n";
+			HashSet<String> pars = new HashSet<String>();
+			for (Parameter p : func.getParameters()) {
+				pars.add(p.getID());
+			}
+			this.parameters = pars;
+			reset();
+			result.append("all " + this.prefix + ": " + this.currentClass + " | ");
+
+			result.append(this.printer.getPrintResult(pred));
+
+			this.printResult = result.toString();
 		}
 	}
 
@@ -271,6 +335,63 @@ public class PrettyPrinter implements Visitor {
 	@Override
 	public void visitClass(Class cla) {
 		// TODO Auto-generated method stub
+		// add all signatures
+		StringBuilder result = new StringBuilder();
+		result.append("open util/boolean\n\n");
+		this.currentClass = cla.getName();
+
+		result.append("sig " + this.currentClass + "{");
+
+		for (Declaration decl : cla.getDeclarations()) {
+			reset();
+			result.append("\n\t");
+			result.append(this.printer.getPrintResult(decl) + ',');
+		}
+
+		result.deleteCharAt(result.length() - 1);
+		result.append("\n}");
+		// add all assumptions
+		result.append("\n\nfact " + this.currentClass + "Fact {");
+
+		for (Assumption fact : cla.getAssumptions()) {
+			for (Expression expr : fact.getExprs()) {
+				this.prefix = "n";
+				reset();
+				result.append("\n\tall n: " + this.currentClass + "| ");
+				result.append(this.printer.getPrintResult(expr));
+			}
+		}
+
+		result.append("\n}");
+
+//		this.printResult = result.toString();
+
+		// add all assertions
+
+		result.append("\n\nassert " + this.currentClass + "Assert {");
+
+		for (Assertion ass : cla.getAssertions()) {
+			for (Expression expr : ass.getExprs()) {
+				this.prefix = "n";
+				reset();
+				result.append("\n\tall n: " + this.currentClass + "| ");
+				result.append(this.printer.getPrintResult(expr));
+			}
+		}
+
+		result.append("\n}");
+
+		// add all predicates
+		for (Function func : cla.getFunctions()) {
+
+			this.prefix = "n";
+			this.reset();
+			result.append(this.printer.getPrintResult(func));
+
+			result.append("\n}");
+		}
+
+		this.printResult = result.toString();
 
 	}
 

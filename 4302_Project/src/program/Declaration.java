@@ -1,6 +1,7 @@
 package program;
 
 import expression.*;
+import visitor.Visitor;
 
 public class Declaration {
 	private Constant.Type type;
@@ -51,5 +52,9 @@ public class Declaration {
 
 	public Constant getConst() {
 		return this.value;
+	}
+
+	public void accept(Visitor visitor) {
+		visitor.visitDeclaration(this);
 	}
 }

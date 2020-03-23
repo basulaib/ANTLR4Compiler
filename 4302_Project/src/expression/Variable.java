@@ -3,7 +3,7 @@ package expression;
 public abstract class Variable extends Expression {
 
 	protected String ID; // name of the variable
-	protected Boolean valueDefined; // is the value defined? This is determined during parsing.
+	protected boolean valueDefined; // is the value defined? This is determined during parsing.
 	protected Constant value; // the value assigned to this variable
 
 //	public Variable() {
@@ -14,7 +14,7 @@ public abstract class Variable extends Expression {
 		return this.ID;
 	}
 
-	public Boolean getValueDefined() {
+	public boolean getValueDefined() {
 		return valueDefined;
 	}
 
