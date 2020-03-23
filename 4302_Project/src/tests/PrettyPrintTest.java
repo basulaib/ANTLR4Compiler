@@ -28,14 +28,14 @@ public class PrettyPrintTest {
         String result = test.getPrintResult(add);
         System.out.println("Addition test\n----------");
         String result2 = test.getPrintResult(add2);
-        System.out.println("23+25\n"+result + "\n10+15"+"\n" + result2);
+        System.out.println("23+25\n"+result + "\n\n10+15"+"\n" + result2);
 
         BiSubtraction sub = new BiSubtraction(add, add2);
         BiSubtraction sub2 = new BiSubtraction(add2, right);
         System.out.println("\nSubtraction test \n---------");
         result = test.getPrintResult(sub);
         result2 = test.getPrintResult(sub2);
-        System.out.println("(23+25)-(10+15)\n"+result + "\n" + "(10+15)-25\n"+ result2);
+        System.out.println("(23+25)-(10+15)\n"+result + "\n\n" + "(10+15)-25\n"+ result2);
 
 
         BiMultiplication mult = new BiMultiplication(left, right);
