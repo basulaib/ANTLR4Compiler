@@ -1,6 +1,10 @@
 package app;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -32,8 +36,21 @@ public class ProgramApp {
 			PrettyPrinter printer = new PrettyPrinter();
 
 			String result = printer.getPrintResult(prog);
-			System.out.print("\n");
-			System.out.print(result);
+
+			try {
+				String alsFile = fileName.substring(0, fileName.length() - 4);
+				FileWriter f = new FileWriter("." + File.separator + "output-" + alsFile + ".als");
+				f.write("\n");
+				f.write(result);
+				f.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+			// System.out.print("\n");
+			// System.out.print(result);
 
 		}
 ////////////////////////////////////////////////////////
