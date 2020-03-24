@@ -1,26 +1,47 @@
 
 open util/boolean
 
-//==============test==============
-some sig test{
-	result:Bool
+//==============Account==============
+some sig Account{
+	balance:0,
+	id:Int,
+	name:String
 }
 
-fact testFact {
+fact AccountFact {
+	all n: Account| (n.balance) > (0)
+	all n: Account| (n.name) != (none)
 }
 
-assert testAssert {
-	all n: test| ((n.result) = (True)) or (False)
+assert AccountAssert {
+	all n: Account| (n.balance) > (0)
+	all n: Account| (n.id) > (0)
 }
 
-//the class invariant for class (test) is only valid if this check is valid
-check testAssert
+//the class invariant for class (Account) is only valid if this check is valid
+check AccountAssert
 
-pred negateCheck[x:Bool]{
-	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
+pred getBalanceCheck{
+	some n: Account| not ((n.balance) = (n.balance))
 }
 
-//the post condition for function (negate) is only valid when this is inconsistent.
-run {
-	some x: Bool| negateCheck[x]
-}for 8 but 8 int, 2 Bool, exactly 32 String
+//the post condition for function (getBalance) is only valid when this is inconsistent.
+run getBalanceCheck
+
+//==============Bank==============
+some sig Bank{
+	num_of_clients:Int,
+	account_names:String,
+	account_ids:String
+}
+
+fact BankFact {
+	all n: Bank| (n.num_of_clients) >= (0)
+}
+
+assert BankAssert {
+	all n: Bank| (n.num_of_clients) >= (0)
+}
+
+//the class invariant for class (Bank) is only valid if this check is valid
+check BankAssert

@@ -16,11 +16,11 @@ assert testAssert {
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
-pred negateCheck[x:Bool]{
-	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
+pred smallEqualCheck[x:Int, y:Int]{
+	some n: test| not ((((x) > (0)) and ((y) > (0))) => ((((x) <= (y)) => ((True) = ((x) <= (y)))) and ((not ((x) <= (y))) => ((False) = ((x) <= (y))))))
 }
 
-//the post condition for function (negate) is only valid when this is inconsistent.
+//the post condition for function (smallEqual) is only valid when this is inconsistent.
 run {
-	some x: Bool| negateCheck[x]
+	some x: Int| some y: Int| smallEqualCheck[x, y]
 }for 8 but 8 int, 2 Bool, exactly 32 String

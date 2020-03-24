@@ -3,24 +3,26 @@ open util/boolean
 
 //==============test==============
 some sig test{
-	result:Bool
+	result:Bool,
+	bar:Bool
 }
 
 fact testFact {
+	all n: test| (n.bar) = (True)
 }
 
 assert testAssert {
-	all n: test| ((n.result) = (True)) or (False)
+	all n: test| ((n.result) = (n.bar)) or ((n.x) = (False))
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
-pred negateCheck[x:Bool]{
-	some n: test| not ((((x) = (True)) or (False)) => ((not (x)) != (x)))
+pred impCheck[x:Bool, y:Bool]{
+	some n: test| not (((((x) = (True)) or ((x) = (False))) and (((y) = (True)) or ((x) = (False)))) => (((((y) = (True)) and ((x) = (True))) => ((((x) => ((y) and (n.bar))) = (True)) or ((x) = (False)))) and ((not (((y) = (True)) and ((x) = (True)))) => (((((x) or (y)) => ((y) or (x))) = (True)) or ((x) = (False))))))
 }
 
-//the post condition for function (negate) is only valid when this is inconsistent.
+//the post condition for function (imp) is only valid when this is inconsistent.
 run {
-	some x: Bool| negateCheck[x]
+	some x: Bool| some y: Bool| impCheck[x, y]
 }for 8 but 8 int, 2 Bool, exactly 32 String
