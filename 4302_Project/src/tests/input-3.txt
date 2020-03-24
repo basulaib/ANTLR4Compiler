@@ -47,13 +47,13 @@ class Professor {
     
     assume {
         pay > 50000;
-        tenure == false;
+        tenure <=> false;
     }
 
     func void checkTenureTrack() {
         require {
             exp_years > 0;
-            tenure == false;
+            tenure <=> false;
         }
 
         if (exp_years > 10) {

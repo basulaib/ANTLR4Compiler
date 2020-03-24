@@ -202,7 +202,8 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolConst(BoolConst con) {
-		this.printResult = con.getBoolValue() ? "True" : "False";
+		this.printResult = con.getBoolValue() ? "1=1" : "1=0";
+		// this will translate true/false into primitive type boolean value in alloy
 	}
 
 	@Override
@@ -231,9 +232,10 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
+		this.printResult = ((prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
 				? bool.getID()
-				: prefix + "." + bool.getID();
+				: prefix + "." + bool.getID()) + " = True";
+		// this will translate it into primitive type boolean in Alloy
 	}
 
 	@Override
@@ -241,7 +243,10 @@ public class PrettyPrinter implements Visitor {
 		// we don't need to add prefix in declaration
 		if (decl.getConst() != null) {
 			reset();
-			this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+			if (decl.getType() != Constant.Type.bool)
+				this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+			else
+				this.printResult = decl.getID() + ":" + (decl.getConst().getBoolValue() ? "True" : "False");
 		} else {
 			this.printResult = decl.getID() + ":";
 			switch (decl.getType()) {

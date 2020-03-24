@@ -38,7 +38,7 @@ some sig Professor{
 
 fact ProfessorFact {
 	all n: Professor| (n.pay) > (50000)
-	all n: Professor| (n.tenure) = (False)
+	all n: Professor| (n.tenure = True) <=> (1=0)
 }
 
 assert ProfessorAssert {

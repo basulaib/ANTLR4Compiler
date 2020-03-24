@@ -13,7 +13,7 @@ class test{
 		result = x - y;
 
 		ensure {
-			result == x -y;
+			result == x - y;
 		}
 	}
 

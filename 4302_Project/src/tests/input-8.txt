@@ -4,29 +4,29 @@ class test{
     	bool bar;
     }
     assume{
-        bar == true;
+        bar <=> true;
     }
 
 	func bool imp(bool x, bool y){
 		require {
-            x == true || x == false;
-            y == true || x == false;
+            x <=> true || false;
+            y <=> true || false;
 		}
 
-        if(y == true && x == true){
+        if(y <=> true && x <=> true){
 
             result = x => (y && bar);
 
         }
         else{
-            result  = (x || y) => (y || x);
+            result = (x || y) => (y || x);
         }
 		ensure {
-			result == true || x == false;
+			result <=> true || x <=> false;
 		}
 	}
 
 	assert {
-		result == bar || x == false;
+		result <=> bar;
 	}
 }

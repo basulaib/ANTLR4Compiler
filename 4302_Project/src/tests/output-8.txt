@@ -8,18 +8,18 @@ some sig test{
 }
 
 fact testFact {
-	all n: test| (n.bar) = (True)
+	all n: test| (n.bar = True) <=> (1=1)
 }
 
 assert testAssert {
-	all n: test| ((n.result) = (n.bar)) or ((n.x) = (False))
+	all n: test| (n.result = True) <=> (n.bar = True)
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
 pred impCheck[x:Bool, y:Bool]{
-	some n: test| not (((((x) = (True)) or ((x) = (False))) and (((y) = (True)) or ((x) = (False)))) => (((((y) = (True)) and ((x) = (True))) => ((((x) => ((y) and (n.bar))) = (True)) or ((x) = (False)))) and ((not (((y) = (True)) and ((x) = (True)))) => (((((x) or (y)) => ((y) or (x))) = (True)) or ((x) = (False))))))
+	some n: test| not ((((x = True) <=> ((1=1) or (1=0))) and ((y = True) <=> ((1=1) or (1=0)))) => (((((y = True) <=> ((1=1) and (x = True))) <=> (1=1)) => ((((x = True) => ((y = True) and (n.bar = True))) <=> ((1=1) or (x = True))) <=> (1=0))) and ((not (((y = True) <=> ((1=1) and (x = True))) <=> (1=1))) => (((((x = True) or (y = True)) => ((y = True) or (x = True))) <=> ((1=1) or (x = True))) <=> (1=0)))))
 }
 
 //the post condition for function (imp) is only valid when this is inconsistent.
