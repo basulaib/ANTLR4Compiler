@@ -3,6 +3,7 @@ class Account{
 		int old_amount;
     	int	amount;
 		int a = 5;
+		bool testBool = false;
     }
 
 	assume{
@@ -15,6 +16,7 @@ class Account{
 	func int increase(int x, int y, bool p, bool q, bool r){
 		require {
 			x > 0;
+			testBool <=> False;	//only use <=> for bool comparison for now.
 		}
 		//((amount + x) + y) * ((amount + x) + y) == (amount + x + y) * (amount + x + y);
 		
