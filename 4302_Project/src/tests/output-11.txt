@@ -10,14 +10,14 @@ fact testFact {
 }
 
 assert testAssert {
-	all n: test| ((n.result) = (True)) or (False)
+	all n: test| (n.result = True) <=> ((1=1) or (1=0))
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
 pred smallEqualCheck[x:Int, y:Int]{
-	some n: test| not ((((x) > (0)) and ((y) > (0))) => ((((x) <= (y)) => ((True) = ((x) <= (y)))) and ((not ((x) <= (y))) => ((False) = ((x) <= (y))))))
+	some n: test| not ((((x) > (0)) and ((y) > (0))) => ((((x) <= (y)) => ((1=1) <=> ((x) <= (y)))) and ((not ((x) <= (y))) => ((1=0) <=> ((x) <= (y))))))
 }
 
 //the post condition for function (smallEqual) is only valid when this is inconsistent.

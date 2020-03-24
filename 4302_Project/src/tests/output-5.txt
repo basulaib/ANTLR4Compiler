@@ -10,14 +10,14 @@ fact testFact {
 }
 
 assert testAssert {
-	all n: test| ((n.result) = (True)) or (False)
+	all n: test| (n.result = True) <=> ((1=1) or (1=0))
 }
 
 //the class invariant for class (test) is only valid if this check is valid
 check testAssert
 
 pred disjunctionCheck[x:Bool, y:Bool]{
-	some n: test| not (((((x) = (True)) or (False)) and (((y) = (True)) or (False))) => ((((x) or (y)) = (x)) or (y)))
+	some n: test| not ((((x = True) <=> ((1=1) or (1=0))) and ((y = True) <=> ((1=1) or (1=0)))) => (((x = True) or (y = True)) <=> ((x = True) or (y = True))))
 }
 
 //the post condition for function (disjunction) is only valid when this is inconsistent.

@@ -6,18 +6,18 @@ class test{
 
 	func bool disjunction(bool x, bool y){
 		require {
-			x == true || false;
-			y == true || false;
+			x <=> true || false;
+			y <=> true || false;
 		}
 
 		result = x || y;
 
 		ensure {
-			result == x || y;
+			result <=> x || y;
 		}
 	}
 
 	assert {
-		result == true || false;
+		result <=> true || false;
 	}
 }

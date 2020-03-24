@@ -18,11 +18,11 @@ class test{
 		}
 
 		ensure {
-			result == (x != y);
+			result <=> (x != y);
 		}
 	}
 
 	assert {
-		result == true || false;
+		result <=> true || false;
 	}
 }

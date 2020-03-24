@@ -10,7 +10,7 @@ class test{
 			y >= 0;
 			z >= 0;
 		}
-		if(x == y && x == z){
+		if(x <=> y && x <=> z){
 		    result = true;
 		}
 		else{
@@ -18,11 +18,11 @@ class test{
 		}
 
 		ensure {
-			result == (x == y && x == z);
+			result <=> (x <=> y && x <=> z);
 		}
 	}
 
 	assert {
-		result == true || result == false;
+		result <=> true || result <=> false;
 	}
 }

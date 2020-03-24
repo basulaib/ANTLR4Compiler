@@ -243,7 +243,10 @@ public class PrettyPrinter implements Visitor {
 		// we don't need to add prefix in declaration
 		if (decl.getConst() != null) {
 			reset();
-			this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+			if (decl.getType() != Constant.Type.bool)
+				this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+			else
+				this.printResult = decl.getID() + ":" + (decl.getConst().getBoolValue() ? "True" : "False");
 		} else {
 			this.printResult = decl.getID() + ":";
 			switch (decl.getType()) {
