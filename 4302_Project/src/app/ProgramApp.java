@@ -39,7 +39,11 @@ public class ProgramApp {
 
 			try {
 				String alsFile = fileName.substring(0, fileName.length() - 4);
-				FileWriter f = new FileWriter("." + File.separator + "output-" + alsFile + ".als");
+				System.out.println(alsFile);
+				String path = "." + File.separator + "output-" + alsFile + ".als";
+				System.out.println(path);
+				File nf = new File(path);
+				FileWriter f = new FileWriter(nf);
 				f.write("\n");
 				f.write(result);
 				f.close();
