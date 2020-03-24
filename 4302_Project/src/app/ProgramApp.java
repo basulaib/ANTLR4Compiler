@@ -20,10 +20,11 @@ public class ProgramApp {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		if (args.length != 1) {
-			System.err.println("Usage: file name");
+		if (args.length != 2) {
+			System.err.println("Usage: [input file] [output path]");
 		} else {
 			String fileName = args[0];
+			String path = args[1];
 			ProjectParser parser = getParser(fileName);
 
 			// tell ANTLR to build a parse tree from the start symbol 'prog'
@@ -42,11 +43,11 @@ public class ProgramApp {
 			try {
 				Path p = Paths.get(fileName);
 				String alsFileName = p.getFileName().toString();
-				// String alsFile = fileName.substring(0, fileName.length() - 4);
+				alsFileName = alsFileName.substring(0, alsFileName.length() - 4);
 				System.out.println(alsFileName);
-				String path = "." + File.separator + "output-" + alsFileName + ".als";
-				System.out.println(path);
-				File nf = new File(path);
+				String output = path + "output-" + alsFileName + ".als";
+				System.out.println(output);
+				File nf = new File(output);
 				FileWriter f = new FileWriter(nf);
 				f.write("\n");
 				f.write(result);
