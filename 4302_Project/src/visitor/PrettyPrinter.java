@@ -202,7 +202,8 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolConst(BoolConst con) {
-		this.printResult = con.getBoolValue() ? "True" : "False";
+		this.printResult = con.getBoolValue() ? "1=1" : "1=0";
+		// this will translate true/false into primitive type boolean value in alloy
 	}
 
 	@Override
@@ -231,9 +232,10 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
+		this.printResult = ((prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
 				? bool.getID()
-				: prefix + "." + bool.getID();
+				: prefix + "." + bool.getID()) + " = True";
+		// this will translate it into primitive type boolean in Alloy
 	}
 
 	@Override
