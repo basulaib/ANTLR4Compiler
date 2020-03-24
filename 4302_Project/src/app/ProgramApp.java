@@ -21,7 +21,7 @@ public class ProgramApp {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
-			System.err.println("Usage: [input file] [output path]");
+			System.err.println("Usage: [input file] [output file path]");
 		} else {
 			String fileName = args[0];
 			String path = args[1];
@@ -41,13 +41,7 @@ public class ProgramApp {
 			String result = printer.getPrintResult(prog);
 
 			try {
-				Path p = Paths.get(fileName);
-				String alsFileName = p.getFileName().toString();
-				alsFileName = alsFileName.substring(0, alsFileName.length() - 4);
-				System.out.println(alsFileName);
-				String output = path + "output-" + alsFileName + ".als";
-				System.out.println(output);
-				File nf = new File(output);
+				File nf = new File(path);
 				FileWriter f = new FileWriter(nf);
 				f.write("\n");
 				f.write(result);
