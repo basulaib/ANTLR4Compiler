@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -38,9 +40,11 @@ public class ProgramApp {
 			String result = printer.getPrintResult(prog);
 
 			try {
-				String alsFile = fileName.substring(0, fileName.length() - 4);
-				System.out.println(alsFile);
-				String path = "." + File.separator + "output-" + alsFile + ".als";
+				Path p = Paths.get(fileName);
+				String alsFileName = p.getFileName().toString();
+				// String alsFile = fileName.substring(0, fileName.length() - 4);
+				System.out.println(alsFileName);
+				String path = "." + File.separator + "output-" + alsFileName + ".als";
 				System.out.println(path);
 				File nf = new File(path);
 				FileWriter f = new FileWriter(nf);
