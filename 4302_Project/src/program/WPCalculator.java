@@ -23,7 +23,7 @@ public class WPCalculator {
 
 	// passing in the function, it will return the weakest precondition for that
 	// function
-	public Expression getWP(Function func) {
+	private Expression getWP(Function func) {
 		Expression postCond = this.conjunctAll(func.getPostCondition(), 0, func.getPostCondition().size() - 1);
 		return sequentialCase(func.getStatements(), postCond);
 	}
@@ -41,13 +41,16 @@ public class WPCalculator {
 	// condition rule
 	private Expression conditionalCase(Conditional condition, Expression postCond) {
 		Expression result;
-		List<Expression> allConditions = condition.getOrder();
+		List<Expression> originConditions = condition.getOrder();
+		// must pre-process the conditions, negate all the previous conditions.
+		List<Expression> processedConditions = processCondition(originConditions);
+
 		// must conjunct all of these later
 		List<Expression> conjunctPrecond = new ArrayList<Expression>();
 
-		for (Expression expr : allConditions) {
-			List<FuncStatement> statements = condition.getStatements(expr);
-			BiImplication imply = new BiImplication(expr, sequentialCase(statements, postCond));
+		for (int i = 0; i < originConditions.size(); i++) {
+			List<FuncStatement> statements = condition.getStatements(originConditions.get(i));
+			BiImplication imply = new BiImplication(processedConditions.get(i), sequentialCase(statements, postCond));
 			conjunctPrecond.add(imply);
 		}
 
@@ -56,8 +59,25 @@ public class WPCalculator {
 		return result;
 	}
 
-	public static Expression conjunctAll(List<Expression> exprs, int start, int end) {
-		// return the conjunction of all the expression passed in
+	// for each conditions, negate all the previous conditions and conjunct them all
+	// with it self.
+	private List<Expression> processCondition(List<Expression> conditions) {
+		List<Expression> result = new ArrayList<Expression>();
+		for (int i = 0; i < conditions.size(); i++) {
+			List<Expression> currentCondition = new ArrayList<Expression>();
+			for (int j = 0; j <= i; j++) {
+				if (j == i)
+					currentCondition.add(conditions.get(i));
+				else
+					currentCondition.add(new Negation(conditions.get(j)));
+			}
+			result.add(conjunctAll(currentCondition, 0, i));
+		}
+		return result;
+	}
+
+	private Expression conjunctAll(List<Expression> exprs, int start, int end) {
+		// return the conjunction of all the expression passed in, start, end inclusive
 		// lets divide and conquer !!
 
 		if (exprs.isEmpty())

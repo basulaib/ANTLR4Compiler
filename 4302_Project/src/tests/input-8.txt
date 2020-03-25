@@ -9,7 +9,7 @@ class test{
 
 	func bool imp(bool x, bool y){
 		require {
-            x <=> true || false;
+            x == true || false;
             y <=> true || false;
 		}
 

@@ -14,7 +14,6 @@ public abstract class Expression {
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO: this is not complete!
 		if (this == obj)
 			return true;
 		if (obj == null)

@@ -34,6 +34,7 @@ public class PrettyPrinter implements Visitor {
 	private String prefix; // the prefix for all variables, eg. x => n.x
 	private String currentClass;
 	private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
+	private TypeChecker typeChecker;
 
 	private PrettyPrinter printer;// we can reuse the same printer
 
@@ -94,6 +95,8 @@ public class PrettyPrinter implements Visitor {
 	public void reset() {
 //		if (this.printer == null)
 		printer = new PrettyPrinter(this.prefix, this.currentClass, this.parameters);
+		if (typeChecker == null)
+			typeChecker = new TypeChecker();
 		this.printResult = "";
 	}
 
@@ -192,12 +195,22 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitEqual(BiEqual equ) {
-		this.visitBinaryOp(equ, "=");
+		reset();
+		if (typeChecker.getTypeResult(equ) == TypeChecker.Type.bool) {
+			this.visitBinaryOp(equ, "<=>");
+		} else {
+			this.visitBinaryOp(equ, "=");
+		}
 	}
 
 	@Override
 	public void visitNotEqual(BiNotEqual neq) {
-		this.visitBinaryOp(neq, "!=");
+		reset();
+		if (typeChecker.getTypeResult(neq) == TypeChecker.Type.bool) {
+			this.visitBinaryOp(neq, "<=> not");
+		} else {
+			this.visitBinaryOp(neq, "!=");
+		}
 	}
 
 	@Override

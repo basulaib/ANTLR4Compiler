@@ -23,21 +23,23 @@ public class Conditional extends FuncStatement {
 		this.exprBlocks = exprBlocks;
 	}
 
-	public void addConditionalStatement(Expression condition) {
-		if (this.exprBlocks.containsKey(condition)) {
-		} else {
-			List<FuncStatement> statements = new ArrayList<FuncStatement>();
-			exprBlocks.put(condition, statements);
-			this.order.add(condition);
-		}
-	}
+//	public void addConditionalStatement(Expression condition) {
+//		if (this.exprBlocks.containsKey(condition)) {
+//		} else {
+//			List<FuncStatement> statements = new ArrayList<FuncStatement>();
+//			exprBlocks.put(condition, statements);
+//			this.order.add(condition);
+//		}
+//	}
 
 	public void addConditionalStatement(Expression condition, FuncStatement statement) {
 		if (this.exprBlocks.containsKey(condition)) {
-			exprBlocks.get(condition).add(statement);
+			if (statement != null)
+				exprBlocks.get(condition).add(statement);
 		} else {
 			List<FuncStatement> statements = new ArrayList<FuncStatement>();
-			statements.add(statement);
+			if (statement != null)
+				statements.add(statement);
 			exprBlocks.put(condition, statements);
 			this.order.add(condition);
 		}
@@ -45,11 +47,14 @@ public class Conditional extends FuncStatement {
 
 	public void addConditionalStatement(FuncStatement statement) {
 		// make sure you do it for else only
-		List<Expression> conditions = new ArrayList<Expression>();
-		for (Expression expr : this.exprBlocks.keySet()) {
-			conditions.add(new Negation(expr));
-		}
-		Expression defaultCondition = WPCalculator.conjunctAll(conditions, 0, conditions.size() - 1);
+//		List<Expression> conditions = new ArrayList<Expression>();
+//		for (Expression expr : this.exprBlocks.keySet()) {
+//			conditions.add(new Negation(expr));
+//		}
+//		Expression defaultCondition = WPCalculator.conjunctAll(conditions, 0, conditions.size() - 1);
+
+		// I moved the above block to WPcalculator.
+		Expression defaultCondition = new BoolConst(true);
 		if (this.exprBlocks.containsKey(defaultCondition)) {
 
 			if (statement != null)

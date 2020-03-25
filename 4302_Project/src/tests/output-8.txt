@@ -19,7 +19,7 @@ assert testAssert {
 check testAssert
 
 pred impCheck[x:Bool, y:Bool]{
-	some n: test| not ((((x = True) <=> ((1=1) or (1=0))) and ((y = True) <=> ((1=1) or (1=0)))) => (((((y = True) <=> ((1=1) and (x = True))) <=> (1=1)) => ((((x = True) => ((y = True) and (n.bar = True))) <=> ((1=1) or (x = True))) <=> (1=0))) and ((not (((y = True) <=> ((1=1) and (x = True))) <=> (1=1))) => (((((x = True) or (y = True)) => ((y = True) or (x = True))) <=> ((1=1) or (x = True))) <=> (1=0)))))
+	some n: test| not (((((x = True) <=> (1=1)) or (1=0)) and ((y = True) <=> ((1=1) or (1=0)))) => (((((y = True) <=> ((1=1) and (x = True))) <=> (1=1)) => ((((x = True) => ((y = True) and (n.bar = True))) <=> ((1=1) or (x = True))) <=> (1=0))) and (((not (((y = True) <=> ((1=1) and (x = True))) <=> (1=1))) and (1=1)) => (((((x = True) or (y = True)) => ((y = True) or (x = True))) <=> ((1=1) or (x = True))) <=> (1=0)))))
 }
 
 //the post condition for function (imp) is only valid when this is inconsistent.

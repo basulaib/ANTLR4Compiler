@@ -15,7 +15,6 @@ public class BoolConst extends Constant {
 
 	@Override
 	public void accept(Visitor visitor) {
-		// TODO Auto-generated method stub
 		visitor.visitBoolConst(this);
 	}
 }

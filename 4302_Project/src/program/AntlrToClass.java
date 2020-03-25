@@ -281,7 +281,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 					}
 				} else {
 					e = this.toExpression.visit(t.getChild(2));
-					result.addConditionalStatement(e);
+					FuncStatement nullStatement = null;
+					result.addConditionalStatement(e, nullStatement);
 				}
 			} else if (t instanceof ElseIfConditionalContext) {
 				if (((ElseIfConditionalContext) t).children.size() > 6) { // statements exist
@@ -294,7 +295,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 					}
 				} else {
 					e = this.toExpression.visit(t.getChild(2));
-					result.addConditionalStatement(e);
+					FuncStatement nullStatement = null;
+					result.addConditionalStatement(e, nullStatement);
 				}
 			} else {
 				boolean emptyBlock = true;

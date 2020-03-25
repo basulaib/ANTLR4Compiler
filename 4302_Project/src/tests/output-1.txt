@@ -21,7 +21,7 @@ assert AccountAssert {
 check AccountAssert
 
 pred increaseCheck[x:Int, y:Int, p:Bool, q:Bool, r:Bool]{
-	some n: Account| not ((((x) > (0)) and ((n.testBool = True) <=> (n.False))) => (((((x) > (10)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]))) and (((x) > (9)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))) and (((not ((x) > (9))) and (not ((x) > (10)))) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))))
+	some n: Account| not ((((x) > (0)) and ((n.testBool = True) <=> (1=0))) => (((((x) > (10)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]))) and (((not ((x) > (10))) and ((x) > (9))) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))) and ((((not ((x) > (10))) and (not ((x) > (9)))) and (1=1)) => ((mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]]) = (mul[plus[plus[n.amount][x]][y]][plus[plus[n.amount][x]][y]])))))
 }
 
 //the post condition for function (increase) is only valid when this is inconsistent.
