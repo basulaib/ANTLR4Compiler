@@ -1,5 +1,6 @@
 package visitor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,447 +31,441 @@ import program.Class;
 
 public class PrettyPrinter implements Visitor {
 
-	private String printResult;
-	private String prefix; // the prefix for all variables, eg. x => n.x
-	private String currentClass;
-	private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
-	private TypeChecker typeChecker;
+    private String printResult;
+    private String prefix; // the prefix for all variables, eg. x => n.x
+    private String currentClass;
+    private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
+    private TypeChecker typeChecker;
+    private List<Expression> invariants;
 
-	private PrettyPrinter printer;// we can reuse the same printer
+    private PrettyPrinter printer;// we can reuse the same printer
 
-	public PrettyPrinter() {
-		printResult = "";
-		prefix = "";
-	}
+    public PrettyPrinter() {
+        printResult = "";
+        prefix = "";
+    }
 
-	// we need to add prefix for variables for identifying predicates
-	public PrettyPrinter(String prefix) {
-		printResult = "";
-		this.prefix = prefix;
-	}
+    // must be accepted before calling this
+    public String getPrintResult() {
+        return this.printResult;
+    }
 
-	private PrettyPrinter(String prefix, String currentClass) {
-		this.printResult = "";
-		this.prefix = prefix;
-		this.currentClass = currentClass;
-	}
+    public String getPrintResult(Program program) {
+        this.visitProgram(program);
+        return this.printResult;
+    }
 
-	private PrettyPrinter(String prefix, String currentClass, HashSet<String> parameters) {
-		this.printResult = "";
-		this.prefix = prefix;
-		this.currentClass = currentClass;
-		this.parameters = parameters;
-	}
+    public String getPrintResult(Expression expr) {
+        expr.accept(this);
+        return this.printResult;
+    }
 
-	// must be accepted before calling this
-	public String getPrintResult() {
-		return this.printResult;
-	}
+    public String getPrintResult(Declaration decl) {
+        decl.accept(this);
+        return this.printResult;
+    }
 
-	public String getPrintResult(Program program) {
-		this.visitProgram(program);
-		return this.printResult;
-	}
+    public String getPrintResult(Function fun) {
+        fun.accept(this);
+        return this.printResult;
+    }
 
-	public String getPrintResult(Expression expr) {
-		expr.accept(this);
-		return this.printResult;
-	}
+    public String getPrintResult(Class cla) {
+        cla.accept(this);
+        return this.printResult;
+    }
 
-	public String getPrintResult(Declaration decl) {
-		decl.accept(this);
-		return this.printResult;
-	}
-
-	public String getPrintResult(Function fun) {
-		fun.accept(this);
-		return this.printResult;
-	}
-
-	public String getPrintResult(Class cla) {
-		cla.accept(this);
-		return this.printResult;
-	}
-
-	public void reset() {
+    public void reset() {
 //		if (this.printer == null)
-		printer = new PrettyPrinter(this.prefix, this.currentClass, this.parameters);
-		if (typeChecker == null)
-			typeChecker = new TypeChecker();
-		this.printResult = "";
-	}
+        printer = new PrettyPrinter();
+        printer.invariants = invariants;
+        printer.prefix = prefix;
+        printer.currentClass = currentClass;
+        printer.parameters = parameters;
 
-	@Override
-	public void visitConjunction(BiConjunction conjunc) {
-		this.visitBinaryOp(conjunc, "and");
-	}
+        if (typeChecker == null)
+            typeChecker = new TypeChecker();
+        this.printResult = "";
+    }
 
-	@Override
-	public void visitDisjunction(BiDisjunction disjunct) {
-		this.visitBinaryOp(disjunct, "or");
-	}
+    @Override
+    public void visitConjunction(BiConjunction conjunc) {
+        this.visitBinaryOp(conjunc, "and");
+    }
 
-	@Override
-	public void visitImplication(BiImplication imply) {
-		this.visitBinaryOp(imply, "=>");
-	}
+    @Override
+    public void visitDisjunction(BiDisjunction disjunct) {
+        this.visitBinaryOp(disjunct, "or");
+    }
 
-	@Override
-	public void visitEquivalence(BiEquivalence equal) {
-		this.visitBinaryOp(equal, "<=>");
-	}
+    @Override
+    public void visitImplication(BiImplication imply) {
+        this.visitBinaryOp(imply, "=>");
+    }
 
-	@Override
-	public void visitNegation(Negation neg) {
-		reset();
-		neg.expr.accept(printer);
-		this.printResult = "not " + "(" + printer.printResult + ")";
+    @Override
+    public void visitEquivalence(BiEquivalence equal) {
+        this.visitBinaryOp(equal, "<=>");
+    }
 
-//		this.addParenthesis();
-	}
-
-	private void visitBinaryOp(BinaryOperation binary, String keyword) {
-		reset();
-		String left, right;
-		binary.getLeft().accept(printer);
-		left = printer.printResult;
-		reset();
-
-		binary.getRight().accept(printer);
-		right = printer.printResult;
-		reset();
-
-		this.printResult = "(" + left + ")" + " " + keyword + " " + "(" + right + ")";
+    @Override
+    public void visitNegation(Negation neg) {
+        reset();
+        neg.expr.accept(printer);
+        this.printResult = "not " + "(" + printer.printResult + ")";
 
 //		this.addParenthesis();
-	}
+    }
 
-	@Override
-	public void visitMult(BiMultiplication mult) {
-		reset();
-		this.printResult = "mul[" + printer.getPrintResult(mult.getLeft()) + "]["
-				+ printer.getPrintResult(mult.getRight()) + "]";
-	}
+    private void visitBinaryOp(BinaryOperation binary, String keyword) {
+        reset();
+        String left, right;
+        binary.getLeft().accept(printer);
+        left = printer.printResult;
+        reset();
 
-	@Override
-	public void visitDiv(BiDivision div) {
-		reset();
-		this.printResult = "div[" + printer.getPrintResult(div.getLeft()) + "]["
-				+ printer.getPrintResult(div.getRight()) + "]";
-	}
+        binary.getRight().accept(printer);
+        right = printer.printResult;
+        reset();
 
-	@Override
-	public void visitAdd(BiAddition add) {
-		reset();
-		this.printResult = "plus[" + printer.getPrintResult(add.getLeft()) + "]["
-				+ printer.getPrintResult(add.getRight()) + "]";
-	}
+        this.printResult = "(" + left + ")" + " " + keyword + " " + "(" + right + ")";
 
-	@Override
-	public void visitSub(BiSubtraction sub) {
-		reset();
-		this.printResult = "minus[" + printer.getPrintResult(sub.getLeft()) + "]["
-				+ printer.getPrintResult(sub.getRight()) + "]";
-	}
+//		this.addParenthesis();
+    }
 
-	@Override
-	public void visitLarger(BiLarger lar) {
-		this.visitBinaryOp(lar, ">");
-	}
+    @Override
+    public void visitMult(BiMultiplication mult) {
+        reset();
+        this.printResult = "mul[" + printer.getPrintResult(mult.getLeft()) + "]["
+                + printer.getPrintResult(mult.getRight()) + "]";
+    }
 
-	@Override
-	public void visitSmaller(BiSmaller sma) {
-		this.visitBinaryOp(sma, "<");
-	}
+    @Override
+    public void visitDiv(BiDivision div) {
+        reset();
+        this.printResult = "div[" + printer.getPrintResult(div.getLeft()) + "]["
+                + printer.getPrintResult(div.getRight()) + "]";
+    }
 
-	@Override
-	public void visitLargerOrEqual(BiLargerOrEqual loe) {
-		this.visitBinaryOp(loe, ">=");
-	}
+    @Override
+    public void visitAdd(BiAddition add) {
+        reset();
+        this.printResult = "plus[" + printer.getPrintResult(add.getLeft()) + "]["
+                + printer.getPrintResult(add.getRight()) + "]";
+    }
 
-	@Override
-	public void visitSmallerOrEqual(BiSmallerOrEqual soe) {
-		this.visitBinaryOp(soe, "<=");
-	}
+    @Override
+    public void visitSub(BiSubtraction sub) {
+        reset();
+        this.printResult = "minus[" + printer.getPrintResult(sub.getLeft()) + "]["
+                + printer.getPrintResult(sub.getRight()) + "]";
+    }
 
-	@Override
-	public void visitEqual(BiEqual equ) {
-		reset();
-		if (typeChecker.getTypeResult(equ) == TypeChecker.Type.bool) {
-			this.visitBinaryOp(equ, "<=>");
-		} else {
-			this.visitBinaryOp(equ, "=");
-		}
-	}
+    @Override
+    public void visitLarger(BiLarger lar) {
+        this.visitBinaryOp(lar, ">");
+    }
 
-	@Override
-	public void visitNotEqual(BiNotEqual neq) {
-		reset();
-		if (typeChecker.getTypeResult(neq) == TypeChecker.Type.bool) {
-			this.visitBinaryOp(neq, "<=> not");
-		} else {
-			this.visitBinaryOp(neq, "!=");
-		}
-	}
+    @Override
+    public void visitSmaller(BiSmaller sma) {
+        this.visitBinaryOp(sma, "<");
+    }
 
-	@Override
-	public void visitBoolConst(BoolConst con) {
-		this.printResult = con.getBoolValue() ? "1=1" : "1=0";
-		// this will translate true/false into primitive type boolean value in alloy
-	}
+    @Override
+    public void visitLargerOrEqual(BiLargerOrEqual loe) {
+        this.visitBinaryOp(loe, ">=");
+    }
 
-	@Override
-	public void visitNumConst(NumConst con) {
-		this.printResult = ((Integer) con.getNumValue()).toString();
-	}
+    @Override
+    public void visitSmallerOrEqual(BiSmallerOrEqual soe) {
+        this.visitBinaryOp(soe, "<=");
+    }
 
-	@Override
-	public void visitStrConst(StringConst str) {
-		this.printResult = str.getStrValue().isEmpty() ? "none" : '"' + str.getStrValue() + '"';
-	}
+    @Override
+    public void visitEqual(BiEqual equ) {
+        reset();
+        if (typeChecker.getTypeResult(equ.getLeft()) == TypeChecker.Type.bool) {
+            this.visitBinaryOp(equ, "<=>");
+        } else {
+            this.visitBinaryOp(equ, "=");
+        }
+    }
 
-	@Override
-	public void visitStrVar(StringVariable str) {
+    @Override
+    public void visitNotEqual(BiNotEqual neq) {
+        reset();
+        if (typeChecker.getTypeResult(neq) == TypeChecker.Type.bool) {
+            this.visitBinaryOp(neq, "<=> not");
+        } else {
+            this.visitBinaryOp(neq, "!=");
+        }
+    }
 
-		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(str.getID()))) ? str.getID()
-				: prefix + "." + str.getID();
-	}
+    @Override
+    public void visitBoolConst(BoolConst con) {
+        this.printResult = con.getBoolValue() ? "1=1" : "1=0";
+        // this will translate true/false into primitive type boolean value in alloy
+    }
 
-	@Override
-	public void visitNumVar(NumVariable num) {
+    @Override
+    public void visitNumConst(NumConst con) {
+        this.printResult = ((Integer) con.getNumValue()).toString();
+    }
 
-		this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(num.getID()))) ? num.getID()
-				: prefix + "." + num.getID();
-	}
+    @Override
+    public void visitStrConst(StringConst str) {
+        this.printResult = str.getStrValue().isEmpty() ? "none" : '"' + str.getStrValue() + '"';
+    }
 
-	@Override
-	public void visitBoolVar(BoolVariable bool) {
-		this.printResult = ((prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
-				? bool.getID()
-				: prefix + "." + bool.getID()) + " = True";
-		// this will translate it into primitive type boolean in Alloy
-	}
+    @Override
+    public void visitStrVar(StringVariable str) {
 
-	@Override
-	public void visitDeclaration(Declaration decl) {
-		// we don't need to add prefix in declaration
-		if (decl.getConst() != null) {
-			reset();
-			if (decl.getType() != Constant.Type.bool)
-				this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
-			else
-				this.printResult = decl.getID() + ":" + (decl.getConst().getBoolValue() ? "True" : "False");
-		} else {
-			this.printResult = decl.getID() + ":";
-			switch (decl.getType()) {
-			case bool:
-				this.printResult = this.printResult + "Bool";
-				break;
-			case string:
-				this.printResult = this.printResult + "String";
-				break;
-			case num:
-				this.printResult = this.printResult + "Int";
-				break;
-			}
-		}
-	}
+        this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(str.getID()))) ? str.getID()
+                : prefix + "." + str.getID();
+    }
 
-	@Override
-	public void visitFunction(Function func) {
-		// each function is a predicate
-		WPCalculator wpCal = new WPCalculator();
-		Expression pred = wpCal.getPred(func);
+    @Override
+    public void visitNumVar(NumVariable num) {
 
-		StringBuilder result = new StringBuilder();
+        this.printResult = (prefix.isEmpty() || (parameters != null && parameters.contains(num.getID()))) ? num.getID()
+                : prefix + "." + num.getID();
+    }
 
-		if (pred != null) {
-			// all n: Class | n.x ........
-			String predicateName = func.getId() + "Check";
-			result.append("\n\n" + "pred " + predicateName);
+    @Override
+    public void visitBoolVar(BoolVariable bool) {
+        this.printResult = ((prefix.isEmpty() || (parameters != null && parameters.contains(bool.getID())))
+                ? bool.getID()
+                : prefix + "." + bool.getID()) + " = True";
+        // this will translate it into primitive type boolean in Alloy
+    }
 
-			if (!func.getParameters().isEmpty()) {
-				result.append("[");
-				for (Parameter p : func.getParameters()) {
-					result.append(p.getID() + ":");
-					switch (p.getType()) {
-					case string:
-						result.append("String, ");
-						break;
-					case num:
-						result.append("Int, ");
-						break;
-					case bool:
-						result.append("Bool, ");
-						break;
-					}
-				}
+    @Override
+    public void visitDeclaration(Declaration decl) {
+        // we don't need to add prefix in declaration
+        if (decl.getConst() != null) {
+            reset();
+            if (decl.getType() != Constant.Type.bool)
+                this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
+            else
+                this.printResult = decl.getID() + ":" + (decl.getConst().getBoolValue() ? "True" : "False");
+        } else {
+            this.printResult = decl.getID() + ":";
+            switch (decl.getType()) {
+                case bool:
+                    this.printResult = this.printResult + "Bool";
+                    break;
+                case string:
+                    this.printResult = this.printResult + "String";
+                    break;
+                case num:
+                    this.printResult = this.printResult + "Int";
+                    break;
+            }
+        }
+    }
 
-				result.deleteCharAt(result.length() - 1);
-				result.deleteCharAt(result.length() - 1);
-				result.append("]");
-			}
-			result.append("{\n\t");
+    @Override
+    public void visitFunction(Function func) {
+        // each function is a predicate
+        WPCalculator wpCal = new WPCalculator();
+        Expression pred = wpCal.getHoareTriple(func, invariants);
 
-			this.prefix = "n";
-			HashSet<String> pars = new HashSet<String>();
-			for (Parameter p : func.getParameters()) {
-				pars.add(p.getID());
-			}
-			this.parameters = pars;
-			reset();
-			result.append("some " + this.prefix + ": " + this.currentClass + "| ");
+        StringBuilder result = new StringBuilder();
 
-			// try to find an instance of the negation of that
-			result.append(this.printer.getPrintResult(new Negation(pred)));
+        if (pred != null) {
+            // all n: Class | n.x ........
+            String predicateName = func.getId() + "Check";
+            result.append("\n\n" + "pred " + predicateName);
 
-			result.append("\n}\n\n" + runPred(func.getParameterList(), predicateName));
+            if (!func.getParameters().isEmpty()) {
+                result.append("[");
+                for (Parameter p : func.getParameters()) {
+                    result.append(p.getID() + ":");
+                    switch (p.getType()) {
+                        case string:
+                            result.append("String, ");
+                            break;
+                        case num:
+                            result.append("Int, ");
+                            break;
+                        case bool:
+                            result.append("Bool, ");
+                            break;
+                    }
+                }
 
-			this.printResult = result.toString();
-		}
-	}
+                result.deleteCharAt(result.length() - 1);
+                result.deleteCharAt(result.length() - 1);
+                result.append("]");
+            }
+            result.append("{\n\t");
 
-	private String runPred(List<Parameter> pars, String predName) {
-		StringBuilder result = new StringBuilder();
+            this.prefix = "n";
+            HashSet<String> pars = new HashSet<String>();
+            for (Parameter p : func.getParameters()) {
+                pars.add(p.getID());
+            }
+            this.parameters = pars;
+            reset();
+            result.append("some " + this.prefix + ": " + this.currentClass + "| ");
 
-		result.append("//the post condition for function (" + predName.substring(0, predName.length() - 5));
-		result.append(") is only valid when this is inconsistent.\n");
+            // try to find an instance of the negation of that
+            result.append(this.printer.getPrintResult(new Negation(pred)));
 
-		if (pars == null || pars.isEmpty()) {
-			result.append("run " + predName);
-		} else {
-			result.append("run {\n\t");
-			for (Parameter p : pars) {
-				result.append("some " + p.getID() + ": ");
-				switch (p.getType()) {
-				case string:
-					result.append("String| ");
-					break;
-				case bool:
-					result.append("Bool| ");
-					break;
-				case num:
-					result.append("Int| ");
-					break;
-				}
-			}
-			result.append(predName + "[");
+            result.append("\n}\n\n" + runPred(func.getParameterList(), predicateName));
 
-			for (Parameter p : pars) {
-				result.append(p.getID() + ", ");
-			}
+            this.printResult = result.toString();
+        }
+    }
 
-			// delete the last 2 character ", "
-			result.deleteCharAt(result.length() - 1);
-			result.deleteCharAt(result.length() - 1);
+    private String runPred(List<Parameter> pars, String predName) {
+        StringBuilder result = new StringBuilder();
 
-			result.append("]\n}");
+        result.append("//the post condition and class invariants for function (" + predName.substring(0, predName.length() - 5));
+        result.append(") is only valid when this is inconsistent.\n");
 
-			result.append("for 8 but 8 int, 2 Bool, exactly 32 String");
-		}
-		return result.toString();
-	}
+        if (pars == null || pars.isEmpty()) {
+            result.append("run " + predName);
+        } else {
+            result.append("run {\n\t");
+            for (Parameter p : pars) {
+                result.append("some " + p.getID() + ": ");
+                switch (p.getType()) {
+                    case string:
+                        result.append("String| ");
+                        break;
+                    case bool:
+                        result.append("Bool| ");
+                        break;
+                    case num:
+                        result.append("Int| ");
+                        break;
+                }
+            }
+            result.append(predName + "[");
 
-	@Override
-	public void visitConditional(Conditional cond) {
-		// TODO Auto-generated method stub
+            for (Parameter p : pars) {
+                result.append(p.getID() + ", ");
+            }
 
-	}
+            // delete the last 2 character ", "
+            result.deleteCharAt(result.length() - 1);
+            result.deleteCharAt(result.length() - 1);
 
-	@Override
-	public void visitAssignment(Assignment assign) {
-		// TODO Auto-generated method stub
+            result.append("]\n}");
 
-	}
+            result.append("for 8 but 8 int, 2 Bool, exactly 32 String");
+        }
+        return result.toString();
+    }
 
-	@Override
-	public void visitPreCondition(PreCondition preCond) {
-		// TODO Auto-generated method stub
+    @Override
+    public void visitConditional(Conditional cond) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void visitPostCondition(PostCondition postCond) {
-		// TODO Auto-generated method stub
+    @Override
+    public void visitAssignment(Assignment assign) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void visitProgram(Program program) {
-		StringBuilder result = new StringBuilder();
-		result.append("open util/boolean");
-		for (Class c : program.getClasses()) {
-			result.append("\n\n//==============" + c.getName() + "==============\n");
-			this.printer = new PrettyPrinter();
-			result.append(printer.getPrintResult(c));
-		}
+    @Override
+    public void visitPreCondition(PreCondition preCond) {
+        // TODO Auto-generated method stub
 
-		this.printResult = result.toString();
-	}
+    }
 
-	@Override
-	public void visitClass(Class cla) {
-		// add all signatures
-		StringBuilder result = new StringBuilder();
-		this.currentClass = cla.getName();
+    @Override
+    public void visitPostCondition(PostCondition postCond) {
+        // TODO Auto-generated method stub
 
-		// some keyword is a must!
-		result.append("some sig " + this.currentClass + "{");
+    }
 
-		for (Declaration decl : cla.getDeclarations()) {
-			reset();
-			result.append("\n\t");
-			result.append(this.printer.getPrintResult(decl) + ',');
-		}
+    @Override
+    public void visitProgram(Program program) {
+        StringBuilder result = new StringBuilder();
+        result.append("open util/boolean");
+        for (Class c : program.getClasses()) {
+            result.append("\n\n//==============" + c.getName() + "==============\n");
+            this.printer = new PrettyPrinter();
+            result.append(printer.getPrintResult(c));
+        }
 
-		result.deleteCharAt(result.length() - 1);
-		result.append("\n}");
-		// add all assumptions
-		result.append("\n\nfact " + this.currentClass + "Fact {");
+        this.printResult = result.toString();
+    }
 
-		for (Assumption fact : cla.getAssumptions()) {
-			for (Expression expr : fact.getExprs()) {
-				this.prefix = "n";
-				reset();
-				result.append("\n\tall n: " + this.currentClass + "| ");
-				result.append(this.printer.getPrintResult(expr));
-			}
-		}
+    @Override
+    public void visitClass(Class cla) {
+        // add all signatures
+        StringBuilder result = new StringBuilder();
+        this.currentClass = cla.getName();
 
-		result.append("\n}");
+        // some keyword is a must!
+        result.append("some sig " + this.currentClass + "{");
+
+        for (Declaration decl : cla.getDeclarations()) {
+            reset();
+            result.append("\n\t");
+            result.append(this.printer.getPrintResult(decl) + ',');
+        }
+
+        result.deleteCharAt(result.length() - 1);
+        result.append("\n}");
+        // add all assumptions
+        result.append("\n\nfact " + this.currentClass + "Fact {");
+
+        for (Assumption fact : cla.getAssumptions()) {
+            for (Expression expr : fact.getExprs()) {
+                this.prefix = "n";
+                reset();
+                result.append("\n\tall n: " + this.currentClass + "| ");
+                result.append(this.printer.getPrintResult(expr));
+            }
+        }
+
+        result.append("\n}");
 
 //		this.printResult = result.toString();
 
-		// add all assertions
+        // add all assertions, assertion should appear in the form of hoare triple for all funcitons
 
-		result.append("\n\nassert " + this.currentClass + "Assert {");
+        invariants = new ArrayList<>();
+        for (Assertion ass : cla.getAssertions()) {
+            for (Expression expr : ass.getExprs()) {
+                invariants.add(expr);
+            }
+        }
 
-		for (Assertion ass : cla.getAssertions()) {
-			for (Expression expr : ass.getExprs()) {
-				this.prefix = "n";
-				reset();
-				result.append("\n\tall n: " + this.currentClass + "| ");
-				result.append(this.printer.getPrintResult(expr));
-			}
-		}
+//		result.append("\n\nassert " + this.currentClass + "Assert {");
+//
+//		for (Assertion ass : cla.getAssertions()) {
+//			for (Expression expr : ass.getExprs()) {
+//				this.prefix = "n";
+//				reset();
+//				result.append("\n\tall n: " + this.currentClass + "| ");
+//				result.append(this.printer.getPrintResult(expr));
+//			}
+//		}
+//
+//		result.append("\n}\n\n");
+//
+//		result.append("//the class invariant for class (" + this.currentClass);
+//		result.append(") is only valid if this check is valid");
+//
+//		result.append("\ncheck " + this.currentClass + "Assert");
 
-		result.append("\n}\n\n");
+        // add all predicates
+        for (Function func : cla.getFunctions()) {
+            this.prefix = "n";
+            this.reset();
+            result.append(this.printer.getPrintResult(func));
+        }
 
-		result.append("//the class invariant for class (" + this.currentClass);
-		result.append(") is only valid if this check is valid");
+        this.printResult = result.toString();
 
-		result.append("\ncheck " + this.currentClass + "Assert");
-
-		// add all predicates
-		for (Function func : cla.getFunctions()) {
-			this.prefix = "n";
-			this.reset();
-			result.append(this.printer.getPrintResult(func));
-		}
-
-		this.printResult = result.toString();
-
-	}
+    }
 
 //	private void addParenthesis() {
 //		this.printResult = "(" + this.printResult + ")";

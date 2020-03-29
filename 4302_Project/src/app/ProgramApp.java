@@ -18,44 +18,33 @@ import visitor.*;
 
 public class ProgramApp {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		if (args.length != 2) {
-			System.err.println("Usage: [input file] [output file path]");
-		} else {
-			String fileName = args[0];
-			String path = args[1];
-			ProjectParser parser = getParser(fileName);
+    public static void main(String[] args) {
+        if (args.length == 2 && (args[0].equals("out") || args[0].equals("o"))) {
+            String fileName = args[1];
+            System.out.println(getResult(fileName));
+        } else if (args.length != 2) {
+            System.err.println("Usage: [input file] [output file path]");
+        } else {
+            String fileName = args[0];
+            String path = args[1];
+            String result = getResult(fileName);
 
-			// tell ANTLR to build a parse tree from the start symbol 'prog'
+            try {
+                File nf = new File(path);
+                FileWriter f = new FileWriter(nf);
+                f.write("\n");
+                f.write(result);
+                f.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-			ParseTree antlrAST = parser.prog();
 
-			AntlrToProgram progVisitor = new AntlrToProgram();
-//
-			Program prog = progVisitor.visit(antlrAST);
-//
+            // System.out.print("\n");
+            // System.out.print(result);
 
-			PrettyPrinter printer = new PrettyPrinter();
-
-			String result = printer.getPrintResult(prog);
-
-			try {
-				File nf = new File(path);
-				FileWriter f = new FileWriter(nf);
-				f.write("\n");
-				f.write(result);
-				f.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-
-			// System.out.print("\n");
-			// System.out.print(result);
-
-		}
+        }
 ////////////////////////////////////////////////////////
 //		class Account{
 //			declare {
@@ -119,21 +108,39 @@ public class ProgramApp {
 //		String result = printer.getPrintResult(Account);
 //
 //		System.out.print(result);
-	}
+    }
 
-	private static ProjectParser getParser(String fileName) {
-		ProjectParser parser = null;
-		try {
-			CharStream input = CharStreams.fromFileName(fileName);
-			ProjectLexer lexer = new ProjectLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			parser = new ProjectParser(tokens);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    private static String getResult(String fileName) {
+        ProjectParser parser = getParser(fileName);
 
-		return parser;
-	}
+        // tell ANTLR to build a parse tree from the start symbol 'prog'
+
+        ParseTree antlrAST = parser.prog();
+
+        AntlrToProgram progVisitor = new AntlrToProgram();
+//
+        Program prog = progVisitor.visit(antlrAST);
+//
+
+        PrettyPrinter printer = new PrettyPrinter();
+
+        String result = printer.getPrintResult(prog);
+        return result;
+    }
+
+    private static ProjectParser getParser(String fileName) {
+        ProjectParser parser = null;
+        try {
+            CharStream input = CharStreams.fromFileName(fileName);
+            ProjectLexer lexer = new ProjectLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            parser = new ProjectParser(tokens);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return parser;
+    }
 
 }
