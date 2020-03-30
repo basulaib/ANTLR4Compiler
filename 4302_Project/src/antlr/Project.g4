@@ -33,7 +33,7 @@ prog: (classBlock)+ EOF														# Program
 classBlock: 'class' ID '{' body '}'
 	 	  ;
 
-body: declBody? (assume | func | assertion)*								# ClassBody
+body: declBody? (assume | func | assertion | loop)*								# ClassBody
 	;
 
 declBody: 'declare' '{' (decl LINE_END)* '}'
@@ -101,6 +101,41 @@ elseBlock: 'else' '{' (funcStatement)* '}'							# ElseConditional
 
 param: TYPE ID																# Parameter
 	 ;
+
+// initialization, invariant, terminating condition, loop body, and loop variant
+loop: 'loop' '{' fromBlock untilBlock invariantBlock doBlock variantBlock '}'
+         ;
+
+fromBlock: 'from' '{' fromBody* '}'
+         ;
+
+fromBody: ID '=' (expr | VAR) LINE_END
+        | ID LINE_END
+        ;
+
+untilBlock: 'until' '{' untilBody+ '}'
+          ;
+
+untilBody: expr LINE_END
+         ;
+
+invariantBlock: 'invariant' '{' invariantBody+ '}'
+              ;
+
+invariantBody: expr LINE_END
+             ;
+
+doBlock: 'do' '{' doBody* '}'
+       ;
+
+doBody: funcStatement
+      ;
+
+variantBlock: 'variant' '{' variantBody+ '}'
+            ;
+
+variantBody: expr LINE_END
+           ;
 
 // Tokens
 TYPE : 'int' | 'string' | 'bool';
