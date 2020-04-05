@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -118,14 +120,25 @@ public class ProgramApp {
         ParseTree antlrAST = parser.prog();
 
         AntlrToProgram progVisitor = new AntlrToProgram();
-//
         Program prog = progVisitor.visit(antlrAST);
-//
+        List<String> semanticError = progVisitor.getSemanticErrors();
 
-        PrettyPrinter printer = new PrettyPrinter();
+        //TODO: this is a lazy way to deal with duplicated message, can be optimized if we have time.
+        HashSet<String> duplicatedMessage = new HashSet<>();
 
-        String result = printer.getPrintResult(prog);
-        return result;
+        if (!semanticError.isEmpty()) {
+            StringBuilder errors = new StringBuilder();
+            for (String err : semanticError) {
+                if (duplicatedMessage.contains(err)) continue;
+                errors.append(err + "\n");
+                duplicatedMessage.add(err);
+            }
+            return errors.toString();
+        } else {
+            PrettyPrinter printer = new PrettyPrinter();
+            String result = printer.getPrintResult(prog);
+            return result;
+        }
     }
 
     private static ProjectParser getParser(String fileName) {

@@ -9,22 +9,26 @@ import antlr.ProjectParser.ProgramContext;
 
 public class AntlrToProgram extends ProjectBaseVisitor<Program> {
 
-	public List<String> semanticErrors;
-	private HashMap<String, Declaration> decls; // all the declared variable
+    public List<String> semanticErrors;
+    private HashMap<String, Declaration> decls; // all the declared variable
 
-	@Override
-	public Program visitProgram(ProgramContext ctx) {
-		this.semanticErrors = new ArrayList<>();
+    @Override
+    public Program visitProgram(ProgramContext ctx) {
+        this.semanticErrors = new ArrayList<>();
 
-		Program result = new Program(this.semanticErrors);
+        Program result = new Program(this.semanticErrors);
 
-		for (int i = 0; i < ctx.getChildCount() - 1; i++) {
-			this.decls = new HashMap<String, Declaration>();
-			AntlrToClass antlrToClass = new AntlrToClass(this.semanticErrors, decls);
-			result.addClass((Class) antlrToClass.visit(ctx.getChild(i)));
-		}
+        for (int i = 0; i < ctx.getChildCount() - 1; i++) {
+            this.decls = new HashMap<String, Declaration>();
+            AntlrToClass antlrToClass = new AntlrToClass(this.semanticErrors, decls);
+            result.addClass((Class) antlrToClass.visit(ctx.getChild(i)));
+        }
 
-		return result;
-	}
+        return result;
+    }
+
+    public List<String> getSemanticErrors() {
+        return this.semanticErrors;
+    }
 
 }
