@@ -3,6 +3,7 @@ package program;
 import java.util.*;
 
 import expression.*;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -64,11 +65,11 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         Expression expression = this.toExpression.visit(exprContext);
         TypeChecker.Type type = typeChecker.getTypeResult(expression);
 
-        if (type != TypeChecker.Type.bool) {
+        if (type != targetType) {
             Token token = exprContext.getStart();
             int line = token.getLine();
             int column = token.getCharPositionInLine() + 1;
-            semanticErrors.add("Error: expression (" + token.getText() + ")'s type [" + type.toString() + "] does not match target type [" + targetType.toString() + "] (" + line + ", " + column + ")");
+            semanticErrors.add("Error: expression (" + exprContext.getText() + ")'s type [" + type.toString() + "] does not match target type [" + targetType.toString() + "] (" + line + ", " + column + ")");
         }
         return expression;
     }
@@ -234,23 +235,20 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         FuncStatement result = null;
         if (!(ctx.getChild(0) instanceof ConditionalContext)) { // Assignment
             String id = ctx.getChild(0).getText();
-            Token idToken = ctx.ID().getSymbol();
-            int line = idToken.getLine();
-            int column = idToken.getCharPositionInLine() + 1;
-            Expression expression = this.toExpression.visit(ctx.expr());
-
+            Expression expression;
             if (!decls.containsKey(id) && !currentPars.containsKey(id)) {
+                //if the ID of the assignment is not declared, semantic error
+                Token idToken = ctx.ID().getSymbol();
+                int line = idToken.getLine();
+                int column = idToken.getCharPositionInLine() + 1;
                 semanticErrors.add("Error: variable " + id + " not declared (" + line + ", " + column + ")");
+                expression = this.toExpression.visit(ctx.expr());
             } else {
                 Parameter parameter = currentPars.getOrDefault(id, null);
                 Declaration declaration = decls.getOrDefault(id, null);
                 TypeChecker.Type idType = parameter == null ? typeChecker.getTypeResult(declaration) : typeChecker.getTypeResult(parameter);
 
-                TypeChecker.Type type = typeChecker.getTypeResult(expression);
-
-                if (idType != type) {
-                    semanticErrors.add("Error: expression type [" + type.toString() + "] does not match target type [" + idType.toString() + "] (" + line + ", " + column + ")");
-                }
+                expression = checkAndReturn(idType, ctx.expr());
             }
 
             result = new Assignment(ctx.getChild(0).getText(), expression);
@@ -303,31 +301,16 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         Expression e;
         FuncStatement fs;
         for (ParseTree t : ctx.children) { // blocks
-            if (t instanceof IfConditionalContext) {
-                if (((IfConditionalContext) t).children.size() > 6) { // statements exist
-                    e = this.toExpression.visit(t.getChild(2));
-                    for (ParseTree tt : ((IfConditionalContext) t).children) {
+            if (t instanceof IfConditionalContext || t instanceof ElseIfConditionalContext) {
+                e = checkAndReturn(TypeChecker.Type.bool, (ExprContext) t.getChild(2));
+                if (((ParserRuleContext) t).children.size() > 6) { // statements exist
+                    for (ParseTree tt : ((ParserRuleContext) t).children) {
                         if (tt instanceof FuncStatementContext) {
                             fs = (FuncStatement) visit(tt);
                             result.addConditionalStatement(e, fs);
                         }
                     }
                 } else {
-                    e = this.toExpression.visit(t.getChild(2));
-                    FuncStatement nullStatement = null;
-                    result.addConditionalStatement(e, nullStatement);
-                }
-            } else if (t instanceof ElseIfConditionalContext) {
-                if (((ElseIfConditionalContext) t).children.size() > 6) { // statements exist
-                    e = this.toExpression.visit(t.getChild(2));
-                    for (ParseTree tt : ((ElseIfConditionalContext) t).children) {
-                        if (tt instanceof FuncStatementContext) {
-                            fs = (FuncStatement) visit(tt);
-                            result.addConditionalStatement(e, fs);
-                        }
-                    }
-                } else {
-                    e = this.toExpression.visit(t.getChild(2));
                     FuncStatement nullStatement = null;
                     result.addConditionalStatement(e, nullStatement);
                 }

@@ -133,10 +133,14 @@ public class ProgramApp {
                 errors.append(err + "\n");
                 duplicatedMessage.add(err);
             }
-            return errors.toString();
+
+            System.err.println(errors.toString());
+            return "";
         } else {
             PrettyPrinter printer = new PrettyPrinter();
             String result = printer.getPrintResult(prog);
+
+            System.out.println("//semantic check successful");
             return result;
         }
     }

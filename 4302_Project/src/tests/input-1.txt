@@ -25,7 +25,7 @@ class Account{
 		
 		//((amount + x) + y) * ((amount + x) + y) == (old_amount + x + y) * (old_amount + x + y);
 		
-		amount = testBool;
+		amount = amount + x;
 		
 		//(amount + y) * (amount + y) == (old_amount + x + y) * (old_amount + x + y);
 		
