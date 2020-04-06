@@ -21,7 +21,8 @@ import visitor.*;
 public class ProgramApp {
 
     public static void main(String[] args) {
-        if (args.length == 2 && (args[0].equals("out") || args[0].equals("o"))) {
+        if (args.length == 2 && (args[0].equals("-out") || args[0].equals("-o"))) {
+            //if the first parameter is -out/-o, that means the user wants to simply print out the program
             String fileName = args[1];
             System.out.println(getResult(fileName));
         } else if (args.length != 2) {
