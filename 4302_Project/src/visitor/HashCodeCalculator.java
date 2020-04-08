@@ -20,12 +20,47 @@ import function.Conditional;
 import function.Function;
 import function.PostCondition;
 import function.PreCondition;
+import loop.FromBlock;
+import loop.Invariant;
+import loop.Loop;
+import loop.UntilBlock;
+import loop.Variant;
 import program.Declaration;
 import program.Program;
 import program.Class;
 
 public class HashCodeCalculator implements Visitor {
-//this might not be a very eifficient way of geting hash code
+@Override
+	public void visitLoop(Loop loop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitFromBlock(FromBlock fromBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitUntilBlock(UntilBlock untilBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariant(Invariant invariant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariant(Variant variant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//this might not be a very eifficient way of geting hash code
 	private int hashCode;
 	private HashCodeCalculator calculator;
 

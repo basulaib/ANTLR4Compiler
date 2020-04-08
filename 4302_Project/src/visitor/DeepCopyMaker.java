@@ -3,12 +3,47 @@ package visitor;
 import expression.*;
 import expression.binary.*;
 import function.*;
+import loop.FromBlock;
+import loop.Invariant;
+import loop.Loop;
+import loop.UntilBlock;
+import loop.Variant;
 import program.Declaration;
 import program.Program;
 import program.Class;
 
 public class DeepCopyMaker implements Visitor {
-//currently it can only make a deep-copy of binary expression
+@Override
+	public void visitLoop(Loop loop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitFromBlock(FromBlock fromBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitUntilBlock(UntilBlock untilBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariant(Invariant invariant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariant(Variant variant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//currently it can only make a deep-copy of binary expression
 	private Expression copy;
 	private DeepCopyMaker copyMaker;
 

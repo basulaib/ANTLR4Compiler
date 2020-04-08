@@ -17,6 +17,11 @@ import expression.binary.BiSmallerOrEqual;
 import expression.binary.BiSubtraction;
 import expression.binary.BinaryOperation;
 import function.*;
+import loop.FromBlock;
+import loop.Invariant;
+import loop.Loop;
+import loop.UntilBlock;
+import loop.Variant;
 import program.Class;
 import program.Declaration;
 import program.Program;
@@ -26,7 +31,37 @@ import java.util.List;
 
 public class TypeChecker implements Visitor {
 
-    private Type type;
+    @Override
+	public void visitLoop(Loop loop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitFromBlock(FromBlock fromBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitUntilBlock(UntilBlock untilBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariant(Invariant invariant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariant(Variant variant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Type type;
     private TypeChecker checker;
 
     public enum Type {

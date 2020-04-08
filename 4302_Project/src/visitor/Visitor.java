@@ -18,6 +18,7 @@ import expression.binary.BiSubtraction;
 import function.*;
 import program.*;
 import program.Class;
+import loop.*;
 
 public interface Visitor {
 	// binary operation
@@ -87,4 +88,15 @@ public interface Visitor {
 	public void visitClass(Class cla);
 
 	public void visitProgram(Program program);
+	
+	// loop
+	public void visitLoop(Loop loop);
+	
+	public void visitFromBlock(FromBlock fromBlock);
+	
+	public void visitUntilBlock (UntilBlock untilBlock);
+	
+	public void visitInvariant (Invariant invariant);
+	
+	public void visitVariant (Variant variant);
 }

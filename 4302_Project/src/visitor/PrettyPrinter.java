@@ -26,12 +26,47 @@ import function.Function;
 import function.Parameter;
 import function.PostCondition;
 import function.PreCondition;
+import loop.FromBlock;
+import loop.Invariant;
+import loop.Loop;
+import loop.UntilBlock;
+import loop.Variant;
 import program.*;
 import program.Class;
 
 public class PrettyPrinter implements Visitor {
 
-    private String printResult;
+    @Override
+	public void visitLoop(Loop loop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitFromBlock(FromBlock fromBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitUntilBlock(UntilBlock untilBlock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariant(Invariant invariant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariant(Variant variant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private String printResult;
     private String prefix; // the prefix for all variables, eg. x => n.x
     private String currentClass;
     private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
