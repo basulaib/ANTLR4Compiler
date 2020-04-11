@@ -9,10 +9,14 @@ import expression.NumConst;
 import visitor.Visitor;
 
 public class Invariant {
-	Expression expr;
+	List<Expression> invariantList;
 	
-	public Invariant(Expression expr) {
-		this.expr = expr;
+	public Invariant() {
+		this.invariantList = new ArrayList<Expression>();
+	}
+	
+	public Invariant(Invariant invariant) {
+		this.invariantList = invariant.getInvariantList();
 	}
 	
 	public void accept(Visitor visitor) {
@@ -20,7 +24,7 @@ public class Invariant {
 		visitor.visitInvariant(this);
 	}
 
-	public Expression getExpr() {
-		return expr;
+	public List<Expression> getInvariantList() {
+		return this.invariantList;
 	}
 }

@@ -8,7 +8,7 @@ import expression.Expression;
 import function.FuncStatement;
 import visitor.Visitor;
 
-public class Loop {
+public class Loop extends FuncStatement{
 	FromBlock fromBlock;
 	UntilBlock untilBlock;
 	Invariant invariant;
@@ -22,6 +22,14 @@ public class Loop {
 //		this.variant = new Variant();
 //		this.statementList = new ArrayList<FuncStatement>();
 //	}
+	
+	public Loop(FromBlock fromBlock, UntilBlock untilBlock) {
+		this.fromBlock = fromBlock;
+		this.untilBlock = untilBlock;
+		this.invariant = new Invariant();
+		this.variant = new Variant();
+		this.statementList = new ArrayList<FuncStatement>();
+	}
 	
 	public Loop(FromBlock fromBlock, UntilBlock untilBlock, Invariant invariant, Variant variant, List<FuncStatement> statementList) {
 		this.fromBlock = fromBlock;
@@ -44,24 +52,24 @@ public class Loop {
 		this.fromBlock = fromBlock;
 	}
 
-	public UntilBlock getUntilBlock() {
-		return untilBlock;
+	public Expression getUntilBlock() {
+		return untilBlock.getExpr();
 	}
 
 	public void setUntilBlock(UntilBlock untilBlock) {
 		this.untilBlock = untilBlock;
 	}
 
-	public Invariant getInvariant() {
-		return invariant;
+	public List<Expression> getInvariant() {
+		return invariant.getInvariantList();
 	}
 
 	public void setInvariant(Invariant invariant) {
 		this.invariant = invariant;
 	}
 
-	public Variant getVariant() {
-		return variant;
+	public List<Expression> getVariant() {
+		return variant.getVariantList();
 	}
 
 	public void setVariant(Variant variant) {
