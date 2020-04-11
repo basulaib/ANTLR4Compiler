@@ -67,13 +67,16 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleFour() {
-        /*line 1
-         * line2
-         * line3
-         * line4
-         * line5
-         * line6
-         * pls dont merge conflict aha*/
+    	/*line 1
+    	 * line2
+    	 * line3
+    	 * line4
+    	 * line5
+    	 * line6
+    	 * line7 (new)
+    	 * line 8 (new)
+    	 * line 9 (new)
+    	 * pls dont merge conflict aha*/
     }
 
     private Expression hoareTripleFive() {
