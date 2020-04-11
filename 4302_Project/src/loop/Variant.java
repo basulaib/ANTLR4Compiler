@@ -9,37 +9,25 @@ import expression.NumConst;
 import visitor.Visitor;
 
 public class Variant {
-	ArrayList<Expression> exprs;
-	Expression variant;
+    Expression variant;
 
-	
-	public Variant() {
-		exprs = new ArrayList<>();
-	}
-	
-	public Variant(Variant variant) {
-		this.variant = variant.getVariant();
-	}
-	
-	public void accept(Visitor visitor) {
-		// TODO Auto-generated method stub
-		visitor.visitVariant(this);
-	}
-	
-	public void addExpr(Expression e) {
-		if (!exprs.contains(e)) {
-			exprs.add(e);
-		}
-	}
+    public Variant() {
+    }
 
-	public ArrayList<Expression> getExprs() {
-		return exprs;
-	}
+    public Variant(Variant variant) {
+        this.variant = variant.getVariant();
+    }
 
-	public void setExprs(ArrayList<Expression> exprs) {
-		this.exprs = exprs;
-	}
-	public Expression getVariant() {
-		return this.variant;
-	}	
+    public void accept(Visitor visitor) {
+        // TODO Auto-generated method stub
+        visitor.visitVariant(this);
+    }
+
+    public void setVariant(Expression variant) {
+        this.variant = variant;
+    }
+
+    public Expression getVariant() {
+        return this.variant;
+    }
 }
