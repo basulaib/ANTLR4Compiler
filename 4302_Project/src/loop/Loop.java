@@ -23,11 +23,11 @@ public class Loop extends FuncStatement{
 //		this.statementList = new ArrayList<FuncStatement>();
 //	}
 	
-	public Loop(FromBlock fromBlock, UntilBlock untilBlock) {
+	public Loop(FromBlock fromBlock, UntilBlock untilBlock, Variant variant) {
 		this.fromBlock = fromBlock;
 		this.untilBlock = untilBlock;
 		this.invariant = new Invariant();
-		this.variant = new Variant();
+		this.variant = variant;
 		this.statementList = new ArrayList<FuncStatement>();
 	}
 	
@@ -68,8 +68,8 @@ public class Loop extends FuncStatement{
 		this.invariant = invariant;
 	}
 
-	public List<Expression> getVariant() {
-		return variant.getVariantList();
+	public Expression getVariant() {
+		return variant.getVariant();
 	}
 
 	public void setVariant(Variant variant) {

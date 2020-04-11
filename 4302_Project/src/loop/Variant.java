@@ -9,14 +9,10 @@ import expression.NumConst;
 import visitor.Visitor;
 
 public class Variant {
-	List<Expression> variantList;
-	
-	public Variant() {
-		this.variantList = new ArrayList<Expression>();
-	}
+	Expression variant;
 	
 	public Variant(Variant variant) {
-		this.variantList = variant.getVariantList();
+		this.variant = variant.getVariant();
 	}
 	
 	public void accept(Visitor visitor) {
@@ -24,7 +20,7 @@ public class Variant {
 		visitor.visitVariant(this);
 	}
 
-	public List<Expression> getVariantList() {
-		return this.variantList;
+	public Expression getVariant() {
+		return this.variant;
 	}
 }
