@@ -5,6 +5,7 @@ import java.util.*;
 import expression.*;
 import expression.binary.*;
 import function.*;
+import loop.Loop;
 import visitor.*;
 
 public class WPCalculator {
@@ -41,10 +42,36 @@ public class WPCalculator {
     private Expression singleStatement(FuncStatement statement, Expression postCond) {
         if (statement instanceof Assignment) {
             return baseCase((Assignment) statement, postCond);
-        } else {
+        } else if (statement instanceof Conditional) {
             // conditio
             return conditionalCase((Conditional) statement, postCond);
+        } else {
+            return loopCase((Loop) statement, postCond);
         }
+    }
+
+    private Expression loopCase(Loop loop, Expression postCond) {
+
+    }
+
+    private Expression hoareTripleOne() {
+
+    }
+
+    private Expression hoareTripleTwo() {
+
+    }
+
+    private Expression hoareTripleThree() {
+
+    }
+
+    private Expression hoareTripleFour() {
+
+    }
+
+    private Expression hoareTripleFive() {
+
     }
 
     // condition rule
