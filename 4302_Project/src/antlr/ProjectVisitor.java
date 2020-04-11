@@ -1,4 +1,4 @@
-// Generated from Project.g4 by ANTLR 4.8
+// Generated from .\antlr\Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -259,4 +259,70 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParameter(ProjectParser.ParameterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#loop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop(ProjectParser.LoopContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#fromBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFromBlock(ProjectParser.FromBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#fromBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFromBody(ProjectParser.FromBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#untilBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUntilBlock(ProjectParser.UntilBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#untilBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUntilBody(ProjectParser.UntilBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#invariantBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInvariantBlock(ProjectParser.InvariantBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#invariantBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInvariantBody(ProjectParser.InvariantBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#doBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoBlock(ProjectParser.DoBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#doBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoBody(ProjectParser.DoBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#variantBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariantBlock(ProjectParser.VariantBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#variantBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariantBody(ProjectParser.VariantBodyContext ctx);
 }

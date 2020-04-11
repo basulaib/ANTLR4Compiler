@@ -76,6 +76,7 @@ funcBody: precon? (funcStatement)* postcon?			# FunctionBody
 
 funcStatement: ID '=' (expr | VAR) LINE_END						      //# Statement
 			 | conditional
+                      | loop
 			 ;
 
 precon: 'require' '{' (expr LINE_END)* '}'									# PreCond
@@ -109,8 +110,8 @@ loop: 'loop' '{' fromBlock untilBlock invariantBlock doBlock variantBlock '}'
 fromBlock: 'from' '{' fromBody* '}'
          ;
 
-fromBody: ID '=' (expr | VAR) LINE_END
-        | ID LINE_END
+fromBody: TYPE ID '=' (expr | VAR) LINE_END
+        | ID '=' expr LINE_END
         ;
 
 untilBlock: 'until' '{' untilBody+ '}'

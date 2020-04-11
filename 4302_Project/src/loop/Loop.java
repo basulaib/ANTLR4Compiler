@@ -31,6 +31,9 @@ public class Loop {
 		this.statementList = statementList;
 	}
 	
+	public Loop() {
+	}
+	
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
 		visitor.visitLoop(this);

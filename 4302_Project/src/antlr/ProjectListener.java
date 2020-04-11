@@ -1,4 +1,4 @@
-// Generated from Project.g4 by ANTLR 4.8
+// Generated from .\antlr\Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -431,4 +431,114 @@ public interface ProjectListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParameter(ProjectParser.ParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#loop}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop(ProjectParser.LoopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#loop}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop(ProjectParser.LoopContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#fromBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterFromBlock(ProjectParser.FromBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#fromBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitFromBlock(ProjectParser.FromBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#fromBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterFromBody(ProjectParser.FromBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#fromBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitFromBody(ProjectParser.FromBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#untilBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterUntilBlock(ProjectParser.UntilBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#untilBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitUntilBlock(ProjectParser.UntilBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#untilBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterUntilBody(ProjectParser.UntilBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#untilBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitUntilBody(ProjectParser.UntilBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#invariantBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterInvariantBlock(ProjectParser.InvariantBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#invariantBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitInvariantBlock(ProjectParser.InvariantBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#invariantBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterInvariantBody(ProjectParser.InvariantBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#invariantBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitInvariantBody(ProjectParser.InvariantBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#doBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoBlock(ProjectParser.DoBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#doBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoBlock(ProjectParser.DoBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#doBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoBody(ProjectParser.DoBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#doBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoBody(ProjectParser.DoBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#variantBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariantBlock(ProjectParser.VariantBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#variantBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariantBlock(ProjectParser.VariantBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#variantBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariantBody(ProjectParser.VariantBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#variantBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariantBody(ProjectParser.VariantBodyContext ctx);
 }
