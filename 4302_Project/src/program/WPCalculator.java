@@ -77,13 +77,7 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleFive() {
-        //line
-        //line
-        //line
-        //line
-        //line
-        //line
-        //line
+        //i'm making some changes.
     }
 
     // condition rule
