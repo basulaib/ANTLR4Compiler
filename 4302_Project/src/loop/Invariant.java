@@ -9,10 +9,10 @@ import expression.NumConst;
 import visitor.Visitor;
 
 public class Invariant {
-	Expression expr;
+	ArrayList<Expression> exprs;
 	
-	public Invariant(Expression expr) {
-		this.expr = expr;
+	public Invariant() {
+		exprs = new ArrayList<>();
 	}
 	
 	public void accept(Visitor visitor) {
@@ -20,7 +20,17 @@ public class Invariant {
 		visitor.visitInvariant(this);
 	}
 
-	public Expression getExpr() {
-		return expr;
+	public void addExpr(Expression e) {
+		if (!exprs.contains(e)) {
+			exprs.add(e);
+		}
+	}
+
+	public ArrayList<Expression> getExprs() {
+		return exprs;
+	}
+
+	public void setExprs(ArrayList<Expression> exprs) {
+		this.exprs = exprs;
 	}
 }
