@@ -10,9 +10,15 @@ import visitor.Visitor;
 
 public class Variant {
 	ArrayList<Expression> exprs;
+	Expression variant;
+
 	
 	public Variant() {
 		exprs = new ArrayList<>();
+	}
+	
+	public Variant(Variant variant) {
+		this.variant = variant.getVariant();
 	}
 	
 	public void accept(Visitor visitor) {
@@ -33,6 +39,7 @@ public class Variant {
 	public void setExprs(ArrayList<Expression> exprs) {
 		this.exprs = exprs;
 	}
-
-	
+	public Expression getVariant() {
+		return this.variant;
+	}	
 }
