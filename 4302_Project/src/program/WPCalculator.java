@@ -73,6 +73,9 @@ public class WPCalculator {
     	 * line4
     	 * line5
     	 * line6
+    	 * line7 (new)
+    	 * line 8 (new)
+    	 * line 9 (new)
     	 * pls dont merge conflict aha*/
     }
 
