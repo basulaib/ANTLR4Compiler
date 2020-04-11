@@ -1,0 +1,25 @@
+//test for conjunction/equivalence
+class test{
+    loop {
+        from {
+            int x = 5;
+            z = 1;
+        }
+
+        until {
+            x == 2;
+        }
+
+        invariant {
+            x > 0;
+        }
+
+        do {
+            x = x - 1;
+        }
+
+        variant {
+            x < x + 1;
+        }
+    }
+}

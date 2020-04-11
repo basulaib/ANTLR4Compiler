@@ -16,23 +16,34 @@ import antlr.ProjectParser.ClassBodyContext;
 import antlr.ProjectParser.ConditionalContext;
 import antlr.ProjectParser.DeclBodyContext;
 import antlr.ProjectParser.DeclContext;
+import antlr.ProjectParser.DoBlockContext;
+import antlr.ProjectParser.DoBodyContext;
 import antlr.ProjectParser.ElseConditionalContext;
 import antlr.ProjectParser.ElseIfConditionalContext;
 import antlr.ProjectParser.ExprContext;
+import antlr.ProjectParser.FromBlockContext;
+import antlr.ProjectParser.FromBodyContext;
 import antlr.ProjectParser.FuncBodyContext;
 import antlr.ProjectParser.FuncStatementContext;
 import antlr.ProjectParser.FunctionBodyContext;
 import antlr.ProjectParser.FunctionContext;
 import antlr.ProjectParser.IfConditionalContext;
+import antlr.ProjectParser.InvariantBlockContext;
+import antlr.ProjectParser.InvariantBodyContext;
+import antlr.ProjectParser.LoopContext;
 import antlr.ProjectParser.ParamContext;
 import antlr.ProjectParser.ParameterContext;
 import antlr.ProjectParser.ParenthesizedExprContext;
 import antlr.ProjectParser.PostCondContext;
 import antlr.ProjectParser.PreCondContext;
 import antlr.ProjectParser.UnaryExprContext;
+import antlr.ProjectParser.UntilBlockContext;
+import antlr.ProjectParser.UntilBodyContext;
 import antlr.ProjectParser.VarDeclContext;
 import antlr.ProjectParser.VarExprContext;
 import antlr.ProjectParser.VarInitContext;
+import antlr.ProjectParser.VariantBlockContext;
+import antlr.ProjectParser.VariantBodyContext;
 import function.Assignment;
 import function.Conditional;
 import function.FuncStatement;
@@ -356,5 +367,76 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         Parameter result = new Parameter(ctx.getChild(0).getText(), ctx.getChild(1).getText());
         return result;
     }
+
+	@Override
+	public Object visitLoop(LoopContext ctx) {
+		// TODO Auto-generated method stub
+		for (ParseTree t : ctx.children) {
+			if (t instanceof FromBlockContext) {
+				
+			}
+		}
+		return ctx;
+	}
+
+	@Override
+	public Object visitFromBlock(FromBlockContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitFromBlock(ctx);
+	}
+
+	@Override
+	public Object visitFromBody(FromBodyContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitFromBody(ctx);
+	}
+
+	@Override
+	public Object visitUntilBlock(UntilBlockContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitUntilBlock(ctx);
+	}
+
+	@Override
+	public Object visitUntilBody(UntilBodyContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitUntilBody(ctx);
+	}
+
+	@Override
+	public Object visitInvariantBlock(InvariantBlockContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitInvariantBlock(ctx);
+	}
+
+	@Override
+	public Object visitInvariantBody(InvariantBodyContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitInvariantBody(ctx);
+	}
+
+	@Override
+	public Object visitDoBlock(DoBlockContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitDoBlock(ctx);
+	}
+
+	@Override
+	public Object visitDoBody(DoBodyContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitDoBody(ctx);
+	}
+
+	@Override
+	public Object visitVariantBlock(VariantBlockContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitVariantBlock(ctx);
+	}
+
+	@Override
+	public Object visitVariantBody(VariantBodyContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitVariantBody(ctx);
+	}
 
 }
