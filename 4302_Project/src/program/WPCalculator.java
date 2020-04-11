@@ -55,7 +55,7 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleOne() {
-    	
+
     }
 
     private Expression hoareTripleTwo() {
@@ -80,6 +80,8 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleFive() {
+        //line
+        //line
         //line
         //line
         //line
