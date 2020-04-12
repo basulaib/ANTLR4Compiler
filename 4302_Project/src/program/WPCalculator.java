@@ -78,9 +78,6 @@ public class WPCalculator {
     	 * line 9 (new)
     	 * pls dont merge conflict aha*/
     }
-
-    private Expression hoareTripleFive() {
-        //i'm making some changes.
     private Expression hoareTripleFive(Loop loop) {
         //{I∧¬B} Sbody {V < V0}
         Expression v0 = loop.getVariant();
