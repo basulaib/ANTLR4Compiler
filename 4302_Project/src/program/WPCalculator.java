@@ -58,8 +58,17 @@ public class WPCalculator {
 
     }
 
-    private Expression hoareTripleTwo() {
-
+    private Expression hoareTripleTwo(Loop loop, Expression postCond) {
+    	//{I^!B} Sbody {I}
+    	//we want
+    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
+    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
+    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
+    	Expression notLoopCondition = new Negation(loopCondition);
+    	Expression wp =  this.sequentialCase(new ArrayList<>(loop.getStatementList()), invariant);
+    	
+    	return new BiImplication()
     }
 
     private Expression hoareTripleThree() {
