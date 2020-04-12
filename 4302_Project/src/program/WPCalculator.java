@@ -59,72 +59,76 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleTwo(Loop loop) {
-    	//{I^!B} Sbody {I}
-    	//we want
-    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
-    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
-    	
-    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
-    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
-    	Expression notLoopCondition = new Negation(loopCondition);
-    	
-    	Expression wp =  this.sequentialCase(new ArrayList<>(loop.getStatementList()), invariant);
-    	
-    	return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
+        //{I^!B} Sbody {I}
+        //we want
+        List<Expression> invariants = new ArrayList<>(loop.getInvariant());
+        Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size() - 1);
+
+        List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+        Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size() - 1);
+        Expression notLoopCondition = new Negation(loopCondition);
+
+        Expression wp = this.sequentialCase(new ArrayList<>(loop.getStatementList()), invariant);
+
+        return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
     }
 
     private Expression hoareTripleThree(Loop loop, Expression postCond) {
-    	//I ^ B => R
-    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
-    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
-    	
-    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
-    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
-    	
-    	return new BiImplication(new BiConjunction(invariant, loopCondition), postCond);
+        //I ^ B => R
+        List<Expression> invariants = new ArrayList<>(loop.getInvariant());
+        Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size() - 1);
+
+        List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+        Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size() - 1);
+
+        return new BiImplication(new BiConjunction(invariant, loopCondition), postCond);
     }
 
     private Expression hoareTripleFour(Loop loop) {
-    	/*line 1
-    	 * line2
-    	 * line3
-    	 * line4
-    	 * line5
-    	 * line6
-    	 * line7 (new)
-    	 * line 8 (new)
-    	 * line 9 (new)
-    	 * pls dont merge conflict aha*/
-    	//{I ^ !B}Sbody {V >= 0}
-    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
-    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
-    	
-    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
-    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
-    	Expression notLoopCondition = new Negation(loopCondition);
-    	
-    	Expression wp =  this.sequentialCase(new ArrayList<>(loop.getStatementList()), new BiLargerOrEqual(loop.getVariant(), new NumConst(0)));
-    	
-    	return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
+        /*line 1
+         * line2
+         * line3
+         * line4
+         * line5
+         * line6
+         * line7 (new)
+         * line 8 (new)
+         * line 9 (new)
+         * pls dont merge conflict aha*/
+        //{I ^ !B}Sbody {V >= 0}
+        List<Expression> invariants = new ArrayList<>(loop.getInvariant());
+        Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size() - 1);
+
+        List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+        Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size() - 1);
+        Expression notLoopCondition = new Negation(loopCondition);
+
+        Expression wp = this.sequentialCase(new ArrayList<>(loop.getStatementList()), new BiLargerOrEqual(loop.getVariant(), new NumConst(0)));
+
+        return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
     }
+
     private Expression hoareTripleFive(Loop loop) {
         //{I∧¬B} Sbody {V < V0}
         Expression v0 = loop.getVariant();
 
         DeepCopyMaker copyMaker = new DeepCopyMaker();
         Expression v = copyMaker.getExprCopy(v0);
-        //replace the right hand side (0) with v0 later
-        Expression tempPostcon = new BiSmaller(v, new NumConst(0));
 
-        Expression wp = sequentialCase(loop.getStatementList(), tempPostcon);
+        //lock v0 so that it won't be replaced.
+        VariableLocker locker = new VariableLocker();
+        v0.accept(locker);
+        Expression wp = new BiSmaller(v, v0);
 
-        if (wp instanceof BiSmaller && ((BiSmaller) wp).getRight().equals(new NumConst(0))) {
-            ((BiEqual) wp).setRight(v0);
-        } else {
-            System.err.println("the fifth hoare triple calculation error!");
-        }
+        wp = sequentialCase(loop.getStatementList(), wp);
 
-        return wp;
+        Expression invariant = conjunctAll(loop.getInvariant(), 0, loop.getInvariant().size() - 1);
+        Expression exitCondition = conjunctAll(loop.getUntilBlock(), 0, loop.getUntilBlock().size() - 1);
+        Expression notExitCondition = new Negation(exitCondition);
+
+        Expression result = new BiImplication(new BiConjunction(invariant, notExitCondition), wp);
+
+        return result;
     }
 
     // condition rule
@@ -213,7 +217,7 @@ public class WPCalculator {
         return wp;
     }
 
-    // replace all occurrences of x in R with e.
+    // replace all FREE occurrences of x in R with e.
     private void replace(String x, Expression e, Expression R) {
         // base case
         if (R instanceof Constant)
@@ -229,7 +233,7 @@ public class WPCalculator {
             Expression right = ((BinaryOperation) R).getRight();
 
             if (left instanceof Variable) {
-                if (((Variable) left).getID().equals(x))
+                if (((Variable) left).getID().equals(x) && ((Variable) left).isFree())
                     ((BinaryOperation) R).setLeft(e);
             } else {
                 // recursive case
@@ -237,7 +241,7 @@ public class WPCalculator {
             }
 
             if (right instanceof Variable) {
-                if (((Variable) right).getID().equals(x))
+                if (((Variable) right).getID().equals(x) && ((Variable) right).isFree())
                     ((BinaryOperation) R).setRight(e);
             } else {
                 // recursive case
