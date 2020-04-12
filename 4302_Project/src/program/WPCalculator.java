@@ -58,15 +58,33 @@ public class WPCalculator {
 
     }
 
-    private Expression hoareTripleTwo() {
-
+    private Expression hoareTripleTwo(Loop loop) {
+    	//{I^!B} Sbody {I}
+    	//we want
+    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
+    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
+    	
+    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
+    	Expression notLoopCondition = new Negation(loopCondition);
+    	
+    	Expression wp =  this.sequentialCase(new ArrayList<>(loop.getStatementList()), invariant);
+    	
+    	return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
     }
 
-    private Expression hoareTripleThree() {
-
+    private Expression hoareTripleThree(Loop loop, Expression postCond) {
+    	//I ^ B => R
+    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
+    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
+    	
+    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
+    	
+    	return new BiImplication(new BiConjunction(invariant, loopCondition), postCond);
     }
 
-    private Expression hoareTripleFour() {
+    private Expression hoareTripleFour(Loop loop) {
     	/*line 1
     	 * line2
     	 * line3
@@ -77,6 +95,17 @@ public class WPCalculator {
     	 * line 8 (new)
     	 * line 9 (new)
     	 * pls dont merge conflict aha*/
+    	//{I ^ !B}Sbody {V >= 0}
+    	List<Expression> invariants =  new ArrayList<>(loop.getInvariant());
+    	Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size());
+    	
+    	List<Expression> loopConditions = new ArrayList<>(loop.getUntilBlock());
+    	Expression loopCondition = conjunctAll(new ArrayList<>(loopConditions), 0, loopConditions.size());
+    	Expression notLoopCondition = new Negation(loopCondition);
+    	
+    	Expression wp =  this.sequentialCase(new ArrayList<>(loop.getStatementList()), new BiLargerOrEqual(loop.getVariant(), new NumConst(0)));
+    	
+    	return new BiImplication(new BiConjunction(invariant, notLoopCondition), wp);
     }
     private Expression hoareTripleFive(Loop loop) {
         //{I∧¬B} Sbody {V < V0}
