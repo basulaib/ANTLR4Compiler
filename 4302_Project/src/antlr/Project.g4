@@ -77,6 +77,7 @@ funcBody: precon? (funcStatement)* postcon?			# FunctionBody
 funcStatement: ID '=' (expr | VAR) LINE_END						      //# Statement
 			 | conditional
                       | loop
+             | funcCall
 			 ;
 
 precon: 'require' '{' (expr LINE_END)* '}'									# PreCond
@@ -136,6 +137,9 @@ variantBlock: 'variant' '{' variantBody? '}'
 
 variantBody: expr LINE_END
            ;
+           
+funcCall: ID'('VAR*')'
+		;
 
 // Tokens
 TYPE : 'int' | 'string' | 'bool';
