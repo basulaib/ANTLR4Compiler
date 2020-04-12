@@ -51,7 +51,14 @@ public class WPCalculator {
     }
 
     private Expression loopCase(Loop loop, Expression postCond) {
-
+    	List<Expression> loopHoareTriples = new ArrayList<Expression>();
+    	loopHoareTriples.add(hoareTripleOne(loop));
+    	loopHoareTriples.add(hoareTripleTwo(loop));
+    	loopHoareTriples.add(hoareTripleThree(loop, postCond));
+    	loopHoareTriples.add(hoareTripleFour(loop));
+    	loopHoareTriples.add(hoareTripleFive(loop));
+    	
+    	return conjunctAll(loopHoareTriples, 0, loopHoareTriples.size()-1);
     }
 
     private Expression hoareTripleOne(Loop loop) {
