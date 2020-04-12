@@ -6,6 +6,7 @@ import java.util.List;
 import expression.Constant;
 import expression.Expression;
 import expression.NumConst;
+import function.Assignment;
 import program.Declaration;
 import visitor.Visitor;
 
@@ -15,10 +16,10 @@ public class FromBlock {
 	//pros of having it joint: one point for initialization and verification of from and until blocks
 	//cons: easier for initialization by having them seperate
 	
-	ArrayList<Declaration> decs;
+	ArrayList<Assignment> assignments;
 	
 	public FromBlock() {
-		decs = new ArrayList<>();
+		assignments = new ArrayList<>();
 	}
 	
 	public void accept(Visitor visitor) {
@@ -26,18 +27,18 @@ public class FromBlock {
 		visitor.visitFromBlock(this);
 	}
 	
-	public void addDeclaration(Declaration d) {
-		if (!decs.contains(d)) {
-			decs.add(d);
+	public void addAssignment(Assignment a) {
+		if (!assignments.contains(a)) {
+			assignments.add(a);
 		}
 	}
 
-	public ArrayList<Declaration> getDecs() {
-		return decs;
+	public ArrayList<Assignment> getAssignments() {
+		return assignments;
 	}
 
-	public void setDecs(ArrayList<Declaration> decs) {
-		this.decs = decs;
+	public void setAssignments(ArrayList<Assignment> assgnmnts) {
+		this.assignments = assgnmnts;
 	}
 
 }

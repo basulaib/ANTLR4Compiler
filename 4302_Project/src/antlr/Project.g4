@@ -104,14 +104,13 @@ param: TYPE ID																# Parameter
 	 ;
 
 // initialization, invariant, terminating condition, loop body, and loop variant
-loop: 'loop' '{' fromBlock untilBlock invariantBlock doBlock variantBlock '}'
+loop: 'loop' '{' fromBlock untilBlock invariantBlock? doBlock? variantBlock? '}'
          ;
 
 fromBlock: 'from' '{' fromBody* '}'
          ;
 
-fromBody: TYPE ID '=' (expr | VAR) LINE_END
-        | ID '=' expr LINE_END
+fromBody: ID '=' expr LINE_END
         ;
 
 untilBlock: 'until' '{' untilBody+ '}'
@@ -120,7 +119,7 @@ untilBlock: 'until' '{' untilBody+ '}'
 untilBody: expr LINE_END
          ;
 
-invariantBlock: 'invariant' '{' invariantBody+ '}'
+invariantBlock: 'invariant' '{' invariantBody* '}'
               ;
 
 invariantBody: expr LINE_END
@@ -132,7 +131,7 @@ doBlock: 'do' '{' doBody* '}'
 doBody: funcStatement
       ;
 
-variantBlock: 'variant' '{' variantBody+ '}'
+variantBlock: 'variant' '{' variantBody? '}'
             ;
 
 variantBody: expr LINE_END

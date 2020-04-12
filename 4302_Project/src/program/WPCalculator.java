@@ -65,12 +65,12 @@ public class WPCalculator {
         //{Q} Sinit {I}
         //{True} Sinit {I}
 
-        List<Declaration> declFrom = loop.getFromBlock().getDecs();
+        List<Assignment> declFrom = loop.getFromBlock().getAssignments();
         int current = declFrom.size() - 1;
         Expression currentPostCond = conjunctAll(loop.getInvariant(), 0, loop.getInvariant().size() - 1);
 
         while (current >= 0) {
-            replace(declFrom.get(current).getID(), declFrom.get(current).getConst(), currentPostCond);
+            replace(declFrom.get(current).getID(), declFrom.get(current).getExpr(), currentPostCond);
             current--;
         }
 

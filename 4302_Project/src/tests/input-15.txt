@@ -2,7 +2,7 @@
 class test{
     loop {
         from {
-            int x = 5;
+            x = 5;
             z = 1;
         }
 
@@ -16,6 +16,11 @@ class test{
 
         do {
             x = x - 1;
+            z = 0;
+            x = x == x - z;
+            if (x > z) {
+                x = 0;
+            }
         }
 
         variant {
