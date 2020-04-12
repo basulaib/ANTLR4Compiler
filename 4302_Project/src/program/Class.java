@@ -19,7 +19,7 @@ public class Class {
 	private List<Function> functions;
 
 	// public HashMap<String, Boolean> declaredBools;
-	private Map<Function, List<Function>> adjacencyList;
+	private Map<String, List<String>> adjacencyList;
 
 	public Class(List<String> semanticErrors) {
 		this.id = "";
@@ -88,16 +88,16 @@ public class Class {
 	}
 	
 	public boolean recursionDetection() {
-		adjacencyList = new HashMap<Function, List<Function>>();
+		adjacencyList = new HashMap<String, List<String>>();
 		//create adjacency list
 		if(!this.functions.isEmpty()) {
 			for(Function function : this.functions) {
-				adjacencyList.put(function, new ArrayList<Function>());
+				adjacencyList.put(function.getId(), new ArrayList<String>());
 				if(!function.getStatements().isEmpty()) {
 					for(FuncStatement statement : function.getStatements()) {
 						if(statement instanceof FunctionCall) {
 							FunctionCall funcCall = (FunctionCall) statement;
-							adjacencyList.get(function).add(funcCall.getTarget());
+							adjacencyList.get(function.getId()).add(funcCall.getTarget().getId());
 						}
 					}
 				}
@@ -106,23 +106,23 @@ public class Class {
 			return false;
 		}
 		//check for cycle
-		Map<Function, Boolean> visited = new HashMap<Function, Boolean>();
-		Map<Function, Boolean> recStack = new HashMap<Function, Boolean>();
+		Map<String, Boolean> visited = new HashMap<String, Boolean>();
+		Map<String, Boolean> recStack = new HashMap<String, Boolean>();
 		
 		for(Function function : this.functions) {
-			visited.put(function, false);
-			recStack.put(function, false);
+			visited.put(function.getId(), false);
+			recStack.put(function.getId(), false);
 		}
 		
 		for(Function function : this.functions) {
-			if(isCyclicUtil(function, visited, recStack)) {
+			if(isCyclicUtil(function.getId(), visited, recStack)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public boolean isCyclicUtil (Function func, Map<Function, Boolean> visited, Map<Function, Boolean> recStack) {
+	public boolean isCyclicUtil (String func, Map<String, Boolean> visited, Map<String, Boolean> recStack) {
 		if(recStack.get(func)) {
 			return true;
 		}
@@ -132,8 +132,8 @@ public class Class {
 		visited.put(func, true);
 		recStack.put(func, true);
 		
-		List<Function> children = adjacencyList.get(func);
-		for(Function function : children) {
+		List<String> children = adjacencyList.get(func);
+		for(String function : children) {
 			if (isCyclicUtil(function, visited, recStack)) {
 				return true;
 			}
