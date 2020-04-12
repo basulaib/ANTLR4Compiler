@@ -54,8 +54,20 @@ public class WPCalculator {
 
     }
 
-    private Expression hoareTripleOne() {
+    private Expression hoareTripleOne(Loop loop) {
+        //{Q} Sinit {I}
+        //{True} Sinit {I}
 
+        List<Declaration> declFrom = loop.getFromBlock().getDecs();
+        int current = declFrom.size() - 1;
+        Expression currentPostCond = conjunctAll(loop.getInvariant(), 0, loop.getInvariant().size() - 1);
+
+        while (current >= 0) {
+            replace(declFrom.get(current).getID(), declFrom.get(current).getConst(), currentPostCond);
+            current--;
+        }
+
+        return currentPostCond;
     }
 
     private Expression hoareTripleTwo(Loop loop) {
