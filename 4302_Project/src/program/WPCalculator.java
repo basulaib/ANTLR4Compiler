@@ -85,6 +85,20 @@ public class WPCalculator {
         //{I∧¬B} Sbody {V < V0}
         Expression v0 = loop.getVariant();
 
+        DeepCopyMaker copyMaker = new DeepCopyMaker();
+        Expression v = copyMaker.getExprCopy(v0);
+        //replace the right hand side (0) with v0 later
+        Expression tempPostcon = new BiSmaller(v, new NumConst(0));
+
+        Expression wp = sequentialCase(loop.getStatementList(), tempPostcon);
+
+        if (wp instanceof BiSmaller && ((BiSmaller) wp).getRight().equals(new NumConst(0))) {
+            ((BiEqual) wp).setRight(v0);
+        } else {
+            System.err.println("the fifth hoare triple calculation error!");
+        }
+
+        return wp;
     }
 
     // condition rule
