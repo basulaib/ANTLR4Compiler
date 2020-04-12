@@ -3,8 +3,11 @@ package program;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import function.FuncStatement;
 import function.Function;
+import function.FunctionCall;
 import visitor.Visitor;
 
 public class Class {
@@ -16,6 +19,7 @@ public class Class {
 	private List<Function> functions;
 
 	// public HashMap<String, Boolean> declaredBools;
+	private Map<Function, List<Function>> adjacencyList;
 
 	public Class(List<String> semanticErrors) {
 		this.id = "";
@@ -81,5 +85,62 @@ public class Class {
 
 	public List<String> getSemanticErrors() {
 		return this.semanticErrors;
+	}
+	
+	public boolean recursionDetection() {
+		adjacencyList = new HashMap<Function, List<Function>>();
+		//create adjacency list
+		if(!this.functions.isEmpty()) {
+			for(Function function : this.functions) {
+				adjacencyList.put(function, new ArrayList<Function>());
+				if(!function.getStatements().isEmpty()) {
+					for(FuncStatement statement : function.getStatements()) {
+						if(statement instanceof FunctionCall) {
+							FunctionCall funcCall = (FunctionCall) statement;
+							adjacencyList.get(function).add(funcCall.getTarget());
+						}
+					}
+				}
+			}
+		}else {
+			return false;
+		}
+		//check for cycle
+		Map<Function, Boolean> visited = new HashMap<Function, Boolean>();
+		Map<Function, Boolean> recStack = new HashMap<Function, Boolean>();
+		
+		for(Function function : this.functions) {
+			visited.put(function, false);
+			recStack.put(function, false);
+		}
+		
+		for(Function function : this.functions) {
+			if(isCyclicUtil(function, visited, recStack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isCyclicUtil (Function func, Map<Function, Boolean> visited, Map<Function, Boolean> recStack) {
+		if(recStack.get(func)) {
+			return true;
+		}
+		if(visited.get(func)) {
+			return false;
+		}
+		visited.put(func, true);
+		recStack.put(func, true);
+		
+		List<Function> children = adjacencyList.get(func);
+		for(Function function : children) {
+			if (isCyclicUtil(function, visited, recStack)) {
+				return true;
+			}
+		}
+		recStack.put(func, false);
+		
+		return false;
+		
 	}
 }
