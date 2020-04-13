@@ -50,15 +50,21 @@ public class WPCalculator {
         }
     }
 
+    private Expression functionCallCase(FunctionCall call, Expression postCond) {
+        Expression result = null;
+
+        return result;
+    }
+
     private Expression loopCase(Loop loop, Expression postCond) {
-    	List<Expression> loopHoareTriples = new ArrayList<Expression>();
-    	loopHoareTriples.add(hoareTripleOne(loop));
-    	loopHoareTriples.add(hoareTripleTwo(loop));
-    	loopHoareTriples.add(hoareTripleThree(loop, postCond));
-    	loopHoareTriples.add(hoareTripleFour(loop));
-    	loopHoareTriples.add(hoareTripleFive(loop));
-    	
-    	return conjunctAll(loopHoareTriples, 0, loopHoareTriples.size()-1);
+        List<Expression> loopHoareTriples = new ArrayList<Expression>();
+        loopHoareTriples.add(hoareTripleOne(loop));
+        loopHoareTriples.add(hoareTripleTwo(loop));
+        loopHoareTriples.add(hoareTripleThree(loop, postCond));
+        loopHoareTriples.add(hoareTripleFour(loop));
+        loopHoareTriples.add(hoareTripleFive(loop));
+
+        return conjunctAll(loopHoareTriples, 0, loopHoareTriples.size() - 1);
     }
 
     private Expression hoareTripleOne(Loop loop) {
@@ -145,14 +151,13 @@ public class WPCalculator {
         Expression exitCondition = conjunctAll(loop.getUntilBlock(), 0, loop.getUntilBlock().size() - 1);
         Expression notExitCondition = new Negation(exitCondition);
 
-        Expression result = new BiImplication(new BiConjunction(invariant, notExitCondition), wp);
-
-        return result;
+        return new BiImplication(new BiConjunction(invariant, notExitCondition), wp);
     }
 
     // condition rule
     private Expression conditionalCase(Conditional condition, Expression postCond) {
         Expression result;
+        condition.addConditionalStatement(null); //just to make sure the default case is always included.
         List<Expression> originConditions = condition.getOrder();
         // must pre-process the conditions, negate all the previous conditions.
         List<Expression> processedConditions = processCondition(originConditions);
@@ -186,22 +191,6 @@ public class WPCalculator {
             result.add(conjunctAll(currentCondition, 0, i));
         }
         return result;
-    }
-
-    private Expression conjunctAll(List<Expression> exprs, int start, int end) {
-        // return the conjunction of all the expression passed in, start, end inclusive
-        // lets divide and conquer !!
-
-        if (exprs.isEmpty())
-            return null;
-
-        if (end - start == 0) {
-            return exprs.get(start);
-        } else {
-            int mid = (start + end) / 2;
-            return new BiConjunction(conjunctAll(exprs, start, mid), conjunctAll(exprs, mid + 1, end));
-        }
-
     }
 
     // sequential rule
@@ -274,4 +263,19 @@ public class WPCalculator {
 
     }
 
+    private Expression conjunctAll(List<Expression> exprs, int start, int end) {
+        // return the conjunction of all the expression passed in, start, end inclusive
+        // lets divide and conquer !!
+
+        if (exprs.isEmpty())
+            return null;
+
+        if (end - start == 0) {
+            return exprs.get(start);
+        } else {
+            int mid = (start + end) / 2;
+            return new BiConjunction(conjunctAll(exprs, start, mid), conjunctAll(exprs, mid + 1, end));
+        }
+
+    }
 }
