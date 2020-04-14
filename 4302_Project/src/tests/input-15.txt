@@ -1,34 +1,39 @@
 //test for loop
 // THIS FILE IS NOT COMPLETE, DO NOT SUBMIT THIS TEST
 
-class test{
-    loop {
-        from {
-            x = 5;
-            z = 1;
-        }
-
-        until {
-            x == 2;
-        }
-
-        invariant {
-            x > 0;
-        }
-
-        do {
-            x = x - 1;
-            z = 0;
-            x = x == x - z;
-            if (x > z) {
-                x = 0;
+class LoopTest{
+    declare {
+        int x;
+        int z;
+    }
+    
+    func void decrease(){
+        loop {
+            from {
+                x = 5;
+                z = 1;
             }
-        }
 
-        variant {
-            x < x + 1;
+            until {
+                x == 2;
+            }
+
+            invariant {
+                x > z;
+            }
+
+            do {
+                x = x - 1;
+    //            z = 0;
+    //            x = x == x - z;
+    //            if (x > z) {
+    //                x = 0;
+    //            }
+            }
+
+            variant {
+                x;
+            }
         }
     }
 }
-
-// THIS FILE IS NOT COMPLETE, DO NOT SUBMIT THIS TEST

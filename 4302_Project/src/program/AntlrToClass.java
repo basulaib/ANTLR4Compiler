@@ -93,6 +93,16 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         return expression;
     }
 
+    private TypeChecker.Type getVariableType(String id) {
+        //search and return the correct type of a variable if you encounter
+        //we should need this only during variable re-assignment, use this with checkAndReturn!
+        Parameter parameter = currentPars.getOrDefault(id, null);
+        Declaration declaration = decls.getOrDefault(id, null);
+        TypeChecker.Type idType = parameter == null ? typeChecker.getTypeResult(declaration) : typeChecker.getTypeResult(parameter);
+
+        return idType;
+    }
+
     @Override
     public Class visitClassBlock(ClassBlockContext ctx) {
         // classBlock: 'class' ID '{' body '}'
@@ -252,16 +262,13 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     public FuncStatement visitFuncStatement(FuncStatementContext ctx) {
         // TODO Auto-generated method stub
         FuncStatement result = null;
-        if (ctx.getChild(0) instanceof ConditionalContext){
+        if (ctx.getChild(0) instanceof ConditionalContext) {
             result = (Conditional) visit(ctx.getChild(0));
-        }
-        else if (ctx.getChild(0) instanceof LoopContext) {
-        	result = (Loop) visit(ctx.getChild(0));
-        }
-        else if (ctx.getChild(0) instanceof FunctionCallContext) {
-        	result = (FunctionCall) visit(ctx.getChild(0));
-        }
-        else { // Assignment
+        } else if (ctx.getChild(0) instanceof LoopContext) {
+            result = (Loop) visit(ctx.getChild(0));
+        } else if (ctx.getChild(0) instanceof FunctionCallContext) {
+            result = (FunctionCall) visit(ctx.getChild(0));
+        } else { // Assignment
             String id = ctx.getChild(0).getText();
             Expression expression;
             if (!decls.containsKey(id) && !currentPars.containsKey(id)) {
@@ -272,9 +279,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
                 semanticErrors.add("Error: variable " + id + " not declared (" + line + ", " + column + ")");
                 expression = this.toExpression.visit(ctx.expr());
             } else {
-                Parameter parameter = currentPars.getOrDefault(id, null);
-                Declaration declaration = decls.getOrDefault(id, null);
-                TypeChecker.Type idType = parameter == null ? typeChecker.getTypeResult(declaration) : typeChecker.getTypeResult(parameter);
+                TypeChecker.Type idType = getVariableType(id);
                 expression = checkAndReturn(idType, ctx.expr());
             }
 
@@ -382,146 +387,143 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         return result;
     }
 
-	@Override
-	public Object visitLoop(LoopContext ctx) {
-		// TODO Auto-generated method stub
-		Loop result = new Loop();
-		for (ParseTree t : ctx.children) {
-			if (t instanceof FromBlockContext) {
-				FromBlock fb = (FromBlock) visit(t);
-				result.setFromBlock(fb);
-			}
-			else if (t instanceof UntilBlockContext) {
-				UntilBlock ub = (UntilBlock) visit(t);
-				result.setUntilBlock(ub);
-			}
-			else if (t instanceof InvariantBlockContext) {
-				Invariant inv = (Invariant) visit(t);
-				result.setInvariant(inv);
-			}
-			else if (t instanceof DoBlockContext) {
-				List<FuncStatement> fs = (List<FuncStatement>) visit(t);
-				result.setStatementList(fs);
-			}
-			else { // variant block
-				Variant v = (Variant) visit(t);
-				result.setVariant(v);
-			}
-		}
-		return result;
-	}
+    @Override
+    public Object visitLoop(LoopContext ctx) {
+        // TODO Auto-generated method stub
+        Loop result = new Loop();
+        for (ParseTree t : ctx.children) {
+            if (t instanceof FromBlockContext) {
+                FromBlock fb = (FromBlock) visit(t);
+                result.setFromBlock(fb);
+            } else if (t instanceof UntilBlockContext) {
+                UntilBlock ub = (UntilBlock) visit(t);
+                result.setUntilBlock(ub);
+            } else if (t instanceof InvariantBlockContext) {
+                Invariant inv = (Invariant) visit(t);
+                result.setInvariant(inv);
+            } else if (t instanceof DoBlockContext) {
+                List<FuncStatement> fs = (List<FuncStatement>) visit(t);
+                result.setStatementList(fs);
+            } else { // variant block
+                Variant v = (Variant) visit(t);
+                result.setVariant(v);
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public Object visitFromBlock(FromBlockContext ctx) {
-		// TODO Auto-generated method stub
-		FromBlock result = new FromBlock();
-		for (ParseTree t : ctx.children) {
-			if (t instanceof FromBodyContext) {
-				result.addAssignment((Assignment) visit(t));
-			}
-		}
-		return result;
-	}
+    @Override
+    public Object visitFromBlock(FromBlockContext ctx) {
+        // TODO Auto-generated method stub
+        FromBlock result = new FromBlock();
+        for (ParseTree t : ctx.children) {
+            if (t instanceof FromBodyContext) {
+                result.addAssignment((Assignment) visit(t));
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public Assignment visitFromBody(FromBodyContext ctx) {
-		// TODO Auto-generated method stub
-		String name = ctx.getChild(0).getText();
-		if (!decls.containsKey(name)) {
+    @Override
+    public Assignment visitFromBody(FromBodyContext ctx) {
+        // TODO Auto-generated method stub
+        String name = ctx.getChild(0).getText();
+        if (!decls.containsKey(name) && !this.currentPars.containsKey(name)) {
             //if the ID of the assignment is not declared, semantic error
             Token idToken = ctx.ID().getSymbol();
             int line = idToken.getLine();
             int column = idToken.getCharPositionInLine() + 1;
             semanticErrors.add("Error: variable " + name + " not declared (" + line + ", " + column + ")");
             // expression = this.toExpression.visit(ctx.expr());
-		}
-		Expression e = checkAndReturn(Type.bool, (ExprContext) ctx.getChild(2));
-		Assignment a = new Assignment(name, e);
-		return a;
-	}
+        }
+        TypeChecker.Type type = getVariableType(name);
+        Expression e = checkAndReturn(type, (ExprContext) ctx.getChild(2));
+        Assignment a = new Assignment(name, e);
+        return a;
+    }
 
-	@Override
-	public UntilBlock visitUntilBlock(UntilBlockContext ctx) {
-		UntilBlock result = new UntilBlock();
-		for (ParseTree t : ctx.children) {
-			if (t instanceof UntilBodyContext) {
-				result.addExpr((Expression) visit(t));
-			}
-		}
-		return result;
-	}
+    @Override
+    public UntilBlock visitUntilBlock(UntilBlockContext ctx) {
+        UntilBlock result = new UntilBlock();
+        for (ParseTree t : ctx.children) {
+            if (t instanceof UntilBodyContext) {
+                result.addExpr((Expression) visit(t));
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public Expression visitUntilBody(UntilBodyContext ctx) {
-		return checkAndReturn(Type.bool, (ExprContext) ctx.getChild(0));
-	}
+    @Override
+    public Expression visitUntilBody(UntilBodyContext ctx) {
+        return checkAndReturn(Type.bool, (ExprContext) ctx.getChild(0));
+    }
 
-	@Override
-	public Invariant visitInvariantBlock(InvariantBlockContext ctx) {
-		// TODO Auto-generated method stub
-		Invariant result = new Invariant();
-		for (ParseTree t : ctx.children) {
-			if (t instanceof InvariantBodyContext) {
-				result.addExpr((Expression) visit(t));
-			}
-		}
-		return result;
-	}
+    @Override
+    public Invariant visitInvariantBlock(InvariantBlockContext ctx) {
+        // TODO Auto-generated method stub
+        Invariant result = new Invariant();
+        for (ParseTree t : ctx.children) {
+            if (t instanceof InvariantBodyContext) {
+                result.addExpr((Expression) visit(t));
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public Expression visitInvariantBody(InvariantBodyContext ctx) {
-		return checkAndReturn(Type.bool, (ExprContext) ctx.getChild(0));
-	}
+    @Override
+    public Expression visitInvariantBody(InvariantBodyContext ctx) {
+        return checkAndReturn(Type.bool, (ExprContext) ctx.getChild(0));
+    }
 
-	@Override
-	public List<FuncStatement> visitDoBlock(DoBlockContext ctx) {
-		// TODO Auto-generated method stub
-		ArrayList<FuncStatement> result = new ArrayList<>();
-		for (ParseTree t : ctx.children) {
-			result.add((FuncStatement) visit(t));
-		}
-		return result;
-	}
+    @Override
+    public List<FuncStatement> visitDoBlock(DoBlockContext ctx) {
+        // TODO Auto-generated method stub
+        ArrayList<FuncStatement> result = new ArrayList<>();
+        for (ParseTree t : ctx.children) {
+            result.add((FuncStatement) visit(t));
+        }
+        return result;
+    }
 
-	@Override
-	public FuncStatement visitDoBody(DoBodyContext ctx) {
-		// TODO Auto-generated method stub
-		return (FuncStatement) visit(ctx.getChild(0));
-	}
+    @Override
+    public FuncStatement visitDoBody(DoBodyContext ctx) {
+        // TODO Auto-generated method stub
+        return (FuncStatement) visit(ctx.getChild(0));
+    }
 
-	@Override
-	public Variant visitVariantBlock(VariantBlockContext ctx) {
-		// TODO Auto-generated method stub
-		Variant result = new Variant();
-		for (ParseTree t : ctx.children) {
-			if (t instanceof VariantBodyContext) {
-				result.setVariant((Expression) visit(t));
-			}
-		}
-		return result;
-	}
+    @Override
+    public Variant visitVariantBlock(VariantBlockContext ctx) {
+        // TODO Auto-generated method stub
+        Variant result = new Variant();
+        for (ParseTree t : ctx.children) {
+            if (t instanceof VariantBodyContext) {
+                result.setVariant((Expression) visit(t));
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public Expression visitVariantBody(VariantBodyContext ctx) {
-		// TODO Auto-generated method stub
-		return checkAndReturn(Type.bool, (ExprContext) ctx.getChild(0));
-	}
+    @Override
+    public Expression visitVariantBody(VariantBodyContext ctx) {
+        // TODO Auto-generated method stub
+        return checkAndReturn(Type.num, (ExprContext) ctx.getChild(0));
+    }
 
-	@Override
-	public FunctionCall visitFunctionCall(FunctionCallContext ctx) {
-		// TODO Auto-generated method stub
-		String refFunction = ctx.getChild(0).getText();
-		List<Expression> params = new ArrayList<>();
-		//String id = ctx.getChild(0).getText();
-		for(int i = 2; i < ctx.children.size() - 1; i++) {
-			if(ctx.getChild(i) instanceof ExprContext) {						
-				Expression e = toExpression.visit(ctx.getChild(i));
-				params.add(e);
-			}
-		}	
-		FunctionCall result = new FunctionCall(refFunction, params);
-		return result;
-		
-	}
+    @Override
+    public FunctionCall visitFunctionCall(FunctionCallContext ctx) {
+        // TODO Auto-generated method stub
+        String refFunction = ctx.getChild(0).getText();
+        List<Expression> params = new ArrayList<>();
+        //String id = ctx.getChild(0).getText();
+        for (int i = 2; i < ctx.children.size() - 1; i++) {
+            if (ctx.getChild(i) instanceof ExprContext) {
+                Expression e = toExpression.visit(ctx.getChild(i));
+                params.add(e);
+            }
+        }
+        FunctionCall result = new FunctionCall(refFunction, params);
+        return result;
+
+    }
 
 }
