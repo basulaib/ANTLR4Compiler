@@ -138,7 +138,7 @@ variantBlock: 'variant' '{' variantBody '}'
 variantBody: expr LINE_END
            ;
            
-funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')'
+funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')'													#FunctionCall
 		;
 		
 
