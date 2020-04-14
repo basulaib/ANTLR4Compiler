@@ -74,6 +74,8 @@ public interface Visitor {
 	public void visitDeclaration(Declaration decl);
 
 	public void visitFunction(Function func);
+	
+	public void visitFunctionCall (FunctionCall funcCall);
 
 	public void visitConditional(Conditional cond);
 

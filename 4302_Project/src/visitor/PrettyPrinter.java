@@ -23,6 +23,7 @@ import expression.binary.BinaryOperation;
 import function.Assignment;
 import function.Conditional;
 import function.Function;
+import function.FunctionCall;
 import function.Parameter;
 import function.PostCondition;
 import function.PreCondition;
@@ -501,6 +502,12 @@ public class PrettyPrinter implements Visitor {
         this.printResult = result.toString();
 
     }
+
+	@Override
+	public void visitFunctionCall(FunctionCall funcCall) {
+		// TODO Auto-generated method stub
+		
+	}
 
 //	private void addParenthesis() {
 //		this.printResult = "(" + this.printResult + ")";

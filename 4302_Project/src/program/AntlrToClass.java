@@ -510,62 +510,18 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
 	@Override
 	public FunctionCall visitFunctionCall(FunctionCallContext ctx) {
 		// TODO Auto-generated method stub
-		Function refFunction = null;
+		String refFunction = ctx.getChild(0).getText();
 		List<Expression> params = new ArrayList<>();
-		FunctionCall result = new FunctionCall(null);
-		for(Function function : c.getFunctions()) {
-			String id = ctx.getChild(0).getText();
-			if(function.getId().equals(id)) {
-				refFunction = function;
-				for(int i = 2; i < ctx.children.size(); i++) {
-					if(ctx.getChild(i) instanceof ExprContext) {						
-						Expression e = toExpression.visit(ctx.getChild(i));
-						params.add(e);
-					}else if(!ctx.getChild(i).getText().equals(",")){
-						String param = ctx.getChild(i).getText();
-						if ((!decls.containsKey(param) && !currentPars.containsKey(param))) {
-							//if the ID of the assignment is not declared, and is not a parameter
-							Token idToken = ctx.ID().getSymbol();
-			                int line = idToken.getLine();
-			               	int column = idToken.getCharPositionInLine() + 1;
-			               	semanticErrors.add("Error: variable " + param + " not declared (" + line + ", " + column + ")");
-						}else if((decls.get(param).getConst() == null && !variableIsAssignedInFunction(currentFunc, param))) {
-							//or if the variable was declared without a value and has yet to be assigned a value yet
-							
-							Token idToken = ctx.ID().getSymbol();
-							int line = idToken.getLine();
-							int column = idToken.getCharPositionInLine() + 1;
-							semanticErrors.add("Error: variable " + param + " has not yet been assigned a value (" + line + ", " + column + ")");
-						}else {
-							Expression expression;
-							
-			                Parameter parameter = currentPars.getOrDefault(param, null);
-			                Declaration declaration = decls.getOrDefault(param, null);
-			                TypeChecker.Type idType = parameter == null ? typeChecker.getTypeResult(declaration) : typeChecker.getTypeResult(parameter);
-			                expression = checkAndReturn(idType, ctx.expr().get(i));
-				            params.add(expression);
-						}
-					}
-				}
+		//String id = ctx.getChild(0).getText();
+		for(int i = 2; i < ctx.children.size() - 1; i++) {
+			if(ctx.getChild(i) instanceof ExprContext) {						
+				Expression e = toExpression.visit(ctx.getChild(i));
+				params.add(e);
 			}
-		}
-		result = new FunctionCall(refFunction, params);
+		}	
+		FunctionCall result = new FunctionCall(refFunction, params);
 		return result;
 		
-		
-		//return super.visitFunctionCall(ctx);
-	}
-	
-	private boolean variableIsAssignedInFunction(Function func, String id) {
-		for(FuncStatement statement : func.getStatements()) {
-			if(statement instanceof Assignment) {
-				Assignment assign = (Assignment) statement;
-				if(assign.getID().equals(id)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 }

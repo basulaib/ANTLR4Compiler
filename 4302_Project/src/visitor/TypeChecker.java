@@ -166,6 +166,12 @@ public class TypeChecker implements Visitor {
     }
 
     @Override
+	public void visitFunctionCall(FunctionCall funcCall) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
     public void visitNotEqual(BiNotEqual neq) {
         reset();
         Type leftType = this.checker.getTypeResult(neq.getLeft());

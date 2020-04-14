@@ -582,13 +582,13 @@ public class ProjectBaseListener implements ProjectListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionCall(ProjectParser.FunctionCallContext ctx) { }
+	@Override public void enterFuncCall(ProjectParser.FuncCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionCall(ProjectParser.FunctionCallContext ctx) { }
+	@Override public void exitFuncCall(ProjectParser.FuncCallContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

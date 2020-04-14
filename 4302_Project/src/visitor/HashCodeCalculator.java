@@ -18,6 +18,7 @@ import expression.binary.BiSubtraction;
 import function.Assignment;
 import function.Conditional;
 import function.Function;
+import function.FunctionCall;
 import function.PostCondition;
 import function.PreCondition;
 import loop.FromBlock;
@@ -30,6 +31,12 @@ import program.Program;
 import program.Class;
 
 public class HashCodeCalculator implements Visitor {
+@Override
+	public void visitFunctionCall(FunctionCall funcCall) {
+		// TODO Auto-generated method stub
+		
+	}
+
 @Override
 	public void visitLoop(Loop loop) {
 		// TODO Auto-generated method stub

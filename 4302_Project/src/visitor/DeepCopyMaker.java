@@ -38,6 +38,12 @@ public class DeepCopyMaker implements Visitor {
 	}
 
 	@Override
+	public void visitFunctionCall(FunctionCall funcCall) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void visitVariant(Variant variant) {
 		// TODO Auto-generated method stub
 		

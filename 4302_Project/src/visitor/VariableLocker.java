@@ -12,7 +12,13 @@ public class VariableLocker implements Visitor {
     //this visitor class will make changes to the expression!
     //better use it with DeepCopyMaker.
 
-    private void binaryOp(BinaryOperation bi) {
+    @Override
+	public void visitFunctionCall(FunctionCall funcCall) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void binaryOp(BinaryOperation bi) {
         bi.getLeft().accept(this);
         bi.getRight().accept(this);
     }

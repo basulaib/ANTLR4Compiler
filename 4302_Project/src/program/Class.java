@@ -97,7 +97,7 @@ public class Class {
 					for(FuncStatement statement : function.getStatements()) {
 						if(statement instanceof FunctionCall) {
 							FunctionCall funcCall = (FunctionCall) statement;
-							adjacencyList.get(function.getId()).add(funcCall.getTarget().getId());
+							adjacencyList.get(function.getId()).add(funcCall.getTarget());
 						}
 					}
 				}
