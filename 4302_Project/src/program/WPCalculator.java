@@ -32,7 +32,7 @@ public class WPCalculator {
     private Expression getWP(Function func, List<Expression> invariants) {
         List<Expression> allPostconds = new ArrayList<>(invariants);
         allPostconds.addAll(func.getPostCondition());
-        if (allPostconds.isEmpty()) return new BoolConst(true);
+        if (allPostconds.isEmpty()) allPostconds.add(new BoolConst(true));
 
         Expression postCond = this.conjunctAll(allPostconds, 0, allPostconds.size() - 1);
         return sequentialCase(func.getStatements(), postCond);

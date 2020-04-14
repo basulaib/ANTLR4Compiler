@@ -8,13 +8,13 @@ import expression.Expression;
 import function.FuncStatement;
 import visitor.Visitor;
 
-public class Loop extends FuncStatement{
-	FromBlock fromBlock;
-	UntilBlock untilBlock;
-	Invariant invariant;
-	Variant variant;
-	List<FuncStatement> statementList;
-	
+public class Loop extends FuncStatement {
+    FromBlock fromBlock;
+    UntilBlock untilBlock;
+    Invariant invariant;
+    Variant variant;
+    List<FuncStatement> statementList;
+
 //	public Loop() {
 //		this.fromBlock = new FromBlock();
 //		this.untilBlock = new UntilBlock();
@@ -22,70 +22,70 @@ public class Loop extends FuncStatement{
 //		this.variant = new Variant();
 //		this.statementList = new ArrayList<FuncStatement>();
 //	}
-	
-	public Loop(FromBlock fromBlock, UntilBlock untilBlock, Variant variant) {
-		this.fromBlock = fromBlock;
-		this.untilBlock = untilBlock;
-		this.invariant = new Invariant();
-		this.variant = variant;
-		this.statementList = new ArrayList<FuncStatement>();
-	}
-	
-	public Loop(FromBlock fromBlock, UntilBlock untilBlock, Invariant invariant, Variant variant, List<FuncStatement> statementList) {
-		this.fromBlock = fromBlock;
-		this.untilBlock = untilBlock;
-		this.invariant = invariant;
-		this.variant = variant;
-		this.statementList = statementList;
-	}
-	
-	public Loop() {
-	}
-	
-	public void accept(Visitor visitor) {
-		// TODO Auto-generated method stub
-		visitor.visitLoop(this);
-	}
-	
-	public FromBlock getFromBlock() {
-		return fromBlock;
-	}
 
-	public void setFromBlock(FromBlock fromBlock) {
-		this.fromBlock = fromBlock;
-	}
+    public Loop(FromBlock fromBlock, UntilBlock untilBlock, Variant variant) {
+        this.fromBlock = fromBlock;
+        this.untilBlock = untilBlock;
+        this.invariant = new Invariant();
+        this.variant = variant;
+        this.statementList = new ArrayList<FuncStatement>();
+    }
 
-	public ArrayList<Expression> getUntilBlock() {
-		return untilBlock.getExprs();
-	}
+    public Loop(FromBlock fromBlock, UntilBlock untilBlock, Invariant invariant, Variant variant, List<FuncStatement> statementList) {
+        this.fromBlock = fromBlock;
+        this.untilBlock = untilBlock;
+        this.invariant = invariant;
+        this.variant = variant;
+        this.statementList = statementList;
+    }
 
-	public void setUntilBlock(UntilBlock untilBlock) {
-		this.untilBlock = untilBlock;
-	}
+    public Loop() {
+    }
 
-	public List<Expression> getInvariant() {
-		return invariant.getInvariantList();
-	}
+    public void accept(Visitor visitor) {
+        // TODO Auto-generated method stub
+        visitor.visitLoop(this);
+    }
 
-	public void setInvariant(Invariant invariant) {
-		this.invariant = invariant;
-	}
+    public FromBlock getFromBlock() {
+        return fromBlock;
+    }
 
-	public Expression getVariant() {
-		return variant.getVariant();
-	}
+    public void setFromBlock(FromBlock fromBlock) {
+        this.fromBlock = fromBlock;
+    }
 
-	public void setVariant(Variant variant) {
-		this.variant = variant;
-	}
+    public ArrayList<Expression> getUntilBlock() {
+        return untilBlock.getExprs();
+    }
 
-	public List<FuncStatement> getStatementList() {
-		return statementList;
-	}
+    public void setUntilBlock(UntilBlock untilBlock) {
+        this.untilBlock = untilBlock;
+    }
 
-	public void setStatementList(List<FuncStatement> statementList) {
-		this.statementList = statementList;
-	}
-	
-	
+    public List<Expression> getInvariant() {
+        return invariant.getExprs();
+    }
+
+    public void setInvariant(Invariant invariant) {
+        this.invariant = invariant;
+    }
+
+    public Expression getVariant() {
+        return variant.getVariant();
+    }
+
+    public void setVariant(Variant variant) {
+        this.variant = variant;
+    }
+
+    public List<FuncStatement> getStatementList() {
+        return statementList;
+    }
+
+    public void setStatementList(List<FuncStatement> statementList) {
+        this.statementList = statementList;
+    }
+
+
 }

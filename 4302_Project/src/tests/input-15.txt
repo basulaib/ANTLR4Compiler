@@ -37,3 +37,16 @@ class LoopTest{
         }
     }
 }
+
+
+// 2 things: 1. always make a deep copy of expression when doing replacement
+//            2.  free up all the locked variables after exiting the loop?
+// ((5) > (1))
+//
+//((((5) > (1)) and (not ((n.x) = (2)))) => ((5) > (1)))
+//
+//(((5) > (1)) and ((n.x) = (2))) => (1=1)
+//
+//((((5) > (1)) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0)))
+//
+//(((5) > (1)) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (minus[n.x][1]))

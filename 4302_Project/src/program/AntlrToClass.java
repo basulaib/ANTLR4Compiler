@@ -404,7 +404,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             } else if (t instanceof DoBlockContext) {
                 List<FuncStatement> fs = (List<FuncStatement>) visit(t);
                 result.setStatementList(fs);
-            } else { // variant block
+            } else if (t instanceof VariantBlockContext) { // variant block
+                //t must be a variant block context otherwise v will be set to NULL.
                 Variant v = (Variant) visit(t);
                 result.setVariant(v);
             }
@@ -480,7 +481,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         // TODO Auto-generated method stub
         ArrayList<FuncStatement> result = new ArrayList<>();
         for (ParseTree t : ctx.children) {
-            result.add((FuncStatement) visit(t));
+            if (t instanceof DoBodyContext) result.add((FuncStatement) visit(t));
         }
         return result;
     }

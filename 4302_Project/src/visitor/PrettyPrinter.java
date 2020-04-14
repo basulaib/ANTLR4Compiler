@@ -38,36 +38,36 @@ import program.Class;
 public class PrettyPrinter implements Visitor {
 
     @Override
-	public void visitLoop(Loop loop) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void visitLoop(Loop loop) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void visitFromBlock(FromBlock fromBlock) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visitUntilBlock(UntilBlock untilBlock) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visitFromBlock(FromBlock fromBlock) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void visitInvariant(Invariant invariant) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visitVariant(Variant variant) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visitUntilBlock(UntilBlock untilBlock) {
+        // TODO Auto-generated method stub
 
-	private String printResult;
+    }
+
+    @Override
+    public void visitInvariant(Invariant invariant) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitVariant(Variant variant) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private String printResult;
     private String prefix; // the prefix for all variables, eg. x => n.x
     private String currentClass;
     private HashSet<String> parameters; // if the variable is a parameter, don't add prefix.
@@ -389,9 +389,8 @@ public class PrettyPrinter implements Visitor {
             result.deleteCharAt(result.length() - 1);
 
             result.append("]\n}");
-
-            result.append("for 8 but 8 int, 2 Bool, exactly 32 String");
         }
+        result.append(" for 8 but 8 int, 2 Bool, exactly 32 String");
         return result.toString();
     }
 
@@ -503,11 +502,11 @@ public class PrettyPrinter implements Visitor {
 
     }
 
-	@Override
-	public void visitFunctionCall(FunctionCall funcCall) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visitFunctionCall(FunctionCall funcCall) {
+        // TODO Auto-generated method stub
+
+    }
 
 //	private void addParenthesis() {
 //		this.printResult = "(" + this.printResult + ")";
