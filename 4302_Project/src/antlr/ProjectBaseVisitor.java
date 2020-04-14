@@ -1,4 +1,4 @@
-// Generated from .\antlr\Project.g4 by ANTLR 4.8
+// Generated from Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -342,4 +342,11 @@ public class ProjectBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitVariantBody(ProjectParser.VariantBodyContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFunctionCall(ProjectParser.FunctionCallContext ctx) { return visitChildren(ctx); }
 }

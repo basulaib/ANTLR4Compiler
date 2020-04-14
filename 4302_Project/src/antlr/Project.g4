@@ -138,8 +138,9 @@ variantBlock: 'variant' '{' variantBody '}'
 variantBody: expr LINE_END
            ;
            
-funcCall: ID'('VAR*')'
+funcCall: ID'(' (((expr | VAR) ',')* (expr | VAR)?)')'														#FunctionCall
 		;
+		
 
 // Tokens
 TYPE : 'int' | 'string' | 'bool';

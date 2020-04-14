@@ -1,4 +1,4 @@
-// Generated from .\antlr\Project.g4 by ANTLR 4.8
+// Generated from Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -577,6 +577,18 @@ public class ProjectBaseListener implements ProjectListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVariantBody(ProjectParser.VariantBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionCall(ProjectParser.FunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionCall(ProjectParser.FunctionCallContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

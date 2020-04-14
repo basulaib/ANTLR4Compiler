@@ -1,4 +1,4 @@
-// Generated from .\antlr\Project.g4 by ANTLR 4.8
+// Generated from Project.g4 by ANTLR 4.8
 
 	package antlr;
 
@@ -541,4 +541,16 @@ public interface ProjectListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariantBody(ProjectParser.VariantBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ProjectParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(ProjectParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ProjectParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(ProjectParser.FunctionCallContext ctx);
 }
