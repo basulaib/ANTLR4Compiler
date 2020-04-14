@@ -11,13 +11,13 @@ public class StringVariable extends Variable {
     public StringVariable(String ID, Constant value) {
         super();
         this.ID = ID;
-        this.valueDefined = true;
-        this.value = value;
+//        this.valueDefined = true;
+//        this.value = value;
     }
 
-    public String getStringValue() {
-        return ((StringConst) value).strValue;
-    }
+//    public String getStringValue() {
+//        return ((StringConst) value).strValue;
+//    }
 
     @Override
     public void accept(Visitor visitor) {

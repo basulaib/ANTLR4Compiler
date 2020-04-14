@@ -11,14 +11,14 @@ public class NumVariable extends Variable {
     public NumVariable(String ID, Constant value) {
         super();
         this.ID = ID;
-        this.valueDefined = true;
-        this.value = value;
+//        this.valueDefined = true;
+//        this.value = value;
     }
 
 
-    public int getIntValue() {
-        return ((NumConst) value).numValue;
-    }
+//    public int getIntValue() {
+//        return ((NumConst) value).numValue;
+//    }
 
     @Override
     public void accept(Visitor visitor) {

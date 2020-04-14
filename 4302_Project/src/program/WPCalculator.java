@@ -74,6 +74,8 @@ public class WPCalculator {
         List<Assignment> declFrom = loop.getFromBlock().getAssignments();
         int current = declFrom.size() - 1;
         Expression currentPostCond = conjunctAll(loop.getInvariant(), 0, loop.getInvariant().size() - 1);
+        DeepCopyMaker copyMaker = new DeepCopyMaker();
+        currentPostCond = copyMaker.getExprCopy(currentPostCond);
 
         while (current >= 0) {
             replace(declFrom.get(current).getID(), declFrom.get(current).getExpr(), currentPostCond);
@@ -227,6 +229,7 @@ public class WPCalculator {
 
     // replace all FREE occurrences of x in R with e.
     private void replace(String x, Expression e, Expression R) {
+        // CAUTION: always use this method with deepCopyMaker
         // base case
         if (R instanceof Constant)
             return;

@@ -20,6 +20,8 @@ class LoopTest{
 
             invariant {
                 x > z;
+                x > 1;
+                z == 1;
             }
 
             do {
@@ -39,14 +41,23 @@ class LoopTest{
 }
 
 
-// 2 things: 1. always make a deep copy of expression when doing replacement
-//            2.  free up all the locked variables after exiting the loop?
-// ((5) > (1))
+//pred decreaseCheck{
+//    some n: LoopTest| not (((((((5) > (1)) and ((5) > (1))) and ((1) = (1))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((((minus[n.x][1]) > (n.z)) and ((minus[n.x][1]) > (1))) and ((n.z) = (1))))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and ((n.x) = (2))) => (1=1))) and (((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (n.x)))))
+//}
+
+// 5 hoare triples ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+//{Q} Sinit {I}
+//((((5) > (1)) and ((5) > (1))) and ((1) = (1)))
 //
-//((((5) > (1)) and (not ((n.x) = (2)))) => ((5) > (1)))
+//{I && not B} Sbody {I}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((((minus[n.x][1]) > (n.z)) and ((minus[n.x][1]) > (1))) and ((n.z) = (1)))
 //
-//(((5) > (1)) and ((n.x) = (2))) => (1=1)
+//I && B => R
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and ((n.x) = (2))) => (1=1) 
 //
-//((((5) > (1)) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0)))
+//{I && not B} Sbody {V >= 0}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0))
 //
-//(((5) > (1)) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (minus[n.x][1]))
+//{I && not B} Sbody {V < V0}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (n.x))
