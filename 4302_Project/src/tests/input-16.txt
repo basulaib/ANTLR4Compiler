@@ -1,7 +1,7 @@
 class test{
 	declare {
     	int result;
-    	int amount;
+    	int amount = 5;
     }
 
 
@@ -9,10 +9,8 @@ class test{
 		require {
 			y > 0;
 		}
-
-		amount = 5;
 		
-		switch (amount){
+		switch (amount) {
 			case: 3 {
 				result = 4;
 			}
@@ -21,17 +19,17 @@ class test{
 				result = 7;
 			}
 			
-			default {
+			default: {
 				result = 5;
 			}
-		};
+		}
 
 		ensure {
-			result <=> 7;
+			result == 7;
 		}
 	}
 
 	assert {
-		amount <=> 5;
+		amount == 5;
 	}
 }

@@ -76,8 +76,9 @@ funcBody: precon? (funcStatement)* postcon?			# FunctionBody
 
 funcStatement: ID '=' (expr | VAR) LINE_END						      //# Statement
 			 | conditional
-                      | loop
+             | loop
              | funcCall
+             | switchBlock
 			 ;
 
 precon: 'require' '{' (expr LINE_END)* '}'									# PreCond
@@ -141,14 +142,14 @@ variantBody: expr LINE_END
 funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')' LINE_END											#FunctionCall
 		;
 		
-switchBlock: 'switch' '(' expr ')' '{' switchBody '}' LINE_END								#Switch
-	;
+switchBlock: 'switch' '(' expr ')' '{' switchBody '}' 								#Switch
+		   ;
 	
 switchBody: (caseBlock)* defaultBlock		
-	;
+      	  ;
 	
-caseBlock: 'case:' expr '{' (funcStatement)* '}'											#Case
-	;
+caseBlock: 'case:' expr '{' (funcStatement)* '}'										#Case
+	     ;
 
 defaultBlock: 'default:' '{' (funcStatement)* '}'  										#Default
 	;
