@@ -14,8 +14,10 @@ import antlr.ProjectParser.BoolNumExprContext;
 import antlr.ProjectParser.ClassBlockContext;
 import antlr.ProjectParser.ClassBodyContext;
 import antlr.ProjectParser.ConditionalContext;
+import antlr.ProjectParser.CaseContext;
 import antlr.ProjectParser.DeclBodyContext;
 import antlr.ProjectParser.DeclContext;
+import antlr.ProjectParser.DefaultContext;
 import antlr.ProjectParser.DoBlockContext;
 import antlr.ProjectParser.DoBodyContext;
 import antlr.ProjectParser.ElseConditionalContext;
@@ -36,6 +38,8 @@ import antlr.ProjectParser.ParameterContext;
 import antlr.ProjectParser.ParenthesizedExprContext;
 import antlr.ProjectParser.PostCondContext;
 import antlr.ProjectParser.PreCondContext;
+import antlr.ProjectParser.SwitchContext;
+import antlr.ProjectParser.SwitchBodyContext;
 import antlr.ProjectParser.UnaryExprContext;
 import antlr.ProjectParser.UntilBlockContext;
 import antlr.ProjectParser.UntilBodyContext;
@@ -268,6 +272,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             result = (Loop) visit(ctx.getChild(0));
         } else if (ctx.getChild(0) instanceof FunctionCallContext) {
             result = (FunctionCall) visit(ctx.getChild(0));
+        }else if (ctx.getChild(0) instanceof SwitchContext){
+        	result = (Conditional) visit(ctx.getChild(0));
         } else { // Assignment
             String id = ctx.getChild(0).getText();
             Expression expression;
@@ -322,6 +328,23 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             }
         }
         return result;
+    }
+    
+    @Override
+    public Conditional visitSwitch(SwitchContext ctx) {
+    	Expression e = toExpression.visit(ctx.getChild(2));
+    	return visitSwitchBody((SwitchBodyContext) ctx.getChild(3));
+    }
+    
+    @Override
+    public Conditional visitSwitchBody(SwitchBodyContext ctx) {
+    	//
+    	for(ParseTree t: ctx.children) {
+    		if(t.getText().equals("case:")) {
+    			
+    		}
+    	}    	
+    	return null;
     }
 
     @Override

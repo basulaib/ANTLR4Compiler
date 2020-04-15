@@ -138,9 +138,20 @@ variantBlock: 'variant' '{' variantBody '}'
 variantBody: expr LINE_END
            ;
            
-funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')'													#FunctionCall
+funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')' LINE_END											#FunctionCall
 		;
 		
+switchBlock: 'switch' '(' VAR ')' '{' switchBody '}' LINE_END								#Switch
+	;
+	
+switchBody: (caseBlock)* defaultBlock		
+	;
+	
+caseBlock: 'case:' expr '{' (funcStatement)* '}'											#Case
+	;
+
+defaultBlock: 'default:' '{' (funcStatement)* '}'  										#Default
+	;
 
 // Tokens
 TYPE : 'int' | 'string' | 'bool';

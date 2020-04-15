@@ -553,4 +553,50 @@ public interface ProjectListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionCall(ProjectParser.FunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Switch}
+	 * labeled alternative in {@link ProjectParser#switchBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitch(ProjectParser.SwitchContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Switch}
+	 * labeled alternative in {@link ProjectParser#switchBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitch(ProjectParser.SwitchContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProjectParser#switchBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitchBody(ProjectParser.SwitchBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProjectParser#switchBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitchBody(ProjectParser.SwitchBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Case}
+	 * labeled alternative in {@link ProjectParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterCase(ProjectParser.CaseContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Case}
+	 * labeled alternative in {@link ProjectParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitCase(ProjectParser.CaseContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Default}
+	 * labeled alternative in {@link ProjectParser#defaultBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefault(ProjectParser.DefaultContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Default}
+	 * labeled alternative in {@link ProjectParser#defaultBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefault(ProjectParser.DefaultContext ctx);
 }

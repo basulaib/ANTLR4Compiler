@@ -332,4 +332,31 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionCall(ProjectParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Switch}
+	 * labeled alternative in {@link ProjectParser#switchBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSwitch(ProjectParser.SwitchContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ProjectParser#switchBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSwitchBody(ProjectParser.SwitchBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Case}
+	 * labeled alternative in {@link ProjectParser#caseBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCase(ProjectParser.CaseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Default}
+	 * labeled alternative in {@link ProjectParser#defaultBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefault(ProjectParser.DefaultContext ctx);
 }
