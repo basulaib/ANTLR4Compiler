@@ -3,6 +3,7 @@ package visitor;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.SortedMap;
 
 import expression.*;
 import expression.binary.BiAddition;
@@ -276,9 +277,18 @@ public class PrettyPrinter implements Visitor {
     }
 
     @Override
+    public void visitArrayVar(ArrayVariable arr) {
+        //currently array reference cannot be a parameter type
+        reset();
+        this.printResult = (prefix.isEmpty() ? arr.getID() : prefix + "." + arr.getID())
+                + "[" + printer.getPrintResult(arr.getIndex()) + "]" + (arr.getType() == Constant.Type.bool ? " = True" : "");
+        //if the array is an array of boolean, also translate that
+    }
+
+    @Override
     public void visitDeclaration(Declaration decl) {
         // we don't need to add prefix in declaration
-        if (decl.getConst() != null) {
+        if (decl.getConst() != null && !decl.isArrayDeclaration()) {
             reset();
             if (decl.getType() != Constant.Type.bool)
                 this.printResult = decl.getID() + ":" + this.printer.getPrintResult(decl.getConst());
@@ -288,13 +298,16 @@ public class PrettyPrinter implements Visitor {
             this.printResult = decl.getID() + ":";
             switch (decl.getType()) {
                 case bool:
-                    this.printResult = this.printResult + "Bool";
+                    if (decl.isArrayDeclaration()) this.printResult = this.printResult + "seq Bool";
+                    else this.printResult = this.printResult + "Bool";
                     break;
                 case string:
-                    this.printResult = this.printResult + "String";
+                    if (decl.isArrayDeclaration()) this.printResult = this.printResult + "seq String";
+                    else this.printResult = this.printResult + "String";
                     break;
                 case num:
-                    this.printResult = this.printResult + "Int";
+                    if (decl.isArrayDeclaration()) this.printResult = this.printResult + "seq Int";
+                    else this.printResult = this.printResult + "Int";
                     break;
             }
         }
@@ -422,6 +435,7 @@ public class PrettyPrinter implements Visitor {
     public void visitProgram(Program program) {
         StringBuilder result = new StringBuilder();
         result.append("open util/boolean");
+        result.append("\nopen util/sequniv");
         for (Class c : program.getClasses()) {
             result.append("\n\n//==============" + c.getName() + "==============\n");
             this.printer = new PrettyPrinter();
@@ -440,14 +454,36 @@ public class PrettyPrinter implements Visitor {
         // some keyword is a must!
         result.append("some sig " + this.currentClass + "{");
 
+        List<Declaration> arrayDecls = new ArrayList<>();
         for (Declaration decl : cla.getDeclarations()) {
             reset();
             result.append("\n\t");
             result.append(this.printer.getPrintResult(decl) + ',');
+            if (decl.isArrayDeclaration()) arrayDecls.add(decl);
         }
 
         result.deleteCharAt(result.length() - 1);
         result.append("\n}");
+
+        if (!arrayDecls.isEmpty()) {
+            result.append("{");
+            for (Declaration decl : arrayDecls) {
+                int counter = 0;
+                for (Constant constant : decl.getConstantArray()) {
+                    reset();
+                    if (decl.getType() != Constant.Type.bool) {
+                        result.append("\n\t");
+                        result.append(decl.getID() + "[" + counter + "] = " + this.printer.getPrintResult(constant));
+                    } else {
+                        result.append("\n\t");
+                        result.append(decl.getID() + "[" + counter + "] = " + (constant.getBoolValue() ? "True" : "False"));
+                    }
+                    counter++;
+                }
+            }
+            result.append("\n}");
+        }
+
         // add all assumptions
         result.append("\n\nfact " + this.currentClass + "Fact {");
 

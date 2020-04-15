@@ -41,6 +41,8 @@ declBody: 'declare' '{' (decl LINE_END)* '}'
 
 decl: TYPE ID																# VarDecl
 	| TYPE ID '=' VAR														# VarInit
+  | TYPE '[' VAR ']' ID                       # ArrDecl //Var must be of integer type
+  | TYPE '[]' ID '=' '{' (VAR ',')* VAR'}'                # ArrInit
     ;
 
 assume: 'assume' '{' (expr LINE_END)* '}'									# Assumption
@@ -63,8 +65,9 @@ expr: '(' expr ')' 															# ParenthesizedExpr
     | expr '=>' expr                                                         # Implication
     | expr '<=>' expr                                                         # Equivalence
     | UNARY_OP expr															# UnaryExpr	
-    | ID																	# VarExpr
     | VAR																	# BoolNumExpr
+    | ID '[' expr ']'                      # ArrExpr
+    | ID																	# VarExpr
     ;
     
 //BINARY_OP : '*' | '/' | '+' | '-' | '&&' | '||' | '>' | '<' | '>=' | '<=' | '==' | '!=' | '=>' | '<=>';
@@ -74,12 +77,13 @@ func: 'func' (TYPE | 'void') ID '(' ((param ',')* param)? ')' '{' funcBody '}'		
 funcBody: precon? (funcStatement)* postcon?			# FunctionBody
 		;
 
-funcStatement: ID '=' (expr | VAR) LINE_END						      //# Statement
-			 | conditional
-             | loop
-             | funcCall
-             | switchBlock
-			 ;
+funcStatement: ID '[' expr ']' '=' expr LINE_END    //array elements reassignment
+            | ID '=' expr LINE_END						      //# Statement
+            | conditional
+            | loop
+            | funcCall
+            | switchBlock
+            ;
 
 precon: 'require' '{' (expr LINE_END)* '}'									# PreCond
 	  ;

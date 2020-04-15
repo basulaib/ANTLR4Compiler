@@ -72,9 +72,10 @@ public class WPCalculator {
         //each input should correspond to one parameter
         for (int i = 0; i < input.size(); i++) {
             String id = pars.get(i).getID();
+            Variable variable = pars.get(i).getVariableReference();
             Expression in = input.get(i);
-            replace(id, in, targetPrecond);
-            replace(id, in, targetPostcond);
+            replace(variable, in, targetPrecond);
+            replace(variable, in, targetPostcond);
         }
 
         //now we have a processed target precondition and target post condition.
@@ -117,7 +118,7 @@ public class WPCalculator {
         currentPostCond = copyMaker.getExprCopy(currentPostCond);
 
         while (current >= 0) {
-            replace(declFrom.get(current).getID(), declFrom.get(current).getExpr(), currentPostCond);
+            replace(declFrom.get(current).getVariable(), declFrom.get(current).getExpr(), currentPostCond);
             current--;
         }
 
@@ -243,6 +244,7 @@ public class WPCalculator {
     private Expression baseCase(Assignment ass, Expression postCond) {
         String name = ass.getID();
         Expression expr = ass.getExpr();
+        Variable variable = ass.getVariable();
 
         // now replace all free occurrences of variable x in postCond with expr
 
@@ -251,13 +253,13 @@ public class WPCalculator {
         postCond.accept(copyMaker);
         Expression wp = copyMaker.getExprCopy();
 
-        this.replace(name, expr, wp);
+        this.replace(variable, expr, wp);
 
         return wp;
     }
 
     // replace all FREE occurrences of x in R with e.
-    private void replace(String x, Expression e, Expression R) {
+    private void replace(Variable x, Expression e, Expression R) {
         // CAUTION: always use this method with deepCopyMaker
         // base case
         if (R instanceof Constant)
@@ -273,7 +275,7 @@ public class WPCalculator {
             Expression right = ((BinaryOperation) R).getRight();
 
             if (left instanceof Variable) {
-                if (((Variable) left).getID().equals(x) && ((Variable) left).isFree())
+                if (left.equals(x) && ((Variable) left).isFree())
                     ((BinaryOperation) R).setLeft(e);
             } else {
                 // recursive case
@@ -281,7 +283,7 @@ public class WPCalculator {
             }
 
             if (right instanceof Variable) {
-                if (((Variable) right).getID().equals(x) && ((Variable) right).isFree())
+                if (right.equals(x) && ((Variable) right).isFree())
                     ((BinaryOperation) R).setRight(e);
             } else {
                 // recursive case

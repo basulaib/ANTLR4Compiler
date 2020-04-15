@@ -1,5 +1,6 @@
 
 open util/boolean
+open util/sequniv
 
 //==============Sorting==============
 some sig Sorting{

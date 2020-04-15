@@ -53,6 +53,20 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarInit(ProjectParser.VarInitContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ArrDecl}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrDecl(ProjectParser.ArrDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrInit}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrInit(ProjectParser.ArrInitContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Assumption}
 	 * labeled alternative in {@link ProjectParser#assume}.
 	 * @param ctx the parse tree
@@ -122,6 +136,13 @@ public interface ProjectVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDisjunction(ProjectParser.DisjunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrExpr(ProjectParser.ArrExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Subtraction}
 	 * labeled alternative in {@link ProjectParser#expr}.

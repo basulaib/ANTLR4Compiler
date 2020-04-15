@@ -1,28 +1,35 @@
 package function;
 
 import expression.Expression;
+import expression.Variable;
 import visitor.Visitor;
 
 public class Assignment extends FuncStatement {
-	String id;
-	Expression value;
+    Variable variable;
+    //    String id;
+    Expression value;
 
-	public Assignment(String id, Expression value) {
-		this.id = id;
-		this.value = value;
-	}
+    public Assignment(Variable variable, Expression value) {
+//        this.id = id;
+        this.variable = variable;
+        this.value = value;
+    }
 
-	@Override
-	public void accept(Visitor visitor) {
-		// TODO Auto-generated method stub
-		visitor.visitAssignment(this);
-	}
+    @Override
+    public void accept(Visitor visitor) {
+        // TODO Auto-generated method stub
+        visitor.visitAssignment(this);
+    }
 
-	public String getID() {
-		return this.id;
-	}
+    public Variable getVariable() {
+        return variable;
+    }
 
-	public Expression getExpr() {
-		return this.value;
-	}
+    public String getID() {
+        return this.variable.getID();
+    }
+
+    public Expression getExpr() {
+        return this.value;
+    }
 }

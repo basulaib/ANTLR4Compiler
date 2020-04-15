@@ -32,36 +32,36 @@ import java.util.List;
 public class TypeChecker implements Visitor {
 
     @Override
-	public void visitLoop(Loop loop) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void visitLoop(Loop loop) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void visitFromBlock(FromBlock fromBlock) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visitUntilBlock(UntilBlock untilBlock) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visitFromBlock(FromBlock fromBlock) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void visitInvariant(Invariant invariant) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visitVariant(Variant variant) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visitUntilBlock(UntilBlock untilBlock) {
+        // TODO Auto-generated method stub
 
-	private Type type;
+    }
+
+    @Override
+    public void visitInvariant(Invariant invariant) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitVariant(Variant variant) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private Type type;
     private TypeChecker checker;
 
     public enum Type {
@@ -166,12 +166,12 @@ public class TypeChecker implements Visitor {
     }
 
     @Override
-	public void visitFunctionCall(FunctionCall funcCall) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void visitFunctionCall(FunctionCall funcCall) {
+        // TODO Auto-generated method stub
 
-	@Override
+    }
+
+    @Override
     public void visitNotEqual(BiNotEqual neq) {
         reset();
         Type leftType = this.checker.getTypeResult(neq.getLeft());
@@ -240,6 +240,11 @@ public class TypeChecker implements Visitor {
     @Override
     public void visitNumVar(NumVariable num) {
         this.type = Type.num;
+    }
+
+    @Override
+    public void visitArrayVar(ArrayVariable arr) {
+        this.type = getType(arr.getType());
     }
 
     @Override

@@ -13,12 +13,12 @@ public class VariableLocker implements Visitor {
     //better use it with DeepCopyMaker.
 
     @Override
-	public void visitFunctionCall(FunctionCall funcCall) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void visitFunctionCall(FunctionCall funcCall) {
+        // TODO Auto-generated method stub
 
-	private void binaryOp(BinaryOperation bi) {
+    }
+
+    private void binaryOp(BinaryOperation bi) {
         bi.getLeft().accept(this);
         bi.getRight().accept(this);
     }
@@ -125,6 +125,11 @@ public class VariableLocker implements Visitor {
     public void visitNumVar(NumVariable num) {
         //TODO: if the variable to be locked is not a number, maybe we should report semantic error since we only use it for loop variant
         num.setFree(false);
+    }
+
+    @Override
+    public void visitArrayVar(ArrayVariable arr) {
+        arr.setFree(false);
     }
 
     @Override

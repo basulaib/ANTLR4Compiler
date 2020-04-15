@@ -245,6 +245,15 @@ public class DeepCopyMaker implements Visitor {
     }
 
     @Override
+    public void visitArrayVar(ArrayVariable arr) {
+        //currently array reference cannot be a parameter type
+        this.copy = new ArrayVariable(arr.getID(), arr.getType(), arr.getIndex());
+        ((Variable) copy).setFree(arr.isFree());
+        //if the array is an array of boolean, also translate that
+    }
+
+
+    @Override
     public void visitFunction(Function func) {
         // TODO Auto-generated method stub
 

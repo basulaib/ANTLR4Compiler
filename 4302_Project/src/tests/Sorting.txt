@@ -2,7 +2,7 @@ class Sorting{
 	declare{
 		int a = 6;
 		int b = 1;
-		int c = 4;
+		int c = 4; //if you change this to 8, the verification will also fail because <= is not in post-condition!
 		int d = 8;
 		int tmp;
 	}

@@ -90,6 +90,30 @@ public class ProjectBaseListener implements ProjectListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArrDecl(ProjectParser.ArrDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrDecl(ProjectParser.ArrDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrInit(ProjectParser.ArrInitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrInit(ProjectParser.ArrInitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssumption(ProjectParser.AssumptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -205,6 +229,18 @@ public class ProjectBaseListener implements ProjectListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDisjunction(ProjectParser.DisjunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrExpr(ProjectParser.ArrExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrExpr(ProjectParser.ArrExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

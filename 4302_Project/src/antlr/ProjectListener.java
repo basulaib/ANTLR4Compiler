@@ -78,6 +78,30 @@ public interface ProjectListener extends ParseTreeListener {
 	 */
 	void exitVarInit(ProjectParser.VarInitContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ArrDecl}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrDecl(ProjectParser.ArrDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrDecl}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrDecl(ProjectParser.ArrDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrInit}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrInit(ProjectParser.ArrInitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrInit}
+	 * labeled alternative in {@link ProjectParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrInit(ProjectParser.ArrInitContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Assumption}
 	 * labeled alternative in {@link ProjectParser#assume}.
 	 * @param ctx the parse tree
@@ -197,6 +221,18 @@ public interface ProjectListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDisjunction(ProjectParser.DisjunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrExpr(ProjectParser.ArrExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrExpr}
+	 * labeled alternative in {@link ProjectParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrExpr(ProjectParser.ArrExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Subtraction}
 	 * labeled alternative in {@link ProjectParser#expr}.

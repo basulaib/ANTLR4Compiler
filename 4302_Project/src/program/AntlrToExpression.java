@@ -168,6 +168,7 @@ public class AntlrToExpression extends ProjectBaseVisitor<Expression> {
         return result;
     }
 
+    @Override
     public Expression visitUnaryExpr(UnaryExprContext ctx) {
         Expression expr = visit(ctx.getChild(1));
         if (ctx.getChild(0).getText().equals("!")) {
@@ -178,6 +179,38 @@ public class AntlrToExpression extends ProjectBaseVisitor<Expression> {
 
     }
 
+    private Expression checkAndReturn(TypeChecker.Type targetType, ExprContext exprContext) {
+        Expression expression = this.visit(exprContext);
+        TypeChecker.Type type = typeChecker.getTypeResult(expression);
+
+        if (type != targetType) {
+            Token token = exprContext.getStart();
+            int line = token.getLine();
+            int column = token.getCharPositionInLine() + 1;
+            semanticErrors.add("Error: expression (" + exprContext.getText() + ")'s type [" + type.toString() + "] does not match target type [" + targetType.toString() + "] (" + line + ", " + column + ")");
+        }
+        return expression;
+    }
+
+    @Override
+    public Expression visitArrExpr(ArrExprContext ctx) {
+        Token idToken = ctx.ID().getSymbol();
+        int line = idToken.getLine();
+        int column = idToken.getCharPositionInLine() + 1;
+        String id = ctx.getChild(0).getText();
+        Expression index = checkAndReturn(TypeChecker.Type.num, ctx.expr());
+
+        if (!decls.containsKey(id)) {
+            semanticErrors.add("Error: array " + id + " not declared (" + line + ", " + column + ")");
+            return new ArrayVariable(id, Constant.Type.num, index);
+        } else {
+            ArrayVariable result = (ArrayVariable) decls.get(id).getVariableReference();
+            result.setIndex(index);
+            return result;
+        }
+    }
+
+    @Override
     public Expression visitVarExpr(VarExprContext ctx) {
         // Expression expr = visit(ctx.getChild(0));
         Token idToken = ctx.ID().getSymbol();
@@ -194,12 +227,14 @@ public class AntlrToExpression extends ProjectBaseVisitor<Expression> {
         }
     }
 
+    @Override
     public Expression visitParenthesizedExpr(ParenthesizedExprContext ctx) {
         Expression expr = visit(ctx.getChild(1));
         expr.parenthesized = true;
         return expr;
     }
 
+    @Override
     public Expression visitBoolNumExpr(BoolNumExprContext ctx) {
         String exp = ctx.getChild(0).getText();
         Token idToken = ctx.VAR().getSymbol();

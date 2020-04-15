@@ -1,7 +1,9 @@
 package program;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
+import antlr.ProjectParser;
 import expression.*;
 import expression.binary.BiEqual;
 import expression.binary.BiEquivalence;
@@ -13,6 +15,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.ProjectBaseVisitor;
 import antlr.ProjectParser.AssertionContext;
 import antlr.ProjectParser.AssumptionContext;
+import antlr.ProjectParser.ArrDeclContext;
+import antlr.ProjectParser.ArrInitContext;
 import antlr.ProjectParser.BoolNumExprContext;
 import antlr.ProjectParser.ClassBlockContext;
 import antlr.ProjectParser.ClassBodyContext;
@@ -65,6 +69,7 @@ import loop.Invariant;
 import loop.Loop;
 import loop.UntilBlock;
 import loop.Variant;
+import visitor.DeepCopyMaker;
 import visitor.TypeChecker;
 import visitor.TypeChecker.Type;
 
@@ -158,12 +163,6 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         for (ParseTree c : ctx.children) {
             if (c instanceof DeclContext)
                 result.add((Declaration) visit(c));
-//			if (c instanceof VarDeclContext) {
-//				visit(c);
-//			}
-//			else if (c instanceof VarInitContext) {
-//				
-//			}
         }
         return result;
     }
@@ -210,6 +209,60 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     }
 
     @Override
+    public Declaration visitArrInit(ProjectParser.ArrInitContext ctx) {
+        String type = ctx.TYPE().getText();
+        String id = ctx.ID().getText();
+        List<Constant> constantList = new ArrayList<>();
+        for (int i = 5; i < ctx.children.size() - 1; i++) {
+            //only 5, 7, 9, 11 are constant...
+            if (i % 2 == 0) continue;
+            if (type.equals("int")) {
+                Integer value = Integer.parseInt(ctx.getChild(i).getText());
+                constantList.add(new NumConst(value));
+            } else if (type.equals("string")) {
+                String value = ctx.getChild(i).getText().substring(1, ctx.getChild(i).getText().length() - 1);
+                constantList.add(new StringConst(value));
+            } else if (type.equals("bool")) {
+                Boolean value = Boolean.parseBoolean(ctx.getChild(i).getText());
+                constantList.add(new BoolConst(value));
+            }
+        }
+        Declaration result = new Declaration(id, constantList);
+        this.decls.put(result.getID(), result);
+        return result;
+    }
+
+    @Override
+    public Declaration visitArrDecl(ProjectParser.ArrDeclContext ctx) {
+        Constant defaultValue;
+        String type = ctx.TYPE().getText();
+        String id = ctx.ID().getText();
+        //TODO: type check for child[2]
+        int size = Integer.parseInt(ctx.getChild(2).getText());
+        switch (type) {
+            case "int":
+                defaultValue = new NumConst(0);
+                break;
+            case "string":
+                defaultValue = new StringConst("defaultString");
+                break;
+            default:
+                defaultValue = new BoolConst(false);
+                break;
+        }
+        List<Constant> constantList = new ArrayList<>();
+        DeepCopyMaker copyMaker = new DeepCopyMaker();
+        for (int i = 0; i < size; i++) {
+            constantList.add((Constant) copyMaker.getExprCopy(defaultValue));
+        }
+
+        Declaration result = new Declaration(id, constantList);
+        this.decls.put(result.getID(), result);
+
+        return result;
+    }
+
+    @Override
     public Assumption visitAssumption(AssumptionContext ctx) {
         // TODO Auto-generated method stub
         Assumption result = new Assumption();
@@ -241,6 +294,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
                 result.addParameter(par);
             }
             if (funcTree instanceof FuncBodyContext) {
+                if (((FuncBodyContext) funcTree).children == null) continue;
                 for (ParseTree funcBodyTree : ((FuncBodyContext) funcTree).children) {
                     if (funcBodyTree instanceof PreCondContext) {
                         result.setPreCondition((PreCondition) visit(funcBodyTree));
@@ -278,22 +332,47 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             result = (FunctionCall) visit(ctx.getChild(0));
         } else if (ctx.getChild(0) instanceof SwitchContext) {
             result = (Conditional) visit(ctx.getChild(0));
-        } else { // Assignment
+        } else if (ctx.getChild(1).getText().equals("=")) { // Assignment
             String id = ctx.getChild(0).getText();
             Expression expression;
+            Variable variable;
             if (!decls.containsKey(id) && !currentPars.containsKey(id)) {
                 //if the ID of the assignment is not declared, semantic error
                 Token idToken = ctx.ID().getSymbol();
                 int line = idToken.getLine();
                 int column = idToken.getCharPositionInLine() + 1;
                 semanticErrors.add("Error: variable " + id + " not declared (" + line + ", " + column + ")");
-                expression = this.toExpression.visit(ctx.expr());
+                expression = this.toExpression.visit(ctx.getChild(2));
+                variable = new StringVariable("ERROR!");
             } else {
                 TypeChecker.Type idType = getVariableType(id);
-                expression = checkAndReturn(idType, ctx.expr());
+                expression = checkAndReturn(idType, (ExprContext) ctx.getChild(2));
+                if (decls.containsKey(id)) {
+                    variable = decls.get(id).getVariableReference();
+                } else {
+                    variable = this.currentPars.get(id).getVariableReference();
+                }
             }
+            result = new Assignment(variable, expression);
+        } else { // array elements assignment
+            String id = ctx.getChild(0).getText();
+            Expression index = checkAndReturn(Type.num, (ExprContext) ctx.getChild(2));
+            Expression expression; //value
 
-            result = new Assignment(ctx.getChild(0).getText(), expression);
+            ArrayVariable variable;
+            if (!decls.containsKey(id)) {
+                Token idToken = ctx.ID().getSymbol();
+                int line = idToken.getLine();
+                int column = idToken.getCharPositionInLine() + 1;
+                semanticErrors.add("Error: variable " + id + " not declared (" + line + ", " + column + ")");
+                expression = this.toExpression.visit(ctx.getChild(5));
+                variable = new ArrayVariable("ERROR!", Constant.Type.string, new NumConst(-1));
+            } else {
+                expression = checkAndReturn(getVariableType(id), (ExprContext) ctx.getChild(5));
+                variable = (ArrayVariable) decls.get(id).getVariableReference();
+                variable.setIndex(index);
+            }
+            result = new Assignment(variable, expression);
         }
         return result;
     }
@@ -492,9 +571,14 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             semanticErrors.add("Error: variable " + name + " not declared (" + line + ", " + column + ")");
             // expression = this.toExpression.visit(ctx.expr());
         }
+
+        Variable variable = new StringVariable("ERROR!");
+        if (decls.containsKey(name)) variable = decls.get(name).getVariableReference();
+        if (currentPars.containsKey(name)) variable = currentPars.get(name).getVariableReference();
+
         TypeChecker.Type type = getVariableType(name);
         Expression e = checkAndReturn(type, (ExprContext) ctx.getChild(2));
-        Assignment a = new Assignment(name, e);
+        Assignment a = new Assignment(variable, e);
         return a;
     }
 
