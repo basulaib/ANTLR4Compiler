@@ -345,6 +345,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     	Conditional result = new Conditional();
     	FuncStatement fs;
     	Expression e = null;
+    	TypeChecker checker = new TypeChecker();
+    	Type switchVarType = checker.getTypeResult(switchExpression);
     	for(ParseTree t: ctx.children) {
     		if(t instanceof CaseContext) {
     			for(ParseTree tt : ((ParserRuleContext) t).children ) {
@@ -353,7 +355,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     					Expression condition = new BiEquivalence(switchExpression, e);
     					result.addConditionalStatement(condition, fs);
     				}else if(tt instanceof ExprContext) {
-    					e = toExpression.visit(tt); 
+    					//check type of switch expression matches, type of case expression
+    					e = checkAndReturn(switchVarType, (ExprContext) tt);
     				}
     			}
     		}else if(t instanceof DefaultContext) {
