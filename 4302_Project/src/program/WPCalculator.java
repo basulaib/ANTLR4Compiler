@@ -52,6 +52,36 @@ public class WPCalculator {
 
     private Expression functionCallCase(FunctionCall call, Expression postCond) {
         Expression result = null;
+        //pre[P/x] of call must be implied (This one's variable is free)
+        //call must be correct (which is verified later)
+        //post[P/x] of call implies postCond (This on is locked, meaning no variable is a free occurrence)
+        Function target = call.getTargetFunction();
+
+        DeepCopyMaker copyMaker = new DeepCopyMaker();
+        Expression targetPrecond = conjunctAll(target.getPreCondition(), 0, target.getPreCondition().size() - 1);
+        if (targetPrecond == null) targetPrecond = new BoolConst(true);
+        targetPrecond = copyMaker.getExprCopy(targetPrecond);
+
+        Expression targetPostcond = conjunctAll(target.getPostCondition(), 0, target.getPostCondition().size() - 1);
+        if (targetPostcond == null) targetPostcond = new BoolConst(true);
+        targetPostcond = copyMaker.getExprCopy(targetPostcond);
+
+        List<Expression> input = call.getParameters();
+        List<Parameter> pars = target.getParameters();
+        //each input should correspond to one parameter
+        for (int i = 0; i < input.size(); i++) {
+            String id = pars.get(i).getID();
+            Expression in = input.get(i);
+            replace(id, in, targetPrecond);
+            replace(id, in, targetPostcond);
+        }
+
+        //now we have a processed target precondition and target post condition.
+        Expression post = new BiImplication(targetPostcond, postCond);
+        VariableLocker locker = new VariableLocker();
+        post.accept(locker);
+
+        result = new BiConjunction(targetPrecond, post);
 
         return result;
     }
@@ -63,6 +93,14 @@ public class WPCalculator {
         loopHoareTriples.add(hoareTripleThree(loop, postCond));
         loopHoareTriples.add(hoareTripleFour(loop));
         loopHoareTriples.add(hoareTripleFive(loop));
+
+        //We must lock all the variables except for the first hoare triple.
+        //because all the previous function statements can be seen as initialization step.
+        VariableLocker locker = new VariableLocker();
+        loopHoareTriples.get(1).accept(locker);
+        loopHoareTriples.get(2).accept(locker);
+        loopHoareTriples.get(3).accept(locker);
+        loopHoareTriples.get(4).accept(locker);
 
         return conjunctAll(loopHoareTriples, 0, loopHoareTriples.size() - 1);
     }

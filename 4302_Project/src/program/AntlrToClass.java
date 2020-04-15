@@ -523,6 +523,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             }
         }
         FunctionCall result = new FunctionCall(refFunction, params);
+        result.setTargetClass(c);
+        
         return result;
 
     }
