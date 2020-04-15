@@ -5,6 +5,7 @@ class Account {
         int balance = 0;
         int id;
         string name;
+        int y;
     }
     
     func int getBalance() {

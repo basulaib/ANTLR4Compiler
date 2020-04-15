@@ -230,7 +230,7 @@ public class PrettyPrinter implements Visitor {
     @Override
     public void visitNotEqual(BiNotEqual neq) {
         reset();
-        if (typeChecker.getTypeResult(neq) == TypeChecker.Type.bool) {
+        if (typeChecker.getTypeResult(neq.getRight()) == TypeChecker.Type.bool) {
             this.visitBinaryOp(neq, "<=> not");
         } else {
             this.visitBinaryOp(neq, "!=");
@@ -357,7 +357,7 @@ public class PrettyPrinter implements Visitor {
     private String runPred(List<Parameter> pars, String predName) {
         StringBuilder result = new StringBuilder();
 
-        result.append("//the post condition and class invariants for function (" + predName.substring(0, predName.length() - 5));
+        result.append("//The post-condition/class-invariant/loop-correctness of function (" + predName.substring(0, predName.length() - 5));
         result.append(") is only valid when this is inconsistent.\n");
 
         if (pars == null || pars.isEmpty()) {

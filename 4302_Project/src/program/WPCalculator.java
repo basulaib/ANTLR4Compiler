@@ -43,10 +43,11 @@ public class WPCalculator {
         if (statement instanceof Assignment) {
             return baseCase((Assignment) statement, postCond);
         } else if (statement instanceof Conditional) {
-            // conditio
             return conditionalCase((Conditional) statement, postCond);
-        } else {
+        } else if (statement instanceof Loop) {
             return loopCase((Loop) statement, postCond);
+        } else {
+            return functionCallCase((FunctionCall) statement, postCond);
         }
     }
 
@@ -150,16 +151,6 @@ public class WPCalculator {
     }
 
     private Expression hoareTripleFour(Loop loop) {
-        /*line 1
-         * line2
-         * line3
-         * line4
-         * line5
-         * line6
-         * line7 (new)
-         * line 8 (new)
-         * line 9 (new)
-         * pls dont merge conflict aha*/
         //{I ^ !B}Sbody {V >= 0}
         List<Expression> invariants = new ArrayList<>(loop.getInvariant());
         Expression invariant = conjunctAll(new ArrayList<>(invariants), 0, invariants.size() - 1);

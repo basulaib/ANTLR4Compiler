@@ -22,6 +22,11 @@ public class AntlrToProgram extends ProjectBaseVisitor<Program> {
             this.decls = new HashMap<String, Declaration>();
             AntlrToClass antlrToClass = new AntlrToClass(this.semanticErrors, decls);
             result.addClass((Class) antlrToClass.visit(ctx.getChild(i)));
+            if (result.getClasses().get(i).recursionDetection()) {
+                System.out.println("//recursion detected in class " + result.getClasses().get(i).getName() + " :)");
+            } else {
+                System.out.println("//recursion NOT detected in class " + result.getClasses().get(i).getName() + " :(");
+            }
         }
 
         return result;

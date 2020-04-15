@@ -21,32 +21,37 @@ import visitor.*;
 public class ProgramApp {
 
     public static void main(String[] args) {
-        if (args.length == 2 && (args[0].equals("-out") || args[0].equals("-o"))) {
+        String help = "Usage: [input file]\t compile the input file and open the output in alloy (make sure alloy jar file is in the same directory!)" +
+                "\nUsage: -o [input file]\t print out the compiled output in stdout" +
+                "\nUsage: [input file] [output file path]\t save the compiled output to specified path" +
+                "\nUsage: -h\t show this help";
+
+        if (args[0].equals("-h")) {
+            System.out.println(help);
+        } else if (args.length == 2 && (args[0].equals("-out") || args[0].equals("-o"))) {
             //if the first parameter is -out/-o, that means the user wants to simply print out the program
             String fileName = args[1];
+
             System.out.println(getResult(fileName));
-        } else if (args.length != 2) {
-            System.err.println("Usage: [input file] [output file path]");
-        } else {
+        } else if (args.length == 1) {
             String fileName = args[0];
-            String path = args[1];
-            String result = getResult(fileName);
+            String path = fileName + ".als";
+            writeFile(fileName, path);
 
             try {
-                File nf = new File(path);
-                FileWriter f = new FileWriter(nf);
-                f.write("\n");
-                f.write(result);
-                f.close();
+                Runtime.getRuntime().exec("echo \"happy\"");
+                Runtime.getRuntime().exec("java -jar org.alloytools.alloy.dist.jar " + path);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
+        } else if (args.length == 2) {
+            String fileName = args[0];
+            String path = args[1];
+            writeFile(fileName, path);
 
-            // System.out.print("\n");
-            // System.out.print(result);
-
+        } else {
+            System.err.println(help);
         }
 ////////////////////////////////////////////////////////
 //		class Account{
@@ -111,6 +116,21 @@ public class ProgramApp {
 //		String result = printer.getPrintResult(Account);
 //
 //		System.out.print(result);
+    }
+
+    private static void writeFile(String fileName, String path) {
+        String result = getResult(fileName);
+
+        try {
+            File nf = new File(path);
+            FileWriter f = new FileWriter(nf);
+            f.write("\n");
+            f.write(result);
+            f.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private static String getResult(String fileName) {

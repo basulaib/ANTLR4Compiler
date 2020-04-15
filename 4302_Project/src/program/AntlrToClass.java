@@ -77,7 +77,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     private HashMap<String, Parameter> currentPars; //the current parameters for the currentFunc
     private Function currentFunc; //the current function being visited, must be NULL if the function is returned.
     private Expression switchExpression; //Expression used in comparison in the switch block
-    
+
     public AntlrToClass(List<String> semanticErrors, Map<String, Declaration> decls) {
         this.semanticErrors = semanticErrors;
         this.c = new Class(this.semanticErrors);
@@ -275,8 +275,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
             result = (Loop) visit(ctx.getChild(0));
         } else if (ctx.getChild(0) instanceof FunctionCallContext) {
             result = (FunctionCall) visit(ctx.getChild(0));
-        }else if (ctx.getChild(0) instanceof SwitchContext){
-        	result = (Conditional) visit(ctx.getChild(0));
+        } else if (ctx.getChild(0) instanceof SwitchContext) {
+            result = (Conditional) visit(ctx.getChild(0));
         } else { // Assignment
             String id = ctx.getChild(0).getText();
             Expression expression;
@@ -332,50 +332,50 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         }
         return result;
     }
-    
+
     @Override
     public Conditional visitSwitch(SwitchContext ctx) {
-    	switchExpression = toExpression.visit(ctx.getChild(2));
-    	return visitSwitchBody((SwitchBodyContext) ctx.getChild(5));
+        switchExpression = toExpression.visit(ctx.getChild(2));
+        return visitSwitchBody((SwitchBodyContext) ctx.getChild(5));
     }
-    
+
     @Override
     public Conditional visitSwitchBody(SwitchBodyContext ctx) {
-    	//
-    	Conditional result = new Conditional();
-    	FuncStatement fs;
-    	Expression e = null;
-    	TypeChecker checker = new TypeChecker();
-    	Type switchVarType = checker.getTypeResult(switchExpression);
-    	for(ParseTree t: ctx.children) {
-    		if(t instanceof CaseContext) {
-    			for(ParseTree tt : ((ParserRuleContext) t).children ) {
-    				if(tt instanceof FuncStatementContext) {
-    					fs = (FuncStatement) visit(tt);
-    					Expression condition = new BiEquivalence(switchExpression, e);
-    					result.addConditionalStatement(condition, fs);
-    				}else if(tt instanceof ExprContext) {
-    					//check type of switch expression matches, type of case expression
-    					e = checkAndReturn(switchVarType, (ExprContext) tt);
-    				}
-    			}
-    		}else if(t instanceof DefaultContext) {
-    			boolean emptyBlock = true;
-    			for(ParseTree tt : ((ParserRuleContext) t).children ) {
-    				if(tt instanceof FuncStatementContext) {
-    					fs = (FuncStatement) visit(tt);
-    					result.addConditionalStatement(fs);
-    					emptyBlock = false;
-    				}
-    			}
-    			if (emptyBlock) {
-    				FuncStatement nullStatement = null;
+        //
+        Conditional result = new Conditional();
+        FuncStatement fs;
+        Expression e = null;
+        TypeChecker checker = new TypeChecker();
+        Type switchVarType = checker.getTypeResult(switchExpression);
+        for (ParseTree t : ctx.children) {
+            if (t instanceof CaseContext) {
+                for (ParseTree tt : ((ParserRuleContext) t).children) {
+                    if (tt instanceof FuncStatementContext) {
+                        fs = (FuncStatement) visit(tt);
+                        Expression condition = new BiEquivalence(switchExpression, e);
+                        result.addConditionalStatement(condition, fs);
+                    } else if (tt instanceof ExprContext) {
+                        //check type of switch expression matches, type of case expression
+                        e = checkAndReturn(switchVarType, (ExprContext) tt);
+                    }
+                }
+            } else if (t instanceof DefaultContext) {
+                boolean emptyBlock = true;
+                for (ParseTree tt : ((ParserRuleContext) t).children) {
+                    if (tt instanceof FuncStatementContext) {
+                        fs = (FuncStatement) visit(tt);
+                        result.addConditionalStatement(fs);
+                        emptyBlock = false;
+                    }
+                }
+                if (emptyBlock) {
+                    FuncStatement nullStatement = null;
                     result.addConditionalStatement(nullStatement);
-    			}
-    		}
-    	}    	
-    	switchExpression = null;
-    	return result;
+                }
+            }
+        }
+        switchExpression = null;
+        return result;
     }
 
     @Override
@@ -578,7 +578,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
         }
         FunctionCall result = new FunctionCall(refFunction, params);
         result.setTargetClass(c);
-        
+
         return result;
 
     }

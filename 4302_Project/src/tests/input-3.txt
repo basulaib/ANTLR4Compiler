@@ -60,7 +60,7 @@ class Professor {
             tenure = true;
         }
 
-        name = true;
+        name = "wierd";
     }
 
     assert {
