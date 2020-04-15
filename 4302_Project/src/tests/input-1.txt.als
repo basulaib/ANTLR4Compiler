@@ -1,5 +1,6 @@
 
 open util/boolean
+open util/sequniv
 
 //==============Account==============
 some sig Account{

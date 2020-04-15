@@ -8,7 +8,6 @@ class ArrayTest{
 	}
 	
 	func void swap(int i, int j){
-		//x == 1 means increasing, x == 0 means decreasing order
 		require{
 			i > 0 && j > 0 && i < 4 && j < 4;
 		}
