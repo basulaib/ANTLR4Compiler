@@ -3,6 +3,7 @@ package program;
 import java.util.*;
 
 import expression.*;
+import expression.binary.BiEqual;
 import expression.binary.BiEquivalence;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -352,7 +353,7 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
                 for (ParseTree tt : ((ParserRuleContext) t).children) {
                     if (tt instanceof FuncStatementContext) {
                         fs = (FuncStatement) visit(tt);
-                        Expression condition = new BiEquivalence(switchExpression, e);
+                        Expression condition = new BiEqual(switchExpression, e);
                         result.addConditionalStatement(condition, fs);
                     } else if (tt instanceof ExprContext) {
                         //check type of switch expression matches, type of case expression
