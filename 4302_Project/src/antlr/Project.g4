@@ -141,7 +141,7 @@ variantBody: expr LINE_END
 funcCall: ID '(' (((expr | VAR) ',')* (expr | VAR))? ')' LINE_END											#FunctionCall
 		;
 		
-switchBlock: 'switch' '(' VAR ')' '{' switchBody '}' LINE_END								#Switch
+switchBlock: 'switch' '(' expr ')' '{' switchBody '}' LINE_END								#Switch
 	;
 	
 switchBody: (caseBlock)* defaultBlock		
