@@ -25,8 +25,9 @@ public class ProgramApp {
                 "\nUsage: -o [input file]\t print out the compiled output in stdout" +
                 "\nUsage: [input file] [output file path]\t save the compiled output to specified path" +
                 "\nUsage: -h\t show this help";
-
-        if (args[0].equals("-h")) {
+        if (args.length == 0) {
+            System.err.println(help);
+        } else if (args[0].equals("-h")) {
             System.out.println(help);
         } else if (args.length == 2 && (args[0].equals("-out") || args[0].equals("-o"))) {
             //if the first parameter is -out/-o, that means the user wants to simply print out the program
@@ -39,7 +40,6 @@ public class ProgramApp {
             writeFile(fileName, path);
 
             try {
-                Runtime.getRuntime().exec("echo \"happy\"");
                 Runtime.getRuntime().exec("java -jar org.alloytools.alloy.dist.jar " + path);
             } catch (IOException e) {
                 e.printStackTrace();
