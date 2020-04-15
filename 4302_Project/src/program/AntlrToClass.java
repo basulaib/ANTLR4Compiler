@@ -3,6 +3,8 @@ package program;
 import java.util.*;
 
 import expression.*;
+import expression.binary.BiEquivalence;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -74,7 +76,8 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     TypeChecker typeChecker;
     private HashMap<String, Parameter> currentPars; //the current parameters for the currentFunc
     private Function currentFunc; //the current function being visited, must be NULL if the function is returned.
-
+    private Expression switchExpression; //Expression used in comparison in the switch block
+    
     public AntlrToClass(List<String> semanticErrors, Map<String, Declaration> decls) {
         this.semanticErrors = semanticErrors;
         this.c = new Class(this.semanticErrors);
@@ -332,19 +335,44 @@ public class AntlrToClass extends ProjectBaseVisitor<Object> {
     
     @Override
     public Conditional visitSwitch(SwitchContext ctx) {
-    	Expression e = toExpression.visit(ctx.getChild(2));
-    	return visitSwitchBody((SwitchBodyContext) ctx.getChild(3));
+    	switchExpression = toExpression.visit(ctx.getChild(2));
+    	return visitSwitchBody((SwitchBodyContext) ctx.getChild(5));
     }
     
     @Override
     public Conditional visitSwitchBody(SwitchBodyContext ctx) {
     	//
+    	Conditional result = new Conditional();
+    	FuncStatement fs;
+    	Expression e = null;
     	for(ParseTree t: ctx.children) {
-    		if(t.getText().equals("case:")) {
-    			
+    		if(t instanceof CaseContext) {
+    			for(ParseTree tt : ((ParserRuleContext) t).children ) {
+    				if(tt instanceof FuncStatementContext) {
+    					fs = (FuncStatement) visit(tt);
+    					Expression condition = new BiEquivalence(switchExpression, e);
+    					result.addConditionalStatement(condition, fs);
+    				}else if(tt instanceof ExprContext) {
+    					e = toExpression.visit(tt); 
+    				}
+    			}
+    		}else if(t instanceof DefaultContext) {
+    			boolean emptyBlock = true;
+    			for(ParseTree tt : ((ParserRuleContext) t).children ) {
+    				if(tt instanceof FuncStatementContext) {
+    					fs = (FuncStatement) visit(tt);
+    					result.addConditionalStatement(fs);
+    					emptyBlock = false;
+    				}
+    			}
+    			if (emptyBlock) {
+    				FuncStatement nullStatement = null;
+                    result.addConditionalStatement(nullStatement);
+    			}
     		}
     	}    	
-    	return null;
+    	switchExpression = null;
+    	return result;
     }
 
     @Override
