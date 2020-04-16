@@ -1,5 +1,4 @@
 //test for loop
-// THIS FILE IS NOT COMPLETE, DO NOT SUBMIT THIS TEST
 
 class LoopTest{
     declare {
