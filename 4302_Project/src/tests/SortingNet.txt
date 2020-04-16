@@ -1,29 +1,37 @@
+//This Program is Correct!
 class SortingNet{
 	declare{
-		int[] arr = {8, 4, 2, 2};
+		int[9] arr;
 		int tmp;
 		int old_i;
 		int old_j;
 	}
 	
 	func void sort(){
-		swap(1,2);
-		swap(0,2);
-		swap(0,1);
-//		swap(1,3);
-//		swap(1,2);
-		
+		SWAP(0, 1); SWAP(3, 4); SWAP(6, 7);
+		SWAP(1, 2); SWAP(4, 5); SWAP(7, 8);
+        SWAP(0, 1); SWAP(3, 4); SWAP(6, 7);
+		SWAP(0, 3); SWAP(3, 6); SWAP(0, 3);
+		SWAP(1, 4); SWAP(4, 7); SWAP(1, 4);
+		SWAP(2, 5); SWAP(5, 8); SWAP(2, 5);
+		SWAP(1, 3); SWAP(5, 7); SWAP(2, 6);
+		SWAP(4, 6); SWAP(2, 4); SWAP(2, 3);
+		SWAP(5, 6);
+		//Try to remove any one of the lines above, alloy will find counter examples instantly!
+
 		ensure{
 			arr[0] <= arr[1];
 			arr[1] <= arr[2];
-//			arr[2] > arr[3];	
+			arr[2] <= arr[3];
+			arr[3] <= arr[4];
+			arr[4] <= arr[5];
+			arr[5] <= arr[6];
+			arr[6] <= arr[7];
+			arr[7] <= arr[8];
 		}
 	}
 
-//((((1) >= (0)) and ((2) >= (0))) and (((n.arr[1]) <= (n.arr[2])) => (((n.arr[0]) <= (n.arr[2])) => (((n.arr[0]) <= (n.arr[1])) and ((n.arr[1]) <= (n.arr[2]))))))
-
-
-	func void swap(int i, int j){
+	func void SWAP(int i, int j){
 		require{
 			i >= 0 && j >= 0;
 		}
@@ -39,8 +47,8 @@ class SortingNet{
 		
 		ensure{
 			arr[i] <= arr[j];
-//			(old_i > old_j) => (arr[i] == old_j) && (arr[j] == old_i);
-//			(old_i <= old_j) => (arr[i] == old_i) && (arr[j] == old_j);
+			(old_i > old_j) => (arr[i] == old_j) && (arr[j] == old_i);
+			(old_i <= old_j) => (arr[i] == old_i) && (arr[j] == old_j);
 		}
 	}
 	
