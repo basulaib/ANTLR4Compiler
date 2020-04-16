@@ -1,0 +1,30 @@
+//test for smaller/larger
+class test{
+	declare {
+    	string result;
+    }
+
+	func string smaller(int x, int y){
+		require {
+			x > 0;
+			y > 0;
+		}
+		if(x < y){
+		    result = "x";
+		}
+		else if(x > y){
+		    result = "y";
+		}
+		else{
+		    result = "equal";
+		}
+
+		ensure {
+			result == "x" || result == "y" || result == "equal";
+		}
+	}
+
+	assert {
+		result == "x" || result == "y" || result == "equal";
+	}
+}

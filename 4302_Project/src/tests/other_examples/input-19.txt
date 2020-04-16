@@ -1,0 +1,82 @@
+class Stock{
+    declare{
+        string[] mutualFund = {"slowFund", "neutralFund", "growthFund", "riskyFund", "vriskyFund"};
+        int[5] mutualAmount;
+        string name;
+        int size = 5;
+        int balance;
+        int result;
+        int fees = 50;
+        int commission = 150;
+    }
+
+    func void deposit(int amount){
+        require{
+            amount > 0;
+        }
+        balance = balance + amount;
+    }
+
+    func int withdraw(int amount){
+        require{
+            (amount > 0) && ((amount + fees) <= balance);
+        }
+        balance = balance - amount;
+    }
+
+    func void invest(int index, int amount){
+        require{
+            index < size;
+            (amount + commission) <= balance;
+        }
+        switch(index){
+            case: 0 {
+                mutualAmount[0] = mutualAmount[0] + amount;
+                balance = balance - (amount + commission);
+            }
+
+            case: 1 {
+                mutualAmount[1] = mutualAmount[1] + amount;
+                balance = balance - (amount + commission);
+            }
+
+            case: 2 {
+                mutualAmount[2] = mutualAmount[0] + amount;
+                balance = balance - (amount + commission);
+            }
+
+            case: 3 {
+                mutualAmount[3] = mutualAmount[0] + amount;
+                balance = balance - (amount + commission);
+            }
+
+            case: 4 {
+                mutualAmount[4] = mutualAmount[0] + amount;
+                balance = balance - (amount + commission);
+            }
+
+            default: {
+
+            }
+
+        }
+
+        ensure{
+            balance == balance - (amount + commission);
+        }
+
+    }
+
+    func int getMF(int index){
+        require{
+            index < size;
+        }
+
+        result = mutualAmount[index];
+        name = mutualFund[index];
+
+        ensure{
+            result == mutualAmount[index];
+        }
+    }
+}

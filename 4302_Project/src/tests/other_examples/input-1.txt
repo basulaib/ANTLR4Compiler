@@ -1,0 +1,55 @@
+class Account{
+	declare {
+		int old_amount;
+    	int	amount;
+		int a = 5;
+		bool testBool = false;
+    }
+
+	assume{
+		amount > 0;	
+	}
+    
+//   amount = 5;
+//   ID = 8;
+	
+	func int increase(int x, int y, bool p, bool q, bool r){
+		require {
+			x > 0;
+			y > 0; //without this line, the program will be invalid as the class invariant is violated!
+			testBool <=> false;	//only use <=> for bool comparison for now.
+		}
+		//((amount + x) + y) * ((amount + x) + y) == (amount + x + y) * (amount + x + y);
+		
+		old_amount = amount;
+		
+		//((amount + x) + y) * ((amount + x) + y) == (old_amount + x + y) * (old_amount + x + y);
+		
+		amount = amount + x;
+		
+		//(amount + y) * (amount + y) == (old_amount + x + y) * (old_amount + x + y);
+		
+        amount = amount + y;
+
+		//amount * amount == (old_amount + x + y) * (old_amount + x + y);
+
+		amount = amount * amount;
+		
+        if (x > 10) {
+           	 r = p || q && r;
+             q = p && q || r;
+        }else if (x > 9) {
+
+        }else {
+
+        }
+        
+		ensure {
+			amount == (old_amount + x + y) * (old_amount + x + y);
+		}		
+	}
+	
+	assert {
+		amount > 0;
+	}
+}

@@ -1,0 +1,62 @@
+//test for loop
+
+class LoopTest{
+    declare {
+        int x;
+        int z;
+    }
+    
+    func void decrease(){
+        loop {
+            from {
+                x = 5;
+                z = 1;
+            }
+
+            until {
+                x == 2;
+            }
+
+            invariant {
+                x > z;
+                x > 1;
+                z == 1;
+            }
+
+            do {
+                x = x - 1; //Try change this to + 1, the program will become invalid.
+    //            z = 0;
+    //            x = x == x - z;
+    //            if (x > z) {
+    //                x = 0;
+    //            }
+            }
+
+            variant {
+                x;
+            }
+        }
+    }
+}
+
+
+//pred decreaseCheck{
+//    some n: LoopTest| not (((((((5) > (1)) and ((5) > (1))) and ((1) = (1))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((((minus[n.x][1]) > (n.z)) and ((minus[n.x][1]) > (1))) and ((n.z) = (1))))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and ((n.x) = (2))) => (1=1))) and (((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0))) and ((((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (n.x)))))
+//}
+
+// 5 hoare triples ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+//{Q} Sinit {I}
+//((((5) > (1)) and ((5) > (1))) and ((1) = (1)))
+//
+//{I && not B} Sbody {I}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((((minus[n.x][1]) > (n.z)) and ((minus[n.x][1]) > (1))) and ((n.z) = (1)))
+//
+//I && B => R
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and ((n.x) = (2))) => (1=1) 
+//
+//{I && not B} Sbody {V >= 0}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) >= (0))
+//
+//{I && not B} Sbody {V < V0}
+//(((((n.x) > (n.z)) and ((n.x) > (1))) and ((n.z) = (1))) and (not ((n.x) = (2)))) => ((minus[n.x][1]) < (n.x))

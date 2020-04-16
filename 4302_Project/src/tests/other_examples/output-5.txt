@@ -1,0 +1,26 @@
+
+open util/boolean
+
+//==============test==============
+some sig test{
+	result:Bool
+}
+
+fact testFact {
+}
+
+assert testAssert {
+	all n: test| (n.result = True) <=> ((1=1) or (1=0))
+}
+
+//the class invariant for class (test) is only valid if this check is valid
+check testAssert
+
+pred disjunctionCheck[x:Bool, y:Bool]{
+	some n: test| not ((((x = True) <=> ((1=1) or (1=0))) and ((y = True) <=> ((1=1) or (1=0)))) => (((x = True) or (y = True)) <=> ((x = True) or (y = True))))
+}
+
+//the post condition for function (disjunction) is only valid when this is inconsistent.
+run {
+	some x: Bool| some y: Bool| disjunctionCheck[x, y]
+}for 8 but 8 int, 2 Bool, exactly 32 String

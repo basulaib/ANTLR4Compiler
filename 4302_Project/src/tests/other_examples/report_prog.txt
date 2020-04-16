@@ -1,0 +1,78 @@
+class Account {  
+  declare {
+    int old_amount;         
+    int amount = 0;
+    int tmp;
+    string name;            
+    bool student = false;   
+    int[50] recentTransactions; 
+  }
+
+  assume { 
+    amount >= 0;
+  }
+
+  func int increase(int x, int y) {
+    require {                             
+       x > 0;
+       y > 0;
+    }
+    old_amount = amount;      
+    amount = amount + x;
+    amount = amount + y;
+
+    loop {                 
+      from {               
+        tmp = 1;
+        amount = 5;
+        old_amount = amount;
+      }
+      until {             
+        tmp == 5;
+      }
+      invariant {         
+        tmp > 0;
+        amount >= old_amount;
+      }
+      do {                
+        old_amount = amount;
+        amount = amount * 2;
+        tmp = tmp + 1;
+      }
+      variant {           
+        5 - tmp;
+      }
+    }         
+    
+    if (amount > 50) {      
+      amount = amount - 50;
+    } else if (amount <= 50) {
+      amount = amount + 50;
+    } else {
+      amount = amount - 1;
+    }
+    switch (amount) {
+      case: 4 {         
+        student = true;
+      }
+      default: {        
+        student = false;
+      }
+    }
+    
+    ensure {                        
+      amount == (old_amount + x + y);
+    }
+  }
+
+  func void increaseAndCheck() {
+    increase(20, 20);  
+    ensure {
+      amount >= 0;
+    }
+  }
+
+  assert {             
+    amount > 0;
+  }
+}

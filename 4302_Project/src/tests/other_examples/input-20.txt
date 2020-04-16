@@ -1,0 +1,29 @@
+class Course {
+    declare {
+        string name;
+        string department;
+        string instructor;
+        int code;
+        string[50] studentsEnrolled;
+        int[3] assignmentAverages;
+    }
+
+    assume {
+        code > 0;
+        name != "";
+        department != "";
+        instructor != "";
+    }
+
+    func void removeStudent(int index) {
+        require {
+            index > 0;
+        }
+
+        studentsEnrolled[i] = "";
+
+        ensure {
+            studentsEnrolled[i] == "";
+        }
+    }
+}

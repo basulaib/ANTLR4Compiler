@@ -1,4 +1,4 @@
-// Generated from Project.g4 by ANTLR 4.8
+// Generated from .\antlr\Project.g4 by ANTLR 4.8
 
 	package antlr;
 

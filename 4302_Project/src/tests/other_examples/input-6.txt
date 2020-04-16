@@ -1,0 +1,28 @@
+//test for conjunction/equivalence
+class test{
+	declare {
+    	bool result;
+    }
+
+	func bool disjunc(int x, int y, int z){
+		require {
+			x >= 0;
+			y >= 0;
+			z >= 0;
+		}
+		if(x == y && x == z){
+		    result = true;
+		}
+		else{
+		    result = false;
+		}
+
+		ensure {
+			result <=> (x == y && x == z);
+		}
+	}
+
+	assert {
+		result <=> true || result <=> false;
+	}
+}
