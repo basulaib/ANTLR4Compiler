@@ -265,8 +265,24 @@ public class WPCalculator {
         if (R instanceof Constant)
             return;
 
+        if (R instanceof Variable && !(R instanceof ArrayVariable))
+            return;
+
         if (R instanceof Negation) {
-            replace(x, e, ((Negation) R).expr);
+            if (((Negation) R).expr.equals(x) && ((Variable) ((Negation) R).expr).isFree()) {
+                ((Negation) R).setExpr(e);
+            } else {
+                replace(x, e, ((Negation) R).expr);
+            }
+            return;
+        }
+
+        if (R instanceof ArrayVariable) {
+            if (((ArrayVariable) R).getIndex().equals(x) && ((Variable) ((ArrayVariable) R).getIndex()).isFree()) {
+                ((ArrayVariable) R).setIndex(e);
+            } else {
+                replace(x, e, ((ArrayVariable) R).getIndex());
+            }
             return;
         }
 
@@ -274,17 +290,24 @@ public class WPCalculator {
             Expression left = ((BinaryOperation) R).getLeft();
             Expression right = ((BinaryOperation) R).getRight();
 
+            //TODO: is it possible in arr[x] where x is locked but arr[x] is not?
             if (left instanceof Variable) {
-                if (left.equals(x) && ((Variable) left).isFree())
+                if (left.equals(x) && ((Variable) left).isFree()) {
                     ((BinaryOperation) R).setLeft(e);
+                } else if (left instanceof ArrayVariable) {
+                    replace(x, e, left);
+                }
             } else {
                 // recursive case
                 replace(x, e, left);
             }
 
             if (right instanceof Variable) {
-                if (right.equals(x) && ((Variable) right).isFree())
+                if (right.equals(x) && ((Variable) right).isFree()) {
                     ((BinaryOperation) R).setRight(e);
+                } else if (right instanceof ArrayVariable) {
+                    replace(x, e, right);
+                }
             } else {
                 // recursive case
                 replace(x, e, right);

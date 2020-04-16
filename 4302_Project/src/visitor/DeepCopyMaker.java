@@ -13,42 +13,6 @@ import program.Program;
 import program.Class;
 
 public class DeepCopyMaker implements Visitor {
-    @Override
-    public void visitLoop(Loop loop) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visitFromBlock(FromBlock fromBlock) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visitUntilBlock(UntilBlock untilBlock) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visitInvariant(Invariant invariant) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visitFunctionCall(FunctionCall funcCall) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visitVariant(Variant variant) {
-        // TODO Auto-generated method stub
-
-    }
-
     //currently it can only make a deep-copy of binary expression
     private Expression copy;
     private DeepCopyMaker copyMaker;
@@ -247,7 +211,8 @@ public class DeepCopyMaker implements Visitor {
     @Override
     public void visitArrayVar(ArrayVariable arr) {
         //currently array reference cannot be a parameter type
-        this.copy = new ArrayVariable(arr.getID(), arr.getType(), arr.getIndex());
+        reset();
+        this.copy = new ArrayVariable(arr.getID(), arr.getType(), copyMaker.getExprCopy(arr.getIndex()));
         ((Variable) copy).setFree(arr.isFree());
         //if the array is an array of boolean, also translate that
     }
@@ -294,5 +259,42 @@ public class DeepCopyMaker implements Visitor {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void visitLoop(Loop loop) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitFromBlock(FromBlock fromBlock) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitUntilBlock(UntilBlock untilBlock) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitInvariant(Invariant invariant) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall funcCall) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void visitVariant(Variant variant) {
+        // TODO Auto-generated method stub
+
+    }
+
 
 }

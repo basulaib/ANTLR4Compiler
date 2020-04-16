@@ -130,6 +130,7 @@ public class VariableLocker implements Visitor {
     @Override
     public void visitArrayVar(ArrayVariable arr) {
         arr.setFree(false);
+        arr.getIndex().accept(this);
     }
 
     @Override

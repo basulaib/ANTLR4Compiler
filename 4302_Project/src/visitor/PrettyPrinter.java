@@ -465,24 +465,25 @@ public class PrettyPrinter implements Visitor {
         result.deleteCharAt(result.length() - 1);
         result.append("\n}");
 
-        if (!arrayDecls.isEmpty()) {
-            result.append("{");
-            for (Declaration decl : arrayDecls) {
-                int counter = 0;
-                for (Constant constant : decl.getConstantArray()) {
-                    reset();
-                    if (decl.getType() != Constant.Type.bool) {
-                        result.append("\n\t");
-                        result.append(decl.getID() + "[" + counter + "] = " + this.printer.getPrintResult(constant));
-                    } else {
-                        result.append("\n\t");
-                        result.append(decl.getID() + "[" + counter + "] = " + (constant.getBoolValue() ? "True" : "False"));
-                    }
-                    counter++;
-                }
-            }
-            result.append("\n}");
-        }
+//  We should NOT have this because we can't assume the initial value of any variable when verifying the functions
+//        if (!arrayDecls.isEmpty()) {
+//            result.append("{");
+//            for (Declaration decl : arrayDecls) {
+//                int counter = 0;
+//                for (Constant constant : decl.getConstantArray()) {
+//                    reset();
+//                    if (decl.getType() != Constant.Type.bool) {
+//                        result.append("\n\t");
+//                        result.append(decl.getID() + "[" + counter + "] = " + this.printer.getPrintResult(constant));
+//                    } else {
+//                        result.append("\n\t");
+//                        result.append(decl.getID() + "[" + counter + "] = " + (constant.getBoolValue() ? "True" : "False"));
+//                    }
+//                    counter++;
+//                }
+//            }
+//            result.append("\n}");
+//        }
 
         // add all assumptions
         result.append("\n\nfact " + this.currentClass + "Fact {");
