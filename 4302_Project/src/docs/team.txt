@@ -1,6 +1,0 @@
-Last Name	First Name	Prism Login	Student Number
-=========	==========	===========	==============
-Basulaib	Abdullah	basulaib	215971716
-Okongwu     Chidi       Onemic      209113101
-Du		    Shiyi		namesdu		214438469
-Adeshina    Abdulfatai  arules15    215136328
