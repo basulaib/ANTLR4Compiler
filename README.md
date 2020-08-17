@@ -1,2 +1,2 @@
-# EECS4302Project
-Project repo for EECS 4302
+# ANTLR4 Compiler
+To be updated soon.
